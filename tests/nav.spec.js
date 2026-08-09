@@ -35,9 +35,12 @@ describe('dữ liệu menu trái suy ra từ CHAPTERS', () => {
   })
 
   it('allSectionIds chỉ chứa trang chủ và các bài đã viết', () => {
+    const moiBai = CHAPTERS.flatMap(c => c.lessons)
     expect(allSectionIds).toContain('trang-chu')
-    expect(allSectionIds).toContain('dsu')
-    expect(allSectionIds).not.toContain('bang-bam')
+    for (const l of moiBai) {
+      if (l.ready) expect(allSectionIds).toContain(l.sid)
+      else expect(allSectionIds).not.toContain(l.sid)
+    }
   })
 
   it('FIRST_LESSON_ID là bài ready đầu tiên theo thứ tự học', () => {

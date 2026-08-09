@@ -73,6 +73,7 @@
           <QhdNenTang :active="activeSection === 'qhd-nen-tang'" />
           <QhdLisLcsDoixung :active="activeSection === 'qhd-lis-lcs-doixung'" />
           <NganXepHangDoi :active="activeSection === 'ngan-xep-hang-doi'" />
+          <BangBam :active="activeSection === 'bang-bam'" />
           <DfsBfs :active="activeSection === 'dfs-bfs'" />
           <Dsu :active="activeSection === 'dsu'" />
           <CayNhiPhanBst :active="activeSection === 'cay-nhi-phan-bst'" />
@@ -134,6 +135,7 @@ import { buildMenu } from "./data/menu.js";
 
 import TrangChu from "./sections/TrangChu.vue";
 import DoPhucTap from "./sections/DoPhucTap.vue";
+import BangBam from "./sections/BangBam.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
 import ToHop from "./sections/ToHop.vue";
 import ThamLam from "./sections/ThamLam.vue";

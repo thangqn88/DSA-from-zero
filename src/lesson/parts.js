@@ -57,7 +57,7 @@ export const CHAPTERS = [
     key: 'tra-cuu', num: 3, title: 'Tra cứu', capstoneReady: false,
     lessons: [
       { sid: 'ngan-xep-hang-doi', title: 'Ngăn xếp và hàng đợi', ready: true, duAn: false },
-      { sid: 'bang-bam', title: 'Bảng băm', ready: false, duAn: false },
+      { sid: 'bang-bam', title: 'Bảng băm', ready: true, duAn: true },
       { sid: 'heap-hang-doi-uu-tien', title: 'Heap và hàng đợi ưu tiên', ready: false, duAn: false },
       { sid: 'trie', title: 'Trie — cây tiền tố', ready: false, duAn: false },
     ],
