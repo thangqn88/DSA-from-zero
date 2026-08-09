@@ -74,7 +74,7 @@ Claude phải:
 
 | Ngày | Task đã xong | Model đã dùng | Cách chạy | Hạn mức còn / ghi chú |
 |---|---|---|---|---|
-| | | | | |
+| 2026-08-09 | Task 0–7 (trọn PHASE 0) | Opus | Inline | Hạ tầng xong: Vitest 3 + jsdom, 6 component dùng chung, schema dữ liệu, menu sinh tự động. `tests/lesson-structure.spec.js` đỏ 3 test cho `quay-lui-xau-nhi-phan` — đúng thiết kế Task 6, Task 8 sẽ làm xanh. Phiên sau bắt đầu từ Task 8 (Opus, inline). |
 
 ---
 
@@ -123,14 +123,14 @@ Claude phải:
 - Consumes: không có
 - Produces: lệnh `npm run test -- --run` chạy được Vitest với môi trường jsdom; repo git có commit gốc
 
-- [ ] **Step 1: Kiểm tra repo git và khởi tạo nếu chưa có**
+- [x] **Step 1: Kiểm tra repo git và khởi tạo nếu chưa có**
 
 ```bash
 cd e:/Repos/dsa-app
 git rev-parse --is-inside-work-tree || git init
 ```
 
-- [ ] **Step 2: Kiểm tra `.gitignore` có `node_modules` và `dist`**
+- [x] **Step 2: Kiểm tra `.gitignore` có `node_modules` và `dist`**
 
 Mở `.gitignore`. Nếu thiếu, thêm 2 dòng:
 
@@ -139,20 +139,20 @@ node_modules
 dist
 ```
 
-- [ ] **Step 3: Commit toàn bộ trạng thái hiện tại làm mốc gốc**
+- [x] **Step 3: Commit toàn bộ trạng thái hiện tại làm mốc gốc**
 
 ```bash
 git add -A
 git commit -m "chore: baseline before content rewrite"
 ```
 
-- [ ] **Step 4: Cài bộ test**
+- [x] **Step 4: Cài bộ test**
 
 ```bash
 npm i -D vitest@^3 @vue/test-utils@^2 jsdom@^25
 ```
 
-- [ ] **Step 5: Thêm script `test` vào `package.json`**
+- [x] **Step 5: Thêm script `test` vào `package.json`**
 
 Trong khối `"scripts"`, thêm dòng:
 
@@ -160,7 +160,7 @@ Trong khối `"scripts"`, thêm dòng:
 "test": "vitest"
 ```
 
-- [ ] **Step 6: Cấu hình Vitest trong `vite.config.js`**
+- [x] **Step 6: Cấu hình Vitest trong `vite.config.js`**
 
 ```js
 import { defineConfig } from 'vite'
@@ -176,7 +176,7 @@ export default defineConfig({
 })
 ```
 
-- [ ] **Step 7: Viết test khói để chứng minh bộ test chạy**
+- [x] **Step 7: Viết test khói để chứng minh bộ test chạy**
 
 Tạo `tests/smoke.spec.js`:
 
@@ -193,12 +193,12 @@ describe('bộ test', () => {
 })
 ```
 
-- [ ] **Step 8: Chạy test**
+- [x] **Step 8: Chạy test**
 
 Run: `npm run test -- --run`
 Expected: PASS, 1 test.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add package.json package-lock.json vite.config.js tests/smoke.spec.js .gitignore
@@ -220,7 +220,7 @@ git commit -m "chore: add vitest + vue test utils harness"
   - `partTitle(key: string): string`
   - `LESSON_SECTIONS: Array<{ sid, file, title }>` — 10 nhóm kiến thức, `file` là đường dẫn tương đối từ gốc repo
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/parts.spec.js`:
 
@@ -259,12 +259,12 @@ describe('parts', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/parts.spec.js`
 Expected: FAIL — "Failed to resolve import ../src/lesson/parts.js".
 
-- [ ] **Step 3: Viết implementation**
+- [x] **Step 3: Viết implementation**
 
 Tạo `src/lesson/parts.js`:
 
@@ -309,12 +309,12 @@ export const LESSON_SECTIONS = [
 ]
 ```
 
-- [ ] **Step 4: Chạy lại test**
+- [x] **Step 4: Chạy lại test**
 
 Run: `npm run test -- --run tests/parts.spec.js`
 Expected: PASS, 5 tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lesson/parts.js tests/parts.spec.js
@@ -335,7 +335,7 @@ git commit -m "feat: add canonical lesson structure definition"
   - `<LessonGoal :sid="String">` — slot mặc định là nội dung "Sau bài này, bạn có thể…"; render `<div class="lesson-goal" :id="partId(sid,'muc-tieu')">`
   - `<LessonPart :sid="String" part="String">` — render `<section class="lesson-part">` chứa `<h3 :id="partId(sid,part)">{{ partTitle(part) }}</h3>` + slot mặc định
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/components/lesson-part.spec.js`:
 
@@ -375,12 +375,12 @@ describe('LessonGoal', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/components/lesson-part.spec.js`
 Expected: FAIL — không resolve được `LessonPart.vue`.
 
-- [ ] **Step 3: Viết `src/components/LessonPart.vue`**
+- [x] **Step 3: Viết `src/components/LessonPart.vue`**
 
 ```vue
 <template>
@@ -400,7 +400,7 @@ defineProps({
 </script>
 ```
 
-- [ ] **Step 4: Viết `src/components/LessonGoal.vue`**
+- [x] **Step 4: Viết `src/components/LessonGoal.vue`**
 
 ```vue
 <template>
@@ -419,7 +419,7 @@ defineProps({
 </script>
 ```
 
-- [ ] **Step 5: Thêm CSS vào cuối `src/style.css`**
+- [x] **Step 5: Thêm CSS vào cuối `src/style.css`**
 
 ```css
   /* ===== Khung 6 phần chuẩn của 1 bài học ===== */
@@ -445,12 +445,12 @@ defineProps({
   }
 ```
 
-- [ ] **Step 6: Chạy lại test**
+- [x] **Step 6: Chạy lại test**
 
 Run: `npm run test -- --run tests/components/lesson-part.spec.js`
 Expected: PASS, 3 tests.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components/LessonPart.vue src/components/LessonGoal.vue src/style.css tests/components/lesson-part.spec.js
@@ -471,7 +471,7 @@ git commit -m "feat: add lesson skeleton components"
   `{ q: String, options: String[], answer: Number /* chỉ số 0-based */, why: String }`.
   Hành vi: click 1 option → khóa câu đó, tô xanh đáp án đúng, tô đỏ lựa chọn sai, hiện `why`, tăng bộ đếm `Đã trả lời x/N — đúng y`.
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/components/quiz-block.spec.js`:
 
@@ -526,12 +526,12 @@ describe('QuizBlock', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/components/quiz-block.spec.js`
 Expected: FAIL — không resolve được `QuizBlock.vue`.
 
-- [ ] **Step 3: Viết implementation**
+- [x] **Step 3: Viết implementation**
 
 Tạo `src/components/QuizBlock.vue`:
 
@@ -594,7 +594,7 @@ const correctCount = computed(
 </script>
 ```
 
-- [ ] **Step 4: Thêm CSS vào cuối `src/style.css`**
+- [x] **Step 4: Thêm CSS vào cuối `src/style.css`**
 
 ```css
   /* ===== Quiz ===== */
@@ -624,12 +624,12 @@ const correctCount = computed(
   .quiz-why { font-size: 0.92rem; color: var(--muted); margin: 0.5rem 0 0; }
 ```
 
-- [ ] **Step 5: Chạy lại test**
+- [x] **Step 5: Chạy lại test**
 
 Run: `npm run test -- --run tests/components/quiz-block.spec.js`
 Expected: PASS, 5 tests.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/QuizBlock.vue src/style.css tests/components/quiz-block.spec.js
@@ -651,7 +651,7 @@ git commit -m "feat: add interactive quiz block component"
   - `<PracticeSet :items="Array">`, item = `{ title: String, idea: String, hint: String }`
   - `<LeetCodeList :items="Array">`, item = `{ no: Number, name: String, slug: String, level: 'Easy'|'Medium'|'Hard', note: String }`; link tới `https://leetcode.com/problems/<slug>/`
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/components/example-practice-leetcode.spec.js`:
 
@@ -718,12 +718,12 @@ describe('LeetCodeList', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/components/example-practice-leetcode.spec.js`
 Expected: FAIL — không resolve được `WorkedExample.vue`.
 
-- [ ] **Step 3: Viết `src/components/WorkedExample.vue`**
+- [x] **Step 3: Viết `src/components/WorkedExample.vue`**
 
 ```vue
 <template>
@@ -759,7 +759,7 @@ defineProps({
 </script>
 ```
 
-- [ ] **Step 4: Viết `src/components/PracticeSet.vue`**
+- [x] **Step 4: Viết `src/components/PracticeSet.vue`**
 
 ```vue
 <template>
@@ -782,7 +782,7 @@ defineProps({
 </script>
 ```
 
-- [ ] **Step 5: Viết `src/components/LeetCodeList.vue`**
+- [x] **Step 5: Viết `src/components/LeetCodeList.vue`**
 
 ```vue
 <template>
@@ -816,7 +816,7 @@ function levelClass(level) {
 </script>
 ```
 
-- [ ] **Step 6: Thêm CSS vào cuối `src/style.css`**
+- [x] **Step 6: Thêm CSS vào cuối `src/style.css`**
 
 ```css
   /* ===== Ví dụ điển hình / bài tập / LeetCode ===== */
@@ -846,12 +846,12 @@ function levelClass(level) {
   .lc-hard { background: var(--danger-bg); color: var(--danger); }
 ```
 
-- [ ] **Step 7: Chạy lại test**
+- [x] **Step 7: Chạy lại test**
 
 Run: `npm run test -- --run tests/components/example-practice-leetcode.spec.js`
 Expected: PASS, 4 tests.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/components/WorkedExample.vue src/components/PracticeSet.vue src/components/LeetCodeList.vue src/style.css tests/components/example-practice-leetcode.spec.js
@@ -875,7 +875,7 @@ git commit -m "feat: add worked example, practice set and leetcode list componen
   - `src/data/lessons/index.js` export `lessons: Record<sid, LessonData>`
 - Ghi chú: test này **cố tình fail** cho 9 nhóm chưa có dữ liệu. Đó là danh sách việc còn lại của Phase 2. Ở Task 5 chỉ cần nhóm đầu tiên xanh, nên test dùng `LESSON_SECTIONS.filter(s => s.sid in lessons)` để chỉ kiểm dữ liệu đã tồn tại, và có 1 test riêng in ra các nhóm còn thiếu (không fail).
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/lesson-data.spec.js`:
 
@@ -952,12 +952,12 @@ describe('tiến độ', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: FAIL — không resolve được `src/data/lessons/index.js`.
 
-- [ ] **Step 3: Tạo file dữ liệu mẫu cho nhóm Quay lui**
+- [x] **Step 3: Tạo file dữ liệu mẫu cho nhóm Quay lui**
 
 Tạo `src/data/lessons/quay-lui-xau-nhi-phan.js` với nội dung tạm đủ hợp lệ (nội dung thật sẽ hoàn thiện ở Task 8):
 
@@ -1022,7 +1022,7 @@ export default {
 }
 ```
 
-- [ ] **Step 4: Tạo `src/data/lessons/index.js`**
+- [x] **Step 4: Tạo `src/data/lessons/index.js`**
 
 ```js
 // Gom dữ liệu 10 nhóm kiến thức. Mỗi lần thêm 1 nhóm mới, thêm đúng 2 dòng ở đây.
@@ -1033,12 +1033,12 @@ export const lessons = {
 }
 ```
 
-- [ ] **Step 5: Chạy lại test**
+- [x] **Step 5: Chạy lại test**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS — 6 test của nhóm `quay-lui-xau-nhi-phan` + test tiến độ in ra 9 nhóm còn thiếu.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/data/lessons tests/lesson-data.spec.js
@@ -1056,7 +1056,7 @@ git commit -m "feat: add lesson data schema with validation tests"
 - Consumes: `LESSON_SECTIONS`, `partId` từ `src/lesson/parts.js`; `lessons` từ `src/data/lessons/index.js`
 - Produces: test chạy trên các section **đã có dữ liệu**, đọc file `.vue` dạng text và khẳng định: có đủ 7 neo id chuẩn, có id của mọi ví dụ khai báo trong data, giữ nguyên `data-sid` và `v-show="active"`.
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/lesson-structure.spec.js`:
 
@@ -1113,16 +1113,16 @@ describe.each(done)('cấu trúc section: $sid', ({ sid, file }) => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để xem nó fail đúng chỗ**
+- [x] **Step 2: Chạy test để xem nó fail đúng chỗ**
 
 Run: `npm run test -- --run tests/lesson-structure.spec.js`
 Expected: FAIL — `QuayLuiXauNhiPhan.vue` chưa dùng `LessonGoal`/`QuizBlock` (đây chính là việc của Task 8).
 
-- [ ] **Step 3: Ghi nhận đây là test dẫn đường, không sửa test để nó xanh**
+- [x] **Step 3: Ghi nhận đây là test dẫn đường, không sửa test để nó xanh**
 
 Không sửa gì thêm. Test này sẽ xanh dần khi từng section được viết lại ở Phase 2.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add tests/lesson-structure.spec.js
@@ -1141,7 +1141,7 @@ git commit -m "test: add lesson structure contract (currently red for pending se
 - Consumes: `LESSON_PARTS`, `partId` từ `src/lesson/parts.js`; `lessons` từ `src/data/lessons/index.js`; `menusData` từ `src/data/menus.json`
 - Produces: `buildMenu(sid): Array<{ id, label, official, level }>` — với section có dữ liệu bài học thì sinh 7 mục chuẩn, chèn các ví dụ (level 4) ngay sau mục "4. Ví dụ điển hình"; với section khác thì trả nguyên `menus.json[sid] || []`
 
-- [ ] **Step 1: Viết test thất bại**
+- [x] **Step 1: Viết test thất bại**
 
 Tạo `tests/menu.spec.js`:
 
@@ -1180,12 +1180,12 @@ describe('buildMenu', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/menu.spec.js`
 Expected: FAIL — không resolve được `src/data/menu.js`.
 
-- [ ] **Step 3: Viết `src/data/menu.js`**
+- [x] **Step 3: Viết `src/data/menu.js`**
 
 ```js
 import { LESSON_PARTS, partId, partTitle } from '../lesson/parts.js'
@@ -1211,7 +1211,7 @@ export function buildMenu(sid) {
 }
 ```
 
-- [ ] **Step 4: Nối vào `src/App.vue`**
+- [x] **Step 4: Nối vào `src/App.vue`**
 
 Thay dòng import `menusData` (dòng 114) bằng:
 
@@ -1225,7 +1225,7 @@ Thay `currentMenu` (dòng 132) bằng:
 const currentMenu = computed(() => buildMenu(activeSection.value));
 ```
 
-- [ ] **Step 5: Chạy test và build**
+- [x] **Step 5: Chạy test và build**
 
 Run: `npm run test -- --run tests/menu.spec.js`
 Expected: PASS, 4 tests.
@@ -1233,7 +1233,7 @@ Expected: PASS, 4 tests.
 Run: `npm run build`
 Expected: build thành công, không lỗi.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/data/menu.js src/App.vue tests/menu.spec.js
