@@ -109,8 +109,11 @@ export const LESSON_SECTIONS = CHAPTERS.flatMap(c =>
 // Menu trái KHÔNG được viết tay. Nó suy ra từ CHAPTERS ngay phía trên, nếu không
 // sẽ có hai nơi cùng định nghĩa thứ tự bài học và chúng sẽ lệch nhau — đó đúng là
 // lý do src/data/nav.js bị xoá.
+// Trang chủ không còn là một mục menu riêng — khối thương hiệu ở đầu sidebar
+// chính là đường về nó. Mục này giữ lại làm dữ liệu: allSectionIds cần id, và
+// nhãn gấp/mở ở màn hẹp cần tên để hiển thị khi đang đứng ở trang chủ.
 export const navTop = [
-  { id: 'trang-chu', label: '📘 Trang chủ' },
+  { id: 'trang-chu', label: 'Trang chủ' },
 ]
 
 export const navGroups = CHAPTERS.map(c => ({
@@ -125,6 +128,8 @@ export const allSectionIds = [
   ...LESSON_SECTIONS.filter(l => l.ready).map(l => l.sid),
 ]
 
+// Bài đầu tiên của lộ trình đã viết xong. Dành cho nút "bắt đầu học" trên trang
+// chủ — sidebar KHÔNG dùng nó, vì chỗ đó là khối thương hiệu.
 export const FIRST_LESSON_ID = LESSON_SECTIONS.find(l => l.ready).sid
 
 export const DEFAULT_ID = 'trang-chu'

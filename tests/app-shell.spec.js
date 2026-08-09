@@ -15,8 +15,34 @@ describe('khung ngoài của app', () => {
   it('chỉ bài đã viết mới là link bấm được', () => {
     const w = mountApp()
     const soReady = LESSON_SECTIONS.filter(s => s.ready).length
-    // Trang chủ + Bắt đầu học + mỗi bài đã viết một link.
-    expect(w.findAll('.sb-list a').length).toBe(soReady + 2)
+    // Danh sách nhóm chỉ chứa bài học. Trang chủ nằm ở khối thương hiệu,
+    // ngoài .sb-list, nên không tính vào đây.
+    expect(w.findAll('.sb-list a').length).toBe(soReady)
+    w.unmount()
+  })
+
+  it('khối thương hiệu thay cho nút Bắt đầu học, và là đường về trang chủ', async () => {
+    const w = mountApp()
+    const brand = w.find('.sb-brand')
+    expect(brand.exists()).toBe(true)
+    expect(brand.text()).toContain('DSA from Zero')
+    expect(w.text()).not.toContain('Bắt đầu học')
+
+    // Dấu nhận diện phải là SVG, không phải emoji.
+    expect(brand.find('svg.sb-brand-mark').exists()).toBe(true)
+
+    await w.findAll('.sb-list a')[0].trigger('click')
+    expect(brand.attributes('aria-current')).toBeUndefined()
+
+    await brand.trigger('click')
+    expect(brand.attributes('aria-current')).toBe('page')
+    w.unmount()
+  })
+
+  it('khối thương hiệu nằm ngoài danh sách gấp, nên màn hẹp vẫn thấy', () => {
+    const w = mountApp()
+    expect(w.find('.sb-list .sb-brand').exists()).toBe(false)
+    expect(w.find('.sidebar > .sb-brand').exists()).toBe(true)
     w.unmount()
   })
 
@@ -113,9 +139,17 @@ describe('nguồn dữ liệu điều hướng', () => {
     expect(src).not.toContain('data/nav.js')
   })
 
-  it('nút Bắt đầu học trỏ tới bài ready đầu tiên, không hardcode sid', () => {
-    expect(src).toContain('goToId(FIRST_LESSON_ID)')
+  it('không còn hardcode sid nào trong điều hướng sidebar', () => {
     expect(src).not.toContain("goToId('quay-lui-xau-nhi-phan')")
+  })
+
+  it('sidebar trội hơn menu bài tập về cỡ chữ, đúng phân cấp chính/phụ', () => {
+    const css = readFileSync(resolve(__dirname, '..', 'src/style.css'), 'utf8')
+    const cuaSidebar = css.match(/\.sidebar \{[^}]*font-size:\s*([\d.]+)rem/)
+    const cuaMenuPhai = css.match(/\.exercise-menu \.em-link \{[^}]*font-size:\s*([\d.]+)rem/)
+    expect(cuaSidebar).not.toBeNull()
+    expect(cuaMenuPhai).not.toBeNull()
+    expect(Number(cuaSidebar[1])).toBeGreaterThan(Number(cuaMenuPhai[1]))
   })
 
   it('style.css có lớp sb-soon giữ chiều cao chạm tối thiểu 44px', () => {

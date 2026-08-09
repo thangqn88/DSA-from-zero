@@ -77,22 +77,73 @@
     max-width: calc(var(--shell) + 4rem);
     margin: 0 auto;
   }
+  /* Sidebar là điều hướng CHÍNH của 30 bài, nên nó phải trội hơn menu bài tập
+     bên phải — chữ lớn hơn (0.95rem so với 0.87rem) và cột rộng hơn để tên
+     chương dài không phải xuống dòng liên tục. Hai menu bằng nhau y hệt thì
+     người đọc mất đầu mối đâu là chính đâu là phụ. */
   .sidebar {
     position: sticky;
     top: 0;
-    width: 270px;
+    width: 304px;
     flex-shrink: 0;
     height: 100vh;
     overflow-y: auto;
     background: var(--surface);
     border-right: 1px solid var(--border);
-    padding: 1.3rem 0.9rem 3rem;
-    font-size: 0.87rem;
+    padding: 1.1rem 0.9rem 3rem;
+    font-size: 0.95rem;
     box-shadow: 0 8px 30px rgba(20, 30, 50, 0.04);
+  }
+
+  /* Khối thương hiệu kiêm đường về trang chủ. Dấu nhận diện là ba đỉnh nối
+     nhau — hình ảnh gần nhất với nội dung môn học, và là SVG chứ không phải
+     emoji để còn ăn theo màu và cỡ chữ của giao diện. */
+  .sidebar .sb-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    padding: 0.5rem 0.6rem;
+    margin: 0 0 0.9rem;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    color: var(--navy);
+  }
+  .sidebar .sb-brand:hover { background: var(--card-bg); }
+  .sidebar .sb-brand.active {
+    background: var(--card-bg);
+    border-color: var(--border);
+  }
+  .sb-brand-mark {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+  .sb-brand-mark circle { fill: var(--amber); stroke: none; }
+  .sb-brand-text { display: flex; flex-direction: column; min-width: 0; }
+  .sb-brand-name {
+    font-size: 1.02rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--navy);
+  }
+  .sb-brand-tag {
+    font-size: 0.76rem;
+    line-height: 1.3;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .sidebar .sb-group {
     text-transform: uppercase;
-    font-size: 0.7rem;
+    font-size: 0.74rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     color: var(--muted-2);
@@ -146,13 +197,6 @@
     color: white;
     font-weight: 600;
   }
-  .sidebar a.sb-top { font-weight: 700; }
-  .sidebar a.sb-start {
-    background: var(--blue-bg);
-    color: var(--blue);
-    border-color: rgba(37, 99, 235, 0.18);
-    margin-bottom: 0.45rem;
-  }
   /* Nút gấp/mở danh sách nhóm — chỉ tồn tại ở màn hẹp, xem mốc 900px bên dưới. */
   .sb-toggle { display: none; }
   .sb-toggle-icon {
@@ -205,6 +249,11 @@
     .sb-list { display: none; padding-top: 0.5rem; }
     .sb-list.open { display: block; }
     .sidebar .sb-group { margin: 1rem 0 0.3rem; }
+    /* Ở khổ này sidebar là thanh bám đỉnh, mỗi pixel chiều cao đều lấn vào chỗ
+       của bài học — nên khối thương hiệu bỏ dòng mô tả, chỉ giữ tên. */
+    .sidebar .sb-brand { margin: 0 0 0.45rem; padding: 0.25rem 0.5rem; min-height: 40px; }
+    .sb-brand-mark { width: 26px; height: 26px; }
+    .sb-brand-tag { display: none; }
     .page { max-width: 100%; padding: 1rem 0.9rem 4rem; }
 
     /* Bảng nhiều cột trên màn hẹp: cho chính bảng cuộn ngang trong khung của

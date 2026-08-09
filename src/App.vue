@@ -1,8 +1,31 @@
 <template>
   <div class="layout">
     <nav class="sidebar" aria-label="Điều hướng chủ đề học">
-      <!-- Nút này chỉ hiện ở màn hẹp: gấp danh sách 11 nhóm lại để nội dung
-           bài học bắt đầu ngay đầu màn hình thay vì sau một bức tường menu. -->
+      <!-- Khối thương hiệu, đồng thời là đường về trang chủ. Nằm NGOÀI .sb-list
+           nên ở màn hẹp nó vẫn hiện khi danh sách nhóm đã gấp lại — trang chủ
+           luôn với tới được mà không cần một mục menu riêng. -->
+      <a
+        class="sb-brand"
+        href="#"
+        :class="{ active: activeSection === DEFAULT_ID }"
+        :aria-current="activeSection === DEFAULT_ID ? 'page' : undefined"
+        @click.prevent="goToId(DEFAULT_ID)"
+      >
+        <svg class="sb-brand-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="12" y1="7" x2="6" y2="17" />
+          <line x1="12" y1="7" x2="18" y2="17" />
+          <circle cx="12" cy="5" r="2.6" />
+          <circle cx="6" cy="19" r="2.6" />
+          <circle cx="18" cy="19" r="2.6" />
+        </svg>
+        <span class="sb-brand-text">
+          <span class="sb-brand-name">DSA from Zero</span>
+          <span class="sb-brand-tag">Cấu trúc dữ liệu &amp; Giải thuật</span>
+        </span>
+      </a>
+
+      <!-- Nút này chỉ hiện ở màn hẹp: gấp danh sách nhóm lại để nội dung bài học
+           bắt đầu ngay đầu màn hình thay vì sau một bức tường menu. -->
       <button
         class="sb-toggle"
         type="button"
@@ -18,23 +41,6 @@
       </button>
 
       <div class="sb-list" id="sb-list" :class="{ open: navOpen }">
-        <a
-          class="sb-top sb-start"
-          href="#"
-          @click.prevent="goToId(FIRST_LESSON_ID)"
-          >▶ Bắt đầu học</a
-        >
-        <a
-          v-for="item in navTop"
-          :key="item.id"
-          class="sb-top"
-          href="#"
-          :class="{ active: activeSection === item.id }"
-          :aria-current="activeSection === item.id ? 'page' : undefined"
-          @click.prevent="goToId(item.id)"
-          >{{ item.label }}</a
-        >
-
         <template v-for="group in navGroups" :key="group.label">
           <div class="sb-group">{{ group.label }}</div>
           <template v-for="item in group.items" :key="item.id">
@@ -129,7 +135,6 @@ import {
   navGroups,
   allSectionIds,
   DEFAULT_ID,
-  FIRST_LESSON_ID,
 } from "./lesson/parts.js";
 import { buildMenu } from "./data/menu.js";
 
