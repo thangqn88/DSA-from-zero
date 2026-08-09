@@ -2303,7 +2303,7 @@ git commit -m "content: rewrite graph traversal lesson in 6-part format"
 - **Quiz (4 câu):** (1) `find(x)` trả về cái gì — "đại diện của nhóm chứa x"; (2) khi nào biết 2 cạnh tạo thành chu trình — "khi 2 đầu mút đã cùng một đại diện"; (3) nén đường làm gì — "rút ngắn đường đi lên đại diện cho các lần hỏi sau"; (4) DSU có xóa được liên kết đã gộp không — "không, DSU chỉ gộp thêm".
 - **Bài tập (3):** đếm số tỉnh từ ma trận kề bằng DSU; tìm cạnh dư thừa làm xuất hiện chu trình; cài Kruskal tìm cây khung nhỏ nhất cho đồ thị nhỏ.
 
-- [ ] **Step 1: Tạo `src/data/lessons/dsu.js`**
+- [x] **Step 1: Tạo `src/data/lessons/dsu.js`**
 
 ```js
 export default {
@@ -2333,7 +2333,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import dsu from './dsu.js'
@@ -2341,18 +2341,18 @@ import dsu from './dsu.js'
   'dsu': dsu,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/dsu.js | sort -u
 ```
 
-- [ ] **Step 5: Viết lại `src/sections/Dsu.vue`**
+- [x] **Step 5: Viết lại `src/sections/Dsu.vue`**
 
 ```vue
 <template>
@@ -2428,7 +2428,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -2436,12 +2436,12 @@ Expected: PASS toàn bộ.
 Run: `npm run build`
 Expected: build sạch.
 
-- [ ] **Step 7: Kiểm tra widget trên trình duyệt**
+- [ ] **Step 7: Kiểm tra widget trên trình duyệt** — CHƯA kiểm chứng bằng mắt trong phiên này (không chạy `npm run dev` để xem trực tiếp); mọi id DOM widget đã được đối chiếu tĩnh bằng grep và khớp 100%.
 
 Run: `npm run dev`, mở nhóm "DSU", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/Dsu.vue src/data/lessons/dsu.js src/data/lessons/index.js
