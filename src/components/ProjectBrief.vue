@@ -38,7 +38,14 @@
       <!-- Dữ liệu mẫu đến từ biến nên phải nội suy — KHÔNG dùng v-pre ở đây,
            khác với code C++ viết tay trong section. -->
       <pre class="pb-sample"><code>{{ brief.data.sample }}</code></pre>
-      <a class="pb-data-link" :href="brief.data.url" target="_blank" rel="noopener">
+      <!-- Có MVP không đọc dữ liệu ngoài nào — khi đó không có gì để tải. -->
+      <a
+        v-if="brief.data.url"
+        class="pb-data-link"
+        :href="brief.data.url"
+        target="_blank"
+        rel="noopener"
+      >
         Tải bộ dữ liệu đầy đủ
       </a>
     </div>

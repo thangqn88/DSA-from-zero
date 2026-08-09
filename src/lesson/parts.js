@@ -36,7 +36,7 @@ export function sidToFile(sid) {
 // "trang-chu" không nằm ở đây vì nó là trang giới thiệu, không phải bài học.
 export const CHAPTERS = [
   {
-    key: 'nen-mong', num: 1, title: 'Nền móng', capstoneReady: false,
+    key: 'nen-mong', num: 1, title: 'Nền móng', capstoneReady: true,
     lessons: [
       { sid: 'do-phuc-tap', title: 'Độ phức tạp thuật toán và mô hình chi phí', ready: false, duAn: false },
       { sid: 'mang-chuoi', title: 'Mảng, chuỗi và mảng động', ready: false, duAn: false },
