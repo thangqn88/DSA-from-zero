@@ -49,6 +49,44 @@ chi phí" trong file kế hoạch.
 - Giải thích theo Feynman: ví dụ đời thường trước, thuật ngữ sau; mỗi khái niệm trả lời
   đủ "Đây là gì? / Vì sao quan trọng? / Làm sao dùng?".
 
+## Nguyên tắc thiết kế giao diện
+
+Đây là trang **đọc lâu**, không phải landing page. Mọi quyết định giao diện lấy dễ đọc
+làm chuẩn, không lấy bắt mắt làm chuẩn. Nếu dùng skill `ui-ux-pro-max`, chỉ lấy phần
+quy tắc đọc và checklist — bỏ qua gợi ý style kiểu startup/giải trí và đừng đổi bảng
+màu navy/amber hiện có.
+
+**Bề ngang khung trang — chỗ đã từng vỡ, đọc kỹ:**
+
+- `--shell` trong `:root` là bề ngang duy nhất của khung trang. `.page-header` và
+  `.content-row` phải rộng bằng nhau. Trước đây `.content-row` bị định nghĩa **hai lần**
+  (một bản grid, một bản flex `max-width: 1120px`) trong khi `.page` rộng tới 1400px —
+  hậu quả là hở một mảng trống bên phải suốt nhiều tháng.
+- **Không đặt `max-width` riêng cho `.content-row`.** Muốn đổi bề ngang thì sửa `--shell`.
+- Trước khi thêm luật layout, kiểm tra selector đó đã tồn tại chưa:
+  `grep -n "^\s*\.<ten-class>\s*[,{]" src/style.css`. File này đủ dài để dễ định nghĩa trùng.
+
+**Chữ và khoảng cách:**
+
+- Độ dài dòng văn xuôi tối đa `--measure` (70ch). Chỉ áp cho `p` và `li` ở cấp ngoài cùng —
+  code, bảng, widget và hộp có nền vẫn dùng trọn bề ngang cột, đừng bó chúng lại.
+- Body 16.5px, `line-height: 1.7`. Không hạ chữ thân bài xuống dưới 16px.
+
+**Tương phản và khả năng tiếp cận:**
+
+- Mọi cặp màu chữ/nền phải đạt AA 4.5:1. Nhãn nhỏ hay bị trượt nhất — `--muted-2` từng
+  chỉ đạt 2.9:1. Không dùng màu viền làm màu chữ trên nền nhạt cùng tông (lỗi cũ của
+  nhãn Easy/Medium/Hard).
+- Giữ `:focus-visible` và khối `prefers-reduced-motion` — không gỡ.
+- Nút bấm và mục menu tối thiểu 44px chiều cao.
+
+**Responsive:** đúng hai mốc, không thêm mốc lẻ — `1023px` (menu bài tập xuống dưới nội
+dung) và `900px` (sidebar thành thanh ngang trên đầu).
+
+**Kiểm chứng:** test và build xanh **không** chứng minh được layout. Sửa giao diện thì
+phải nhìn bằng mắt qua `npm run dev`; nếu không nhìn được thì nói rõ là chưa kiểm chứng,
+đừng khẳng định đã sửa xong.
+
 ## Ràng buộc kỹ thuật
 
 - Mỗi section phải giữ nguyên `id`, `class="day-section"`, `data-sid`, `v-show="active"`
