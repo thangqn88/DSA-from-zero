@@ -548,3 +548,29 @@
   .quiz-opt.correct { background: var(--success-bg); border-color: var(--success); color: #17694B; font-weight: 700; }
   .quiz-opt.wrong { background: var(--danger-bg); border-color: var(--danger); color: #A13A2E; }
   .quiz-why { font-size: 0.92rem; color: var(--muted); margin: 0.5rem 0 0; }
+
+  /* ===== Ví dụ điển hình / bài tập / LeetCode ===== */
+  .worked-example {
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--amber);
+    border-radius: 0 12px 12px 0;
+    padding: 1rem 1.3rem 1.2rem;
+    margin: 1.4rem 0 1.8rem;
+    background: var(--surface);
+  }
+  .worked-example > h4 { margin-top: 0.2rem; }
+  .we-label {
+    color: var(--navy); font-weight: 700; font-size: 0.8rem;
+    text-transform: uppercase; letter-spacing: 0.05em; margin: 1.3rem 0 0.35rem;
+  }
+  .practice-item { margin-bottom: 1rem; }
+  .practice-item details { padding: 0.5rem 0.9rem; margin: 0.4rem 0 0; }
+  .practice-item details summary { font-size: 0.88rem; }
+  .lc-table td:first-child { width: 3.5rem; color: var(--muted-2); }
+  .lc-level {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    padding: 0.15rem 0.55rem; border-radius: 999px; white-space: nowrap;
+  }
+  .lc-easy { background: var(--success-bg); color: var(--success); }
+  .lc-medium { background: var(--warning-bg); color: var(--warning); }
+  .lc-hard { background: var(--danger-bg); color: var(--danger); }
