@@ -122,9 +122,6 @@
     color: white;
     font-weight: 600;
   }
-  .sidebar a.active::after { color: #B9D4FF; }
-  .sidebar a.sb-exam::after { content: " ★"; color: var(--success); }
-  .sidebar a.active.sb-exam::after { color: #7EE8AE; }
   .sidebar a.sb-top { font-weight: 700; }
   .sidebar a.sb-start {
     background: var(--blue-bg);
@@ -132,75 +129,84 @@
     border-color: rgba(37, 99, 235, 0.18);
     margin-bottom: 0.45rem;
   }
-  @media (max-width: 900px) {
-    .layout { flex-direction: column; }
-    .sidebar {
-      position: static; width: 100%; height: auto;
-      border-right: none; border-bottom: 2px solid var(--border);
-      display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center;
-      padding: 0.9rem 1rem;
-    }
-    .sidebar .sb-group { width: auto; margin: 0 0.3rem 0 0.8rem; }
-    .sidebar a { padding: 0.4rem 0.6rem; margin: 0; }
-    .page { max-width: 100%; padding: 1.2rem 1rem 4rem; }
+  /* Nút gấp/mở danh sách nhóm — chỉ tồn tại ở màn hẹp, xem mốc 900px bên dưới. */
+  .sb-toggle { display: none; }
+  .sb-toggle-icon {
+    width: 20px; height: 20px; flex-shrink: 0;
+    fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round;
+  }
+  .sb-toggle-text {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sb-toggle-hint {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    opacity: 0.75;
   }
 
-  h1 { color: var(--navy); font-size: 1.55rem; margin: 0 0 0.3rem; font-weight: 800; letter-spacing: -0.01em; }
-  h1 + p.subtitle { color: var(--muted); font-size: 0.95rem; margin: 0; }
-  .page-header {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 1.2rem 1.3rem 1rem;
-    margin-bottom: 1.6rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(233,242,255,0.95));
-    box-shadow: 0 10px 30px rgba(20, 30, 50, 0.06);
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; }
+    /* Thanh điều hướng bám đỉnh màn hình để từ giữa bài vẫn đổi nhóm được,
+       không phải cuộn ngược lên đầu trang. */
+    .sidebar {
+      position: sticky; top: 0; z-index: 20;
+      width: 100%; height: auto;
+      border-right: none; border-bottom: 1px solid var(--border);
+      padding: 0.55rem 0.9rem;
+      font-size: 1rem;
+    }
+    .sb-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      min-height: 48px;
+      margin: 0;
+      padding: 0.5rem 0.75rem;
+      background: var(--card-bg);
+      color: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    /* Danh sách 11 nhóm chỉ hiện khi người dùng chủ động mở, để bài học bắt
+       đầu ngay đầu màn hình thay vì sau một bức tường menu. */
+    .sb-list { display: none; padding-top: 0.5rem; }
+    .sb-list.open { display: block; }
+    .sidebar .sb-group { margin: 1rem 0 0.3rem; }
+    .page { max-width: 100%; padding: 1rem 0.9rem 4rem; }
+
+    /* Bảng nhiều cột trên màn hẹp: cho chính bảng cuộn ngang trong khung của
+       nó, để cả trang không bị trôi ngang. Không ẩn cột nào — mọi cột đều là
+       nội dung học. */
+    table.formula-table { display: block; overflow-x: auto; max-width: 100%; }
+    /* Khung widget: phần vẽ do JS dựng có thể rộng hơn màn hình, cho nó cuộn
+       trong khung riêng thay vì đẩy cả trang trôi ngang. */
+    .widget { overflow-x: auto; }
+    /* Hàng nút điều khiển widget xuống dòng thay vì tràn ra ngoài. */
+    .controls { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .controls button { margin-right: 0; }
   }
-  .page-header-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 1rem;
+
+  /* Chỉ dành cho trình đọc màn hình: trang cần đúng 1 thẻ h1 nhưng không cần
+     hiển thị nó, vì mỗi bài học đã có tiêu đề h2 riêng. */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
-  .header-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .header-pill {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    padding: 0.45rem 0.8rem;
-    border-radius: 999px;
-    background: var(--navy);
-    color: white;
-    font-size: 0.82rem;
-    font-weight: 700;
-  }
-  .header-pill.secondary {
-    background: var(--surface);
-    color: var(--navy);
-    border: 1px solid var(--border);
-  }
-  .learner-steps {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.75rem;
-  }
-  .step-card {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 0.85rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    box-shadow: 0 4px 14px rgba(20, 30, 50, 0.04);
-  }
-  .step-card strong { color: var(--navy); }
-  .step-card span { color: var(--muted); font-size: 0.9rem; }
+
   h2 {
     color: var(--navy);
     margin-top: 0;
@@ -326,6 +332,10 @@
     font-weight: 600;
     margin-right: 0.5rem;
     transition: opacity 0.15s, transform 0.1s;
+    /* Nút điều khiển widget trước đây chỉ cao ~37px, dưới ngưỡng chạm 44px.
+       touch-action bỏ độ trễ 300ms khi bấm trên điện thoại. */
+    min-height: 44px;
+    touch-action: manipulation;
   }
   button:hover { opacity: 0.88; }
   button:active { transform: scale(0.98); }
@@ -457,8 +467,8 @@
   }
 
   /* ===== Khung nội dung chính + menu bài tập bên phải (SPA layout) =====
-     Hàng này KHÔNG được đặt max-width riêng: nó phải rộng đúng bằng
-     .page-header ở trên, nếu không sẽ hở một mảng trống bên phải. */
+     Hàng này KHÔNG được đặt max-width riêng: bề ngang khung trang do --shell
+     quyết định qua .page. Đặt max-width ở đây sẽ hở một mảng trống bên phải. */
   .content-row {
     display: flex;
     align-items: flex-start;
@@ -493,10 +503,23 @@
     max-height: calc(100vh - 2.4rem);
     overflow-y: auto;
   }
+  /* Nhãn này là <div> ở màn rộng và <button> ở màn hẹp, nên phải gỡ hết kiểu
+     mặc định của button để hai trạng thái trông như nhau. */
   .exercise-menu .em-label {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+    width: 100%; text-align: left;
+    background: none; border: none; box-shadow: none;
+    padding: 0; margin: 0 0 0.3rem;
     font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;
-    color: var(--muted-2); margin-bottom: 0.3rem; font-weight: 700;
+    color: var(--muted-2); font-weight: 700;
   }
+  .exercise-menu .em-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .em-chevron {
+    width: 18px; height: 18px; flex-shrink: 0;
+    fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round;
+    transition: transform 0.15s;
+  }
+  .em-chevron.up { transform: rotate(180deg); }
   .exercise-menu .em-link {
     font-size: 0.87rem; padding: 0.5rem 0.65rem; border-radius: 8px;
     color: var(--navy); text-decoration: none; line-height: 1.4;
@@ -519,7 +542,16 @@
   /* Menu bài tập xuống dưới nội dung khi không còn đủ chỗ cho 2 cột */
   @media (max-width: 1023px) {
     .content-row { flex-direction: column; }
-    .exercise-menu { width: 100%; position: static; max-height: none; order: -1; }
+    .exercise-menu {
+      width: 100%; position: static; max-height: none; order: -1;
+      padding: 0.7rem 0.9rem;
+    }
+    /* Menu nằm TRÊN nội dung ở khổ này, nên mặc định gấp lại — mở sẵn thì
+       người đọc phải cuộn qua gần 10 liên kết mới tới chữ đầu tiên của bài. */
+    .exercise-menu .em-label { min-height: 44px; margin-bottom: 0; font-size: 0.78rem; }
+    .exercise-menu .em-list { display: none; padding-top: 0.5rem; }
+    .exercise-menu .em-list.open { display: flex; }
+    .exercise-menu .em-link { min-height: 44px; display: flex; align-items: center; }
   }
 
   /* ===== Khung 6 phần chuẩn của 1 bài học ===== */

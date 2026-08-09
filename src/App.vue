@@ -1,75 +1,59 @@
 <template>
   <div class="layout">
     <nav class="sidebar" aria-label="Điều hướng chủ đề học">
-      <a class="sb-top sb-start" href="#" @click.prevent="goToId('quay-lui-xau-nhi-phan')"
-        >▶ Bắt đầu học</a
+      <!-- Nút này chỉ hiện ở màn hẹp: gấp danh sách 11 nhóm lại để nội dung
+           bài học bắt đầu ngay đầu màn hình thay vì sau một bức tường menu. -->
+      <button
+        class="sb-toggle"
+        type="button"
+        :aria-expanded="navOpen ? 'true' : 'false'"
+        aria-controls="sb-list"
+        @click="navOpen = !navOpen"
       >
-      <a
-        v-for="item in navTop"
-        :key="item.id"
-        class="sb-top"
-        href="#"
-        :class="{ active: activeSection === item.id }"
-        :aria-current="activeSection === item.id ? 'page' : undefined"
-        @click.prevent="goToId(item.id)"
-        >{{ item.label }}</a
-      >
+        <svg class="sb-toggle-icon" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M3 5h14M3 10h14M3 15h14" />
+        </svg>
+        <span class="sb-toggle-text">{{ activeLabel }}</span>
+        <span class="sb-toggle-hint">{{ navOpen ? "Đóng" : "Đổi nhóm" }}</span>
+      </button>
 
-      <template v-for="group in navGroups" :key="group.label">
-        <div class="sb-group">{{ group.label }}</div>
+      <div class="sb-list" id="sb-list" :class="{ open: navOpen }">
         <a
-          v-for="item in group.items"
-          :key="item.id"
+          class="sb-top sb-start"
           href="#"
-          :class="[
-            item.exam ? 'sb-exam' : '',
-            { active: activeSection === item.id },
-          ]"
+          @click.prevent="goToId('quay-lui-xau-nhi-phan')"
+          >▶ Bắt đầu học</a
+        >
+        <a
+          v-for="item in navTop"
+          :key="item.id"
+          class="sb-top"
+          href="#"
+          :class="{ active: activeSection === item.id }"
           :aria-current="activeSection === item.id ? 'page' : undefined"
           @click.prevent="goToId(item.id)"
           >{{ item.label }}</a
         >
-      </template>
+
+        <template v-for="group in navGroups" :key="group.label">
+          <div class="sb-group">{{ group.label }}</div>
+          <a
+            v-for="item in group.items"
+            :key="item.id"
+            href="#"
+            :class="{ active: activeSection === item.id }"
+            :aria-current="activeSection === item.id ? 'page' : undefined"
+            @click.prevent="goToId(item.id)"
+            >{{ item.label }}</a
+          >
+        </template>
+      </div>
     </nav>
 
     <div class="page">
-      <div class="page-header">
-        <div class="page-header-top">
-          <div>
-            <h1 id="top">Học DSA từ con số 0</h1>
-            <p class="subtitle">
-              Cấu trúc dữ liệu và giải thuật cho người mới bắt đầu: mỗi khái
-              niệm mở đầu bằng một ví dụ đời thường, có widget chạy tay từng
-              bước, code mẫu C++ và bài tập để tự luyện.
-            </p>
-          </div>
-          <div class="header-badges">
-            <span class="header-pill">10 nhóm kiến thức</span>
-            <span class="header-pill secondary">Miễn phí, tiếng Việt</span>
-          </div>
-        </div>
-
-        <div class="learner-steps" aria-label="Lộ trình học gợi ý">
-          <div class="step-card">
-            <strong>1. Hiểu bản chất</strong>
-            <span
-              >Đọc lý thuyết và phần "vì sao quan trọng" trước khi mở code.</span
-            >
-          </div>
-          <div class="step-card">
-            <strong>2. Tự kiểm tra</strong>
-            <span
-              >Làm quiz ngay trong bài để biết mình đã hiểu tới đâu.</span
-            >
-          </div>
-          <div class="step-card">
-            <strong>3. Luyện tập</strong>
-            <span
-              >Làm 3 bài tập của nhóm, rồi luyện tiếp danh sách LeetCode.</span
-            >
-          </div>
-        </div>
-      </div>
+      <!-- Trang không còn khối tiêu đề nhìn thấy được, nhưng vẫn cần đúng 1 thẻ
+           h1 để trình đọc màn hình biết trang này là gì. -->
+      <h1 class="sr-only">Học Cấu trúc dữ liệu và Giải thuật từ con số 0</h1>
 
       <div class="content-row">
         <div class="content-main" ref="contentMainEl">
@@ -89,16 +73,41 @@
         </div>
 
         <aside class="exercise-menu" v-if="currentMenu.length">
-          <div class="em-label">Bài tập &amp; mục trong nhóm này</div>
-          <a
-            v-for="it in currentMenu"
-            :key="it.id"
-            href="#"
-            class="em-link"
-            :class="{ 'em-official': it.official, 'em-level4': it.level === 4 }"
-            @click.prevent="goToId(it.id)"
-            >{{ it.official ? "★ " : "" }}{{ it.label }}</a
+          <!-- Ở màn rộng đây là nhãn tĩnh; ở màn hẹp nó thành nút gấp/mở, vì khi
+               menu nằm trên nội dung thì để mở sẵn sẽ đẩy bài học xuống quá xa. -->
+          <component
+            :is="compactMenu ? 'button' : 'div'"
+            class="em-label"
+            :type="compactMenu ? 'button' : undefined"
+            :aria-expanded="compactMenu ? String(menuOpen) : undefined"
+            :aria-controls="compactMenu ? 'em-list' : undefined"
+            @click="compactMenu && (menuOpen = !menuOpen)"
           >
+            <span>Bài tập &amp; mục trong nhóm này</span>
+            <svg
+              v-if="compactMenu"
+              class="em-chevron"
+              :class="{ up: menuOpen }"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path d="M5 8l5 5 5-5" />
+            </svg>
+          </component>
+          <div class="em-list" id="em-list" :class="{ open: menuOpen }">
+            <a
+              v-for="it in currentMenu"
+              :key="it.id"
+              href="#"
+              class="em-link"
+              :class="{
+                'em-official': it.official,
+                'em-level4': it.level === 4,
+              }"
+              @click.prevent="goToId(it.id)"
+              >{{ it.official ? "★ " : "" }}{{ it.label }}</a
+            >
+          </div>
         </aside>
       </div>
     </div>
@@ -125,7 +134,41 @@ import BstNangCao from "./sections/BstNangCao.vue";
 const activeSection = ref(DEFAULT_ID);
 const contentMainEl = ref(null);
 
+// Hai menu này chỉ gấp lại ở màn hẹp. Ở màn rộng CSS luôn hiện danh sách,
+// nên giá trị ở đây không ảnh hưởng gì tới bố cục desktop.
+const navOpen = ref(false);
+const menuOpen = ref(false);
+
+// Hai mốc responsive duy nhất của dự án, khai báo đúng bằng số với style.css.
+// Cần biết ở JS chứ không chỉ ở CSS, vì nhãn menu bài tập chỉ được là <button>
+// khi nó thật sự gấp/mở được — nếu không, aria-expanded sẽ nói dối.
+const compactMenu = ref(false);
+
+function watchBreakpoint(query, target) {
+  if (typeof window === "undefined" || !window.matchMedia) return;
+  const mq = window.matchMedia(query);
+  target.value = mq.matches;
+  const onChange = (e) => {
+    target.value = e.matches;
+  };
+  if (mq.addEventListener) mq.addEventListener("change", onChange);
+  else mq.addListener(onChange);
+}
+
 const currentMenu = computed(() => buildMenu(activeSection.value));
+
+const allNavItems = computed(() => {
+  const out = [...navTop];
+  for (const g of navGroups) out.push(...g.items);
+  return out;
+});
+
+// Nhãn trên nút gấp/mở phải cho biết đang đứng ở nhóm nào, nếu không người
+// dùng mở menu ra chỉ để kiểm tra xem mình đang ở đâu.
+const activeLabel = computed(() => {
+  const item = allNavItems.value.find((i) => i.id === activeSection.value);
+  return item ? item.label : "Nhóm kiến thức";
+});
 
 function closestSectionId(el) {
   const sectionEl = el.closest ? el.closest(".day-section") : null;
@@ -147,6 +190,10 @@ function goToId(id, opts) {
     if (!sectionId) sectionId = DEFAULT_ID;
   }
   activeSection.value = sectionId;
+
+  // Đã chọn xong thì gấp menu lại, nhường màn hình cho nội dung.
+  navOpen.value = false;
+  menuOpen.value = false;
 
   if (updateUrl) {
     try {
@@ -194,6 +241,8 @@ function onPopState(e) {
 }
 
 onMounted(() => {
+  watchBreakpoint("(max-width: 1023px)", compactMenu);
+
   document.addEventListener("click", onDocumentClick, true);
   window.addEventListener("popstate", onPopState);
 
