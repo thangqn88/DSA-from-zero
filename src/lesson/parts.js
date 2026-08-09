@@ -104,3 +104,26 @@ export const CHAPTERS = [
 export const LESSON_SECTIONS = CHAPTERS.flatMap(c =>
   c.lessons.map(l => ({ ...l, chapter: c.key, file: sidToFile(l.sid) })),
 )
+
+// Menu trái KHÔNG được viết tay. Nó suy ra từ CHAPTERS ngay phía trên, nếu không
+// sẽ có hai nơi cùng định nghĩa thứ tự bài học và chúng sẽ lệch nhau — đó đúng là
+// lý do src/data/nav.js bị xoá.
+export const navTop = [
+  { id: 'trang-chu', label: '📘 Trang chủ' },
+]
+
+export const navGroups = CHAPTERS.map(c => ({
+  label: `Chương ${c.num} — ${c.title}`,
+  items: c.lessons.map(l => ({ id: l.sid, label: l.title, ready: l.ready })),
+}))
+
+// Chỉ bài đã viết mới điều hướng được. Bài chưa viết vẫn hiện trên sidebar để
+// người học thấy lộ trình, nhưng không phải là section thật.
+export const allSectionIds = [
+  ...navTop.map(i => i.id),
+  ...LESSON_SECTIONS.filter(l => l.ready).map(l => l.sid),
+]
+
+export const FIRST_LESSON_ID = LESSON_SECTIONS.find(l => l.ready).sid
+
+export const DEFAULT_ID = 'trang-chu'

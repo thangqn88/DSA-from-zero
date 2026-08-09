@@ -21,7 +21,7 @@
         <a
           class="sb-top sb-start"
           href="#"
-          @click.prevent="goToId('quay-lui-xau-nhi-phan')"
+          @click.prevent="goToId(FIRST_LESSON_ID)"
           >▶ Bắt đầu học</a
         >
         <a
@@ -37,15 +37,21 @@
 
         <template v-for="group in navGroups" :key="group.label">
           <div class="sb-group">{{ group.label }}</div>
-          <a
-            v-for="item in group.items"
-            :key="item.id"
-            href="#"
-            :class="{ active: activeSection === item.id }"
-            :aria-current="activeSection === item.id ? 'page' : undefined"
-            @click.prevent="goToId(item.id)"
-            >{{ item.label }}</a
-          >
+          <template v-for="item in group.items" :key="item.id">
+            <a
+              v-if="item.ready"
+              href="#"
+              :class="{ active: activeSection === item.id }"
+              :aria-current="activeSection === item.id ? 'page' : undefined"
+              @click.prevent="goToId(item.id)"
+              >{{ item.label }}</a
+            >
+            <!-- Bài chưa viết vẫn hiện để người học thấy lộ trình, nhưng không
+                 phải là link — bấm vào sẽ không đi đâu cả. -->
+            <span v-else class="sb-soon"
+              >{{ item.label }}<span class="sb-soon-tag">sắp có</span></span
+            >
+          </template>
         </template>
       </div>
     </nav>
@@ -116,7 +122,13 @@
 
 <script setup>
 import { ref, computed, onMounted, nextTick } from "vue";
-import { navTop, navGroups, allSectionIds, DEFAULT_ID } from "./data/nav.js";
+import {
+  navTop,
+  navGroups,
+  allSectionIds,
+  DEFAULT_ID,
+  FIRST_LESSON_ID,
+} from "./lesson/parts.js";
 import { buildMenu } from "./data/menu.js";
 
 import TrangChu from "./sections/TrangChu.vue";
