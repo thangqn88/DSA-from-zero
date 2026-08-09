@@ -1,7 +1,7 @@
 <template>
 <section id="qhd-lis-lcs-doixung" class="day-section" data-sid="qhd-lis-lcs-doixung" v-show="active">
 
-<h2>QHĐ Nâng Cao — Knapsack, LIS, LCS, Xâu Đối Xứng <span class="exam-tag">★ Đề ôn tập</span></h2>
+<h2>QHĐ Nâng Cao — Knapsack, LIS, LCS, Xâu Đối Xứng</h2>
 
 <LessonGoal :sid="'qhd-lis-lcs-doixung'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>

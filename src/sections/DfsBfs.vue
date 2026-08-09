@@ -1,7 +1,7 @@
 <template>
 <section id="dfs-bfs" class="day-section" data-sid="dfs-bfs" v-show="active">
 
-<h2>BFS &amp; DFS <span class="exam-tag">★ Đề ôn tập — Bài 9 · Đề bổ sung — D04014, D04015, D04010, D04005, D04006</span></h2>
+<h2>BFS &amp; DFS</h2>
 
 <LessonGoal :sid="'dfs-bfs'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>

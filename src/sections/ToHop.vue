@@ -1,7 +1,7 @@
 <template>
 <section id="to-hop" class="day-section" data-sid="to-hop" v-show="active">
 
-<h2>Tổ Hợp <span class="exam-tag">★ Đề ôn tập — Bài 1</span></h2>
+<h2>Tổ Hợp</h2>
 
 <LessonGoal :sid="'to-hop'">
   <ul>

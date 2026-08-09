@@ -1,7 +1,7 @@
 <template>
 <section id="dsu" class="day-section" data-sid="dsu" v-show="active">
 
-<h2>DSU — Disjoint Set Union <span class="exam-tag">★ Đề bổ sung — Bài D04012, D04007, D04004</span></h2>
+<h2>DSU — Disjoint Set Union</h2>
 
 <LessonGoal :sid="'dsu'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>

@@ -1,7 +1,7 @@
 <template>
 <section id="cay-nhi-phan-bst" class="day-section" data-sid="cay-nhi-phan-bst" v-show="active">
 
-<h2>Cây Nhị Phân &amp; BST <span class="exam-tag">★ Đề ôn tập — Bài 7, 8 · Đề bổ sung — D05006, D05008, D05001</span></h2>
+<h2>Cây Nhị Phân &amp; BST</h2>
 
 <LessonGoal :sid="'cay-nhi-phan-bst'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>

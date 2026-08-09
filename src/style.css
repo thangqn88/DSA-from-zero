@@ -226,26 +226,6 @@
   }
   h4 { color: var(--navy); font-size: 1.04rem; font-weight: 700; scroll-margin-top: 20px; }
 
-  .exam-tag {
-    display: inline-block;
-    font-size: 0.66rem;
-    font-weight: 700;
-    vertical-align: middle;
-    margin-left: 0.6rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    background: var(--success-bg);
-    color: var(--success);
-    border: 1px solid var(--success);
-    white-space: normal;
-    line-height: 1.5;
-  }
-  .exam-tag-neutral {
-    background: var(--card-bg);
-    color: var(--muted);
-    border: 1px solid var(--border);
-  }
-
   details {
     border: 1px solid var(--border);
     border-radius: 10px;

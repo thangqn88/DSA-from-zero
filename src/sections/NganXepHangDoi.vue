@@ -1,7 +1,7 @@
 <template>
 <section id="ngan-xep-hang-doi" class="day-section" data-sid="ngan-xep-hang-doi" v-show="active">
 
-<h2>Ngăn Xếp &amp; Hàng Đợi <span class="exam-tag">★ Đề ôn tập — Bài 5, 6 · Đề bổ sung — Dãy ngoặc đúng dài nhất, D03003, D03014, nhóm D03</span></h2>
+<h2>Ngăn Xếp &amp; Hàng Đợi</h2>
 
 <LessonGoal :sid="'ngan-xep-hang-doi'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>

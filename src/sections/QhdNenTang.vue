@@ -1,7 +1,7 @@
 <template>
 <section id="qhd-nen-tang" class="day-section" data-sid="qhd-nen-tang" v-show="active">
 
-<h2>Quy Hoạch Động — Nền Tảng <span class="exam-tag exam-tag-neutral">nền tảng, không có trong đề</span></h2>
+<h2>Quy Hoạch Động — Nền Tảng</h2>
 
 <LessonGoal :sid="'qhd-nen-tang'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>

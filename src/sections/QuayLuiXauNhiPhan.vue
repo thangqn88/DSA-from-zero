@@ -1,7 +1,7 @@
 <template>
 <section id="quay-lui-xau-nhi-phan" class="day-section" data-sid="quay-lui-xau-nhi-phan" v-show="active">
 
-<h2>Quay Lui &amp; Xâu Nhị Phân <span class="exam-tag">★ Đề ôn tập</span></h2>
+<h2>Quay Lui &amp; Xâu Nhị Phân</h2>
 
 <LessonGoal :sid="'quay-lui-xau-nhi-phan'">
   <ul>

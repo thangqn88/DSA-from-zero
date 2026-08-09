@@ -1,7 +1,7 @@
 <template>
 <section id="tham-lam" class="day-section" data-sid="tham-lam" v-show="active">
 
-<h2>Tham Lam <span class="exam-tag">★ Đề ôn tập</span></h2>
+<h2>Tham Lam</h2>
 
 <LessonGoal :sid="'tham-lam'">
   <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>
