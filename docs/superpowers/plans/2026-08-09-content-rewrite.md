@@ -74,7 +74,8 @@ Claude phải:
 
 | Ngày | Task đã xong | Model đã dùng | Cách chạy | Hạn mức còn / ghi chú |
 |---|---|---|---|---|
-| 2026-08-09 | Task 0–7 (trọn PHASE 0) | Opus | Inline | Hạ tầng xong: Vitest 3 + jsdom, 6 component dùng chung, schema dữ liệu, menu sinh tự động. `tests/lesson-structure.spec.js` đỏ 3 test cho `quay-lui-xau-nhi-phan` — đúng thiết kế Task 6, Task 8 sẽ làm xanh. Phiên sau bắt đầu từ Task 8 (Opus, inline). |
+| 2026-08-09 | Task 0–7 (trọn PHASE 0) | Opus | Inline | Hạ tầng xong: Vitest 3 + jsdom, 6 component dùng chung, schema dữ liệu, menu sinh tự động. `tests/lesson-structure.spec.js` đỏ 3 test cho `quay-lui-xau-nhi-phan` — đúng thiết kế Task 6, Task 8 sẽ làm xanh. |
+| 2026-08-09 | Task 8 (section pilot Quay lui) | Opus | Inline | Toàn bộ 35 test xanh, build sạch. Widget kiểm chứng bằng test tạm mount section trong jsdom (đã xóa sau khi chạy) — đủ 18 id DOM còn nguyên, stepper phản hồi đúng. **Phiên sau bắt đầu Task 9, phải đổi sang Sonnet bằng `/model` và chạy subagent tuần tự.** |
 
 ---
 
@@ -1288,7 +1289,7 @@ mỗi phần "Lý thuyết" phải trả lời đủ 3 câu "Đây là gì?" →
 - **Ví dụ 2 (`vd-n-queens`):** N-Queens — đủ 6 khối, chạy tay bàn 4×4 tới nghiệm đầu tiên, phần tối ưu nói về 3 mảng đánh dấu thay cho quét lại bàn cờ.
 - **Quiz, bài tập, LeetCode:** đã viết ở Task 5 — rà lại và giữ nguyên nếu vẫn đúng.
 
-- [ ] **Step 1: Rà lại dữ liệu và thêm ví dụ thứ hai**
+- [x] **Step 1: Rà lại dữ liệu và thêm ví dụ thứ hai**
 
 Trong `src/data/lessons/quay-lui-xau-nhi-phan.js`, đổi mảng `examples` thành:
 
@@ -1299,12 +1300,12 @@ Trong `src/data/lessons/quay-lui-xau-nhi-phan.js`, đổi mảng `examples` thà
   ],
 ```
 
-- [ ] **Step 2: Chạy test dữ liệu**
+- [x] **Step 2: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 3: Ghi lại danh sách id widget đang dùng trong section**
+- [x] **Step 3: Ghi lại danh sách id widget đang dùng trong section**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/quay-lui-xau-nhi-phan.js | sort -u
@@ -1312,7 +1313,7 @@ grep -o "getElementById('[^']*'" src/widgets/quay-lui-xau-nhi-phan.js | sort -u
 
 Mọi id in ra ở bước này **phải còn nguyên** trong template sau khi viết lại.
 
-- [ ] **Step 4: Viết lại `src/sections/QuayLuiXauNhiPhan.vue` theo khuôn mẫu**
+- [x] **Step 4: Viết lại `src/sections/QuayLuiXauNhiPhan.vue` theo khuôn mẫu**
 
 Khung template chuẩn (phần văn xuôi tự viết theo đặc tả nội dung ở trên,
 các widget cũ dán nguyên vào đúng phần "Ví dụ điển hình"):
@@ -1398,12 +1399,12 @@ Tên hàm khởi tạo widget của từng nhóm (đã tra sẵn, dùng đúng t
 `initQhdNenTangWidgets`, `initQhdLisLcsDoixungWidgets`, `initNganXepHangDoiWidgets`,
 `initDfsBfsWidgets`, `initDsuWidgets`, `initCayNhiPhanBstWidgets`, `initBstNangCaoWidgets`.
 
-- [ ] **Step 5: Chạy test cấu trúc**
+- [x] **Step 5: Chạy test cấu trúc**
 
 Run: `npm run test -- --run tests/lesson-structure.spec.js`
 Expected: PASS cho `quay-lui-xau-nhi-phan`.
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -1411,13 +1412,13 @@ Expected: PASS toàn bộ.
 Run: `npm run build`
 Expected: build sạch.
 
-- [ ] **Step 7: Kiểm tra widget còn sống**
+- [x] **Step 7: Kiểm tra widget còn sống**
 
 Run: `npm run dev`, mở nhóm "Quay lui, Xâu nhị phân", bấm "Bước tiếp theo" trên
 từng widget trong section. Expected: không có lỗi trong console, widget chạy đúng
 như trước.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/QuayLuiXauNhiPhan.vue src/data/lessons/quay-lui-xau-nhi-phan.js
