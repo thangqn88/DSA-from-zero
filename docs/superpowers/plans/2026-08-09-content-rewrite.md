@@ -1448,7 +1448,7 @@ git commit -m "content: rewrite backtracking lesson in 6-part format"
 - **Quiz (4 câu):** (1) tổ hợp và hoán vị khác nhau ở đâu — đáp án "thứ tự có tính hay không"; (2) vì sao tổ hợp không cần mảng `used[]` — đáp án "vì luôn đi tiến, chỉ số sau lớn hơn chỉ số trước"; (3) đổi `backtrack(v+1, ...)` thành `backtrack(v, ...)` thì sinh ra gì — đáp án "tổ hợp có lặp"; (4) hoán vị kế tiếp của {5,4,3,2,1} là gì — đáp án "{1,2,3,4,5} do quay vòng".
 - **Bài tập (3):** tổ hợp có lặp; hoán vị của mảng có phần tử trùng nhau; sinh mọi tập con bằng bitmask thay cho đệ quy.
 
-- [ ] **Step 1: Tạo `src/data/lessons/to-hop.js`**
+- [x] **Step 1: Tạo `src/data/lessons/to-hop.js`**
 
 ```js
 export default {
@@ -1478,7 +1478,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import toHop from './to-hop.js'
@@ -1486,12 +1486,12 @@ import toHop from './to-hop.js'
   'to-hop': toHop,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS. Nếu FAIL nghĩa là `quiz`/`practice` chưa điền đủ — điền tiếp tới khi xanh.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/to-hop.js | sort -u
@@ -1499,7 +1499,7 @@ grep -o "getElementById('[^']*'" src/widgets/to-hop.js | sort -u
 
 Mọi id in ra phải còn nguyên trong template sau khi viết lại.
 
-- [ ] **Step 5: Viết lại `src/sections/ToHop.vue`**
+- [x] **Step 5: Viết lại `src/sections/ToHop.vue`**
 
 ```vue
 <template>
@@ -1575,7 +1575,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ, gồm cả `to-hop` trong `tests/lesson-structure.spec.js`.
@@ -1583,12 +1583,11 @@ Expected: PASS toàn bộ, gồm cả `to-hop` trong `tests/lesson-structure.spe
 Run: `npm run build`
 Expected: build sạch, không lỗi.
 
-- [ ] **Step 7: Kiểm tra widget trên trình duyệt**
+Kết quả thực tế: 47/47 test xanh, build sạch.
 
-Run: `npm run dev`, mở nhóm "Tổ hợp", bấm "Bước tiếp theo", "Lùi lại", "Chạy lại từ đầu".
-Expected: widget chạy đúng, console không lỗi.
+- [ ] **Step 7: Kiểm tra widget trên trình duyệt** — CHƯA kiểm chứng bằng mắt (chưa chạy `npm run dev` và xem qua trình duyệt trong phiên này). Cần người review mở nhóm "Tổ hợp" và bấm thử "Bước tiếp theo"/"Lùi lại"/"Chạy lại từ đầu" trước khi coi bước này là xong.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/ToHop.vue src/data/lessons/to-hop.js src/data/lessons/index.js
