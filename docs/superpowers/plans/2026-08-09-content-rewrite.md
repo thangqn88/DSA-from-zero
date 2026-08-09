@@ -1617,7 +1617,7 @@ git commit -m "content: rewrite combinations lesson in 6-part format"
 - **Quiz (4 câu):** (1) tham lam khác vét cạn ở đâu — "không thử lại lựa chọn đã bỏ"; (2) Activity Selection sắp xếp theo tiêu chí nào — "thời điểm kết thúc tăng dần"; (3) tham lam đổi tiền sai với bộ nào — "{1,3,4} với số tiền 6"; (4) làm sao biết tham lam đúng — "chứng minh lựa chọn tham lam an toàn, không chỉ thử vài ví dụ".
 - **Bài tập (3):** nối dây với chi phí nhỏ nhất; phân phát kẹo theo mức đòi hỏi; xếp nhiều cuộc họp nhất vào 1 phòng khi dữ liệu chưa được sắp xếp.
 
-- [ ] **Step 1: Tạo `src/data/lessons/tham-lam.js`**
+- [x] **Step 1: Tạo `src/data/lessons/tham-lam.js`**
 
 ```js
 export default {
@@ -1647,7 +1647,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import thamLam from './tham-lam.js'
@@ -1655,18 +1655,18 @@ import thamLam from './tham-lam.js'
   'tham-lam': thamLam,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/tham-lam.js | sort -u
 ```
 
-- [ ] **Step 5: Viết lại `src/sections/ThamLam.vue`**
+- [x] **Step 5: Viết lại `src/sections/ThamLam.vue`**
 
 ```vue
 <template>
@@ -1742,7 +1742,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -1750,12 +1750,15 @@ Expected: PASS toàn bộ.
 Run: `npm run build`
 Expected: build sạch.
 
-- [ ] **Step 7: Kiểm tra widget trên trình duyệt**
+- [ ] **Step 7: Kiểm tra widget trên trình duyệt** — CHƯA kiểm chứng bằng mắt (agent
+  không mở được trình duyệt); mọi id DOM widget cần đã được rà lại đủ và test/build
+  đều xanh, nhưng cần người mở `npm run dev` xác nhận layout và 3 widget chạy được
+  trước khi coi Step này là xong.
 
 Run: `npm run dev`, mở nhóm "Tham lam", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/ThamLam.vue src/data/lessons/tham-lam.js src/data/lessons/index.js
