@@ -2646,7 +2646,7 @@ git commit -m "content: rewrite binary tree and BST lesson in 6-part format"
 - **Quiz (5 câu):** (1) dãy con và đoạn con khác nhau ở đâu — "dãy con không cần liền nhau"; (2) trạng thái của knapsack 0/1 là gì — "dp[i][w] là giá trị tốt nhất khi xét i món đầu với sức chứa w"; (3) vì sao bản 1 chiều của knapsack phải duyệt w giảm dần — "để mỗi món chỉ được lấy 1 lần"; (4) LCS của `abcde` và `ace` dài bao nhiêu — "3"; (5) xâu đối xứng dài nhất trong `babad` là gì — "`bab` hoặc `aba`".
 - **Bài tập (3):** đếm số cách chọn ra tổng đúng bằng S (biến thể knapsack đếm); tìm độ dài xâu con chung dài nhất và truy vết ra xâu; đếm số xâu con đối xứng trong 1 xâu.
 
-- [ ] **Step 1: Tạo `src/data/lessons/qhd-lis-lcs-doixung.js`**
+- [x] **Step 1: Tạo `src/data/lessons/qhd-lis-lcs-doixung.js`**
 
 ```js
 export default {
@@ -2677,7 +2677,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import qhdLisLcsDoixung from './qhd-lis-lcs-doixung.js'
@@ -2685,18 +2685,18 @@ import qhdLisLcsDoixung from './qhd-lis-lcs-doixung.js'
   'qhd-lis-lcs-doixung': qhdLisLcsDoixung,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/qhd-lis-lcs-doixung.js | sort -u
 ```
 
-- [ ] **Step 5: Viết lại `src/sections/QhdLisLcsDoixung.vue`**
+- [x] **Step 5: Viết lại `src/sections/QhdLisLcsDoixung.vue`**
 
 ```vue
 <template>
@@ -2773,7 +2773,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -2786,7 +2786,11 @@ Expected: build sạch.
 Run: `npm run dev`, mở nhóm "QHĐ: Knapsack, LIS, LCS, Xâu đối xứng", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+Ghi chú: id DOM (`d7KnapTable`, `d7KnapCaption`, và các id suy ra từ `makeStepper('d7Knap', ...)`:
+`d7KnapPrev`, `d7KnapNext`, `d7KnapReset`, `d7KnapStepNum`, `d7KnapStepTotal`) đã được xác nhận có mặt
+nguyên vẹn trong template mới, nhưng chưa có ai bấm thử trên trình duyệt thật.
+
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/QhdLisLcsDoixung.vue src/data/lessons/qhd-lis-lcs-doixung.js src/data/lessons/index.js
