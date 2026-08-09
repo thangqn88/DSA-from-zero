@@ -1,70 +1,108 @@
-# Giáo Án Ôn Thi CTDL & GT — Bản Vue + Vite (SPA)
+# DSA from Zero — Học Cấu trúc dữ liệu & Giải thuật để qua môn
 
-Bản chuyển đổi từ file HTML tĩnh sang Single Page Application dùng **Vue 3 + Vite**.
+**👉 Học ngay tại: https://thangqn88.github.io/DSA-from-zero/**
 
-## Chạy thử (development)
+Một trang web tiếng Việt dạy Cấu trúc dữ liệu & Giải thuật cho sinh viên đại học đang
+chuẩn bị thi. Không cần cài gì, không cần đăng ký, mở link là học được — kể cả trên điện thoại.
+
+Điểm khác biệt so với slide và giáo trình: mỗi thuật toán đều có một **widget mô phỏng
+chạy từng bước**. Bạn bấm "Bước tiếp theo" và nhìn thấy mảng đổi giá trị, cây được duyệt,
+hàng đợi được nạp — thay vì phải tự tưởng tượng trong đầu.
+
+## Học được những gì
+
+| Nhóm | Chủ đề |
+|---|---|
+| 1 — Vét cạn | Quay lui & sinh xâu nhị phân · Sinh tổ hợp, chỉnh hợp |
+| 2 — Bài toán tối ưu | Tham lam (Activity Selection, Đổi tiền) · QHĐ nền tảng (Fibonacci, Bậc thang) · QHĐ (Knapsack, LIS, LCS, Xâu đối xứng) |
+| 3 — Cấu trúc dữ liệu | Ngăn xếp & Hàng đợi |
+| 4 — Duyệt đồ thị | BFS & DFS · DSU (Disjoint Set Union) |
+| 5 — Cây nhị phân | 3 phép duyệt, cây cha-con, BST · BST nâng cao (kiểm tra, cân bằng, LCA) |
+
+Kèm theo là mục **Cẩm nang giải đề** — hướng dẫn nhận dạng đề bài thuộc dạng nào và nên
+dùng thuật toán gì.
+
+## Cách học hiệu quả nhất
+
+1. Đọc phần giải thích bằng ví dụ đời thường trước, đừng vội nhảy vào code.
+2. Chạy widget mô phỏng ít nhất một lượt, dừng lại ở mỗi bước và tự đoán bước kế tiếp.
+3. Đọc code mẫu C++, tự gõ lại từ đầu chứ không copy.
+4. Làm bài tập ở menu bên phải. Mục có dấu ★ là dạng hay ra trong đề.
+
+Nếu một chỗ nào đó bạn đọc mãi không hiểu, khả năng cao là do bài viết chưa đủ rõ chứ
+không phải do bạn — hãy [mở issue](https://github.com/thangqn88/DSA-from-zero/issues)
+báo lại, đó là góp ý có giá trị nhất cho dự án này.
+
+## Đặc điểm kỹ thuật
+
+- **Không backend, không database, không tracking.** Toàn bộ là file tĩnh, chạy hoàn toàn
+  trong trình duyệt.
+- **17 widget mô phỏng tương tác**, dùng chung một engine chạy-từng-bước
+  ([src/utils/stepper.js](src/utils/stepper.js)).
+- **Code mẫu bằng C++**, ngôn ngữ phổ biến nhất trong các môn DSA ở đại học Việt Nam.
+- Giải thích theo lối Feynman: ví dụ đời thường trước, thuật ngữ sau.
+- URL có `#id` nên bạn bookmark hoặc gửi link thẳng tới một mục cụ thể được.
+
+## Chạy trên máy của bạn
+
+Cần [Node.js](https://nodejs.org/) 20 trở lên.
 
 ```bash
+git clone https://github.com/thangqn88/DSA-from-zero.git
+cd DSA-from-zero
 npm install
 npm run dev
 ```
 
-Mở địa chỉ hiện ra trong terminal (mặc định `http://localhost:5173`).
+Mở địa chỉ hiện ra trong terminal (mặc định http://localhost:5173).
 
-## Build bản tĩnh để deploy / mở offline
+Build bản tĩnh:
 
 ```bash
-npm run build
-npm run preview
+npm run build     # tạo thư mục dist/
+npm run preview   # xem thử bản build
 ```
 
-`npm run build` tạo thư mục `dist/` — có thể deploy lên Vercel/Netlify/GitHub Pages,
-hoặc mở offline bằng cách chạy 1 server tĩnh bất kỳ trong thư mục `dist/`
-(ví dụ `npx serve dist`). **Không nên mở trực tiếp `dist/index.html` bằng
-double-click** — trình duyệt sẽ chặn một số tính năng do giới hạn bảo mật của
-`file://`, y hệt vấn đề gặp phải ở bản HTML tĩnh cũ.
+Đừng mở trực tiếp `dist/index.html` bằng double-click — giao thức `file://` bị trình duyệt
+chặn nhiều tính năng. Hãy chạy qua một server tĩnh, ví dụ `npx serve dist`.
 
-## Cấu trúc thư mục
+## Cấu trúc mã nguồn
 
 ```
 src/
-  App.vue              -> layout chính: menu trái + nội dung + menu phải
-  style.css            -> toàn bộ CSS (đã bỏ chữ nghiêng — font-style: italic)
+  App.vue              layout chính: menu trái + nội dung + menu phải
+  style.css            toàn bộ CSS
   data/
-    nav.js             -> dữ liệu menu trái (5 nhóm kiến thức)
-    menus.json         -> dữ liệu menu phải (bài tập/mục con theo từng nhóm)
-  sections/            -> 12 component, mỗi component = 1 nhóm kiến thức
-  widgets/             -> logic JS cho từng widget tương tác (stepper, đồ thị, cây...)
-  utils/stepper.js     -> engine dùng chung cho mọi widget bước-từng-bước
+    nav.js             menu trái — 5 nhóm kiến thức
+    menus.json         menu phải — mục con của từng nhóm
+  sections/            12 component Vue, mỗi component là 1 nhóm kiến thức
+  widgets/             logic của các widget tương tác
+  utils/stepper.js     engine chạy-từng-bước dùng chung
 ```
 
-## Cách hoạt động
+Chuyển nhóm kiến thức bằng `v-show` trên state trong `App.vue`, không dùng router. Mỗi
+widget khởi tạo trong `onMounted()` của component tương ứng và thao tác DOM trực tiếp qua
+`getElementById` — nên khi sửa nội dung, **không được đổi các `id` mà widget đang query**.
 
-- Click vào menu trái → đổi `activeSection` (reactive state trong `App.vue`) →
-  Vue tự động ẩn/hiện đúng component tương ứng bằng `v-show`.
-- Menu phải tự động đổi theo `activeSection`, lấy dữ liệu từ `data/menus.json`
-  (đã tự trích xuất toàn bộ tiêu đề `<h3>`/`<h4>` trong mỗi nhóm, mục nào có
-  dấu ★ là bài chính thức trong đề).
-- Toàn bộ 17 widget tương tác (backtracking, N-Queens, tổ hợp, DFS/BFS, DSU,
-  duyệt cây, v.v.) giữ nguyên logic cũ, chỉ bọc lại trong `onMounted()` của
-  từng Vue component.
-- URL có `#id` để chia sẻ/bookmark trực tiếp tới 1 mục cụ thể, dùng
-  `history.pushState` — hoạt động bình thường khi chạy qua server thật
-  (không còn lỗi "Unsafe attempt to load URL" như khi mở file `file://` cũ).
+Thêm một nhóm kiến thức mới: tạo file trong `src/sections/`, thêm entry vào
+[src/data/nav.js](src/data/nav.js), thêm dữ liệu vào [src/data/menus.json](src/data/menus.json),
+rồi import và gắn `<TenComponent :active="..."/>` vào [src/App.vue](src/App.vue).
 
-## Đã kiểm tra
+Xây dựng bằng [Vue 3](https://vuejs.org/) + [Vite](https://vite.dev/). Mỗi lần push vào
+`main` sẽ tự động build và deploy lên GitHub Pages qua
+[GitHub Actions](.github/workflows/deploy.yml).
 
-- `npm run build` chạy sạch, không lỗi.
-- Đã test bằng trình duyệt headless: click qua toàn bộ 12 nhóm kiến thức và
-  bấm "Bước tiếp theo" trên cả 17 widget — không phát sinh lỗi console nào.
-- Đã xác nhận **không còn chữ nghiêng** ở bất kỳ đâu trong toàn trang.
+## Góp ý và đóng góp
 
-## Ghi chú
+Dự án đang trong quá trình viết lại toàn bộ nội dung, nên chắc chắn còn chỗ sai và chỗ khó hiểu.
 
-- Đã sửa 1 lỗi thẻ `<em>` chưa đóng trong nội dung gốc (phần Cẩm nang — DSU),
-  Vue's compiler nghiêm ngặt hơn trình duyệt nên bắt được lỗi này mà bản HTML
-  tĩnh cũ không phát hiện ra.
-- Nếu muốn thêm 1 nhóm kiến thức mới: tạo file `.vue` mới trong `src/sections/`,
-  thêm entry vào `src/data/nav.js`, thêm dữ liệu menu phải vào
-  `src/data/menus.json`, rồi import + thêm dòng `<TenComponent :active="..."/>`
-  vào `App.vue`.
+- Thấy lỗi kiến thức, lỗi chính tả, hoặc đoạn nào đọc không hiểu → mở issue.
+- Muốn thêm bài, thêm widget, sửa nội dung → gửi pull request.
+
+Quy ước khi viết nội dung: tiếng Việt xưng "bạn", giọng thân thiện, code mẫu C++, và
+**không dùng chữ nghiêng** ở bất kỳ đâu (CSS đã ép `font-style: normal`).
+
+## Giấy phép
+
+[MIT](LICENSE) — bạn được tự do dùng, sửa, và chia sẻ, kể cả cho lớp học của mình.
+Nếu tài liệu này giúp bạn qua môn, một ngôi sao ⭐ trên repo là lời cảm ơn đủ rồi.
