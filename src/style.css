@@ -7,7 +7,14 @@
 
     --ink: #1F2733;
     --muted: #5B6472;
-    --muted-2: #8891A0;
+    /* #8891A0 cũ chỉ đạt 2.9:1 trên nền trắng — dưới chuẩn AA cho nhãn nhỏ */
+    --muted-2: #6B7280;
+
+    /* Bề ngang khung trang: header và hàng nội dung dùng chung 1 giá trị,
+       nếu lệch nhau sẽ tạo khoảng trống thừa bên phải. */
+    --shell: 1120px;
+    /* Độ dài dòng chữ tối đa cho văn xuôi — quá dài thì mắt khó bắt dòng kế. */
+    --measure: 70ch;
 
     --bg: #F7F8FB;
     --surface: #FFFFFF;
@@ -26,6 +33,17 @@
 
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+
+  /* Người bật "giảm chuyển động" trong hệ điều hành dễ chóng mặt vì cuộn mượt
+     và hiệu ứng — tôn trọng lựa chọn đó. */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -55,14 +73,9 @@
     padding: 1.8rem 2rem 6rem;
     min-width: 0;
     flex: 1;
-    max-width: 1400px;
+    /* Cộng padding ngang để phần nội dung bên trong rộng đúng --shell */
+    max-width: calc(var(--shell) + 4rem);
     margin: 0 auto;
-  }
-  .content-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    gap: 1.25rem;
-    align-items: start;
   }
   .sidebar {
     position: sticky;
@@ -118,10 +131,6 @@
     color: var(--blue);
     border-color: rgba(37, 99, 235, 0.18);
     margin-bottom: 0.45rem;
-  }
-  @media (max-width: 1024px) {
-    .content-row { grid-template-columns: 1fr; }
-    .exercise-menu { order: -1; }
   }
   @media (max-width: 900px) {
     .layout { flex-direction: column; }
@@ -347,11 +356,6 @@
   }
 
   .badge-core { display:inline-block; background:var(--success); color:white; font-size:0.72rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:12px; margin-left:0.6rem; vertical-align:middle; text-transform:none; letter-spacing:0; }
-  .badge-bonus { display:inline-block; background:var(--muted); color:white; font-size:0.72rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:12px; margin-left:0.6rem; vertical-align:middle; text-transform:none; letter-spacing:0; }
-
-  .scope-table td.yes { color: var(--success); font-weight:700; text-align:center; }
-  .scope-table td.no { color: var(--muted-2); text-align:center; }
-
   .demo-banner {
     background: var(--card-bg);
     border: 1px dashed #C3CAD6;
@@ -452,21 +456,30 @@
     font-style: normal;
   }
 
-  /* ===== Khung nội dung chính + menu bài tập bên phải (SPA layout) ===== */
+  /* ===== Khung nội dung chính + menu bài tập bên phải (SPA layout) =====
+     Hàng này KHÔNG được đặt max-width riêng: nó phải rộng đúng bằng
+     .page-header ở trên, nếu không sẽ hở một mảng trống bên phải. */
   .content-row {
     display: flex;
     align-items: flex-start;
-    gap: 2.2rem;
-    max-width: 1120px;
-    margin: 0 auto;
+    gap: 2.5rem;
   }
   .content-main {
     flex: 1;
     min-width: 0;
-    max-width: 800px;
+  }
+  /* Giới hạn độ dài dòng chỉ cho văn xuôi ở cấp ngoài cùng. Code, bảng,
+     widget và các hộp có nền vẫn dùng trọn bề ngang cột. */
+  .content-main > p,
+  .content-main > ul > li,
+  .content-main > ol > li,
+  .lesson-part > p,
+  .lesson-part > ul > li,
+  .lesson-part > ol > li {
+    max-width: var(--measure);
   }
   .exercise-menu {
-    width: 250px;
+    width: 264px;
     flex-shrink: 0;
     position: sticky;
     top: 1.2rem;
@@ -485,18 +498,26 @@
     color: var(--muted-2); margin-bottom: 0.3rem; font-weight: 700;
   }
   .exercise-menu .em-link {
-    font-size: 0.85rem; padding: 0.45rem 0.6rem; border-radius: 8px;
-    color: var(--navy); text-decoration: none; line-height: 1.35;
+    font-size: 0.87rem; padding: 0.5rem 0.65rem; border-radius: 8px;
+    color: var(--navy); text-decoration: none; line-height: 1.4;
+    transition: background 0.15s;
   }
   .exercise-menu .em-link:hover { background: var(--border); }
   .exercise-menu .em-link.em-official {
-    font-weight: 700; color: var(--success); background: var(--success-bg);
+    font-weight: 700; color: #0F6B42; background: var(--success-bg);
   }
+  /* Mục con (ví dụ điển hình) thụt vào và có vạch dọc để thấy rõ cấp bậc */
   .exercise-menu .em-link.em-level4 {
-    margin-left: 0.8rem; font-size: 0.8rem; color: var(--muted);
+    margin-left: 0.55rem;
+    padding-left: 0.75rem;
+    border-left: 2px solid var(--border);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.83rem;
+    color: var(--muted);
   }
 
-  @media (max-width: 980px) {
+  /* Menu bài tập xuống dưới nội dung khi không còn đủ chỗ cho 2 cột */
+  @media (max-width: 1023px) {
     .content-row { flex-direction: column; }
     .exercise-menu { width: 100%; position: static; max-height: none; order: -1; }
   }
@@ -571,6 +592,7 @@
     display: inline-block; font-size: 0.72rem; font-weight: 700;
     padding: 0.15rem 0.55rem; border-radius: 999px; white-space: nowrap;
   }
-  .lc-easy { background: var(--success-bg); color: var(--success); }
-  .lc-medium { background: var(--warning-bg); color: var(--warning); }
-  .lc-hard { background: var(--danger-bg); color: var(--danger); }
+  /* Màu chữ đậm hơn màu viền để nhãn nhỏ vẫn đạt tương phản AA trên nền nhạt */
+  .lc-easy { background: var(--success-bg); color: #0F6B42; }
+  .lc-medium { background: var(--warning-bg); color: #8A5A0B; }
+  .lc-hard { background: var(--danger-bg); color: #A32D2D; }
