@@ -500,3 +500,25 @@
     .content-row { flex-direction: column; }
     .exercise-menu { width: 100%; position: static; max-height: none; order: -1; }
   }
+
+  /* ===== Khung 6 phần chuẩn của 1 bài học ===== */
+  .lesson-goal {
+    background: var(--success-bg);
+    border-left: 4px solid var(--success);
+    border-radius: 0 10px 10px 0;
+    padding: 1rem 1.3rem;
+    margin: 1.4rem 0 2rem;
+    scroll-margin-top: 20px;
+  }
+  .lesson-goal .lg-title {
+    display: block;
+    font-weight: 700;
+    color: #17694B;
+    margin-bottom: 0.4rem;
+  }
+  .lesson-goal ul { margin: 0.3rem 0 0; padding-left: 1.2rem; }
+  .lesson-part { margin-bottom: 1rem; }
+  .lesson-part > h3 {
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 0.4rem;
+  }
