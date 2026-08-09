@@ -16,22 +16,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Test đỏ thì dừng ở đây, không build và không deploy.
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - run: npm ci
-      - run: npm run test -- --run
-
+  # Test và build nằm chung một job vì unit test ở đây chạy trên mã nguồn, không
+  # chạy trên bản dist — tách ra hai job chỉ khiến npm ci phải chạy hai lần mà
+  # job sau không dùng lại được gì của job trước.
+  #
+  # Thứ tự trong job vẫn là test trước: bước sau chỉ chạy khi bước trước xanh,
+  # nên test đỏ là dừng luôn, không build và không deploy.
   build:
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,8 +32,14 @@ jobs:
           node-version: 22
           cache: npm
 
-      - run: npm ci
-      - run: npm run build
+      - name: Cài dependencies
+        run: npm ci
+
+      - name: Chạy unit test
+        run: npm run test -- --run
+
+      - name: Build bản tĩnh
+        run: npm run build
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
