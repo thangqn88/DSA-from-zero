@@ -38,36 +38,34 @@
           <div>
             <h1 id="top">Học DSA từ con số 0</h1>
             <p class="subtitle">
-              Một lộ trình học trực quan cho người mới bắt đầu: xem ví dụ, hiểu
-              cách suy nghĩ, rồi tự làm bài tập.
+              Cấu trúc dữ liệu và giải thuật cho người mới bắt đầu: mỗi khái
+              niệm mở đầu bằng một ví dụ đời thường, có widget chạy tay từng
+              bước, code mẫu C++ và bài tập để tự luyện.
             </p>
           </div>
           <div class="header-badges">
-            <span class="header-pill">Học theo khung 6 phần</span>
-            <span class="header-pill secondary">Học theo nhóm kiến thức</span>
+            <span class="header-pill">10 nhóm kiến thức</span>
+            <span class="header-pill secondary">Miễn phí, tiếng Việt</span>
           </div>
         </div>
 
         <div class="learner-steps" aria-label="Lộ trình học gợi ý">
           <div class="step-card">
-            <strong>1. Bắt đầu</strong>
+            <strong>1. Hiểu bản chất</strong>
             <span
-              >Chọn một nhóm kiến thức và đọc mục tiêu bài học trước khi vào lý
-              thuyết.</span
+              >Đọc lý thuyết và phần "vì sao quan trọng" trước khi mở code.</span
             >
           </div>
           <div class="step-card">
-            <strong>2. Hiểu bản chất</strong>
+            <strong>2. Tự kiểm tra</strong>
             <span
-              >Đọc sơ đồ, ví dụ và lời giải ngắn gọn trước khi mở code
-              dài.</span
+              >Làm quiz ngay trong bài để biết mình đã hiểu tới đâu.</span
             >
           </div>
           <div class="step-card">
             <strong>3. Luyện tập</strong>
             <span
-              >Quay lại bài tập trong nhóm để củng cố ngay sau khi học
-              xong.</span
+              >Làm 3 bài tập của nhóm, rồi luyện tiếp danh sách LeetCode.</span
             >
           </div>
         </div>

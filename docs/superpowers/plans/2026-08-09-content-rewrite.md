@@ -3019,7 +3019,7 @@ Mỗi tên nhóm là 1 link `<a href="#<sid>">` để bấm sang thẳng nhóm �
 
 - [x] **Step 6: ~~Thêm liên kết chéo trong `src/sections/CamNang.vue`~~ — BỎ, section đã bị xóa**
 
-- [ ] **Step 7: Cập nhật 3 thẻ bước học trong `src/App.vue`**
+- [x] **Step 7: Cập nhật 3 thẻ bước học trong `src/App.vue`** — đã làm ngày 2026-08-09 (kèm sửa tiêu đề phụ và 2 pill của page-header cho hợp web học tập public)
 
 ```html
         <div class="learner-steps" aria-label="Lộ trình học gợi ý">
