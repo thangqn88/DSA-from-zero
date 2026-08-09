@@ -41,7 +41,7 @@ describe('dữ liệu menu trái suy ra từ CHAPTERS', () => {
   })
 
   it('FIRST_LESSON_ID là bài ready đầu tiên theo thứ tự học', () => {
-    expect(FIRST_LESSON_ID).toBe('ngan-xep-hang-doi')
+    expect(FIRST_LESSON_ID).toBe('do-phuc-tap')
   })
 
   it('DEFAULT_ID vẫn là trang chủ', () => {

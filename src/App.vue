@@ -64,6 +64,7 @@
       <div class="content-row">
         <div class="content-main" ref="contentMainEl">
           <TrangChu :active="activeSection === 'trang-chu'" />
+          <DoPhucTap :active="activeSection === 'do-phuc-tap'" />
           <QuayLuiXauNhiPhan
             :active="activeSection === 'quay-lui-xau-nhi-phan'"
           />
@@ -132,6 +133,7 @@ import {
 import { buildMenu } from "./data/menu.js";
 
 import TrangChu from "./sections/TrangChu.vue";
+import DoPhucTap from "./sections/DoPhucTap.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
 import ToHop from "./sections/ToHop.vue";
 import ThamLam from "./sections/ThamLam.vue";
