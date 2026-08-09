@@ -1962,7 +1962,7 @@ git commit -m "content: rewrite foundational DP lesson in 6-part format"
 - **Quiz (4 câu):** (1) LIFO và FIFO khác nhau ra sao — "thứ tự lấy phần tử ra"; (2) bài kiểm tra dãy ngoặc dùng cấu trúc nào và vì sao — "ngăn xếp, vì ngoặc mở gần nhất phải đóng trước"; (3) BFS dùng cấu trúc nào — "hàng đợi"; (4) đẩy 1,2,3 vào ngăn xếp rồi lấy ra 2 lần thì được gì — "3 rồi 2".
 - **Bài tập (3):** tính giá trị biểu thức hậu tố; cài Min Stack lấy giá trị nhỏ nhất trong O(1); cài hàng đợi bằng 2 ngăn xếp.
 
-- [ ] **Step 1: Tạo `src/data/lessons/ngan-xep-hang-doi.js`**
+- [x] **Step 1: Tạo `src/data/lessons/ngan-xep-hang-doi.js`**
 
 ```js
 export default {
@@ -1994,7 +1994,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import nganXepHangDoi from './ngan-xep-hang-doi.js'
@@ -2002,12 +2002,12 @@ import nganXepHangDoi from './ngan-xep-hang-doi.js'
   'ngan-xep-hang-doi': nganXepHangDoi,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/ngan-xep-hang-doi.js | sort -u
@@ -2015,7 +2015,7 @@ grep -o "getElementById('[^']*'" src/widgets/ngan-xep-hang-doi.js | sort -u
 
 Section này có nhiều widget nhất — kiểm tra kỹ, mọi id in ra phải còn nguyên.
 
-- [ ] **Step 5: Viết lại `src/sections/NganXepHangDoi.vue`**
+- [x] **Step 5: Viết lại `src/sections/NganXepHangDoi.vue`**
 
 ```vue
 <template>
@@ -2091,7 +2091,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -2099,12 +2099,12 @@ Expected: PASS toàn bộ.
 Run: `npm run build`
 Expected: build sạch.
 
-- [ ] **Step 7: Kiểm tra widget trên trình duyệt**
+- [ ] **Step 7: Kiểm tra widget trên trình duyệt** — CHƯA kiểm chứng bằng mắt trong phiên này (không chạy `npm run dev` để xem trực tiếp); mọi id DOM widget đã được đối chiếu tĩnh bằng grep và khớp 100%.
 
 Run: `npm run dev`, mở nhóm "Ngăn xếp & Hàng đợi", chạy hết các nút của **mọi** widget trong section.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/NganXepHangDoi.vue src/data/lessons/ngan-xep-hang-doi.js src/data/lessons/index.js
