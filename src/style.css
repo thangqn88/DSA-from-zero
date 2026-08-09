@@ -634,3 +634,38 @@
   .lc-easy { background: var(--success-bg); color: #0F6B42; }
   .lc-medium { background: var(--warning-bg); color: #8A5A0B; }
   .lc-hard { background: var(--danger-bg); color: #A32D2D; }
+
+  /* Dự án thực hành. Hộp có nền nên KHÔNG bó theo --measure — nó dùng trọn bề
+     ngang cột nội dung, giống các hộp khác của bài học. */
+  .pb {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    background: var(--card-bg);
+  }
+  /* MVP cuối chương viền amber cho khác hẳn bài luyện tay thường ngày. */
+  .pb-capstone { border: 2px solid var(--amber); }
+  /* #8A5A0B thay cho --amber vì --amber chỉ đạt 4.2:1 trên nền --card-bg. */
+  .pb-badge {
+    margin: 0 0 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8A5A0B;
+  }
+  .pb-title { margin: 0 0 0.5rem; font-size: 1.05rem; }
+  .pb-why { margin: 0 0 0.8rem; }
+  .pb-block { margin-top: 0.9rem; }
+  .pb-block ul { margin: 0.35rem 0 0; padding-left: 1.2rem; }
+  .pb-block li { margin: 0.25rem 0; }
+  .pb-block summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
+  .pb-reuse { border-left: 3px solid var(--amber); padding-left: 0.75rem; }
+  .pb-sample { overflow-x: auto; }
+  .pb-data-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--navy);
+    font-weight: 600;
+  }
