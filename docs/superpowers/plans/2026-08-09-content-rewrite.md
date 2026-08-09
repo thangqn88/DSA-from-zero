@@ -1788,7 +1788,7 @@ git commit -m "content: rewrite greedy lesson in 6-part format"
 - **Quiz (4 câu):** (1) vì sao Fibonacci đệ quy thuần chậm — "tính lại cùng một bài toán con rất nhiều lần"; (2) đệ quy có nhớ và dựng bảng khác nhau ở đâu — "thứ tự tính, kết quả như nhau"; (3) dấu hiệu nhận biết bài QHĐ — "bài toán con gối nhau và cấu trúc con tối ưu"; (4) số cách leo 5 bậc là bao nhiêu — "8".
 - **Bài tập (3):** đếm số đường đi trên lưới m×n chỉ đi phải/xuống; House Robber (không lấy 2 nhà liền kề); đổi tiền với số tờ ít nhất bằng QHĐ cho bộ mệnh giá bất kỳ.
 
-- [ ] **Step 1: Tạo `src/data/lessons/qhd-nen-tang.js`**
+- [x] **Step 1: Tạo `src/data/lessons/qhd-nen-tang.js`**
 
 ```js
 export default {
@@ -1818,7 +1818,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import qhdNenTang from './qhd-nen-tang.js'
@@ -1826,12 +1826,12 @@ import qhdNenTang from './qhd-nen-tang.js'
   'qhd-nen-tang': qhdNenTang,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/qhd-nen-tang.js | sort -u
@@ -1839,7 +1839,7 @@ grep -o "getElementById('[^']*'" src/widgets/qhd-nen-tang.js | sort -u
 
 Mọi id in ra phải còn nguyên trong template sau khi viết lại.
 
-- [ ] **Step 5: Viết lại `src/sections/QhdNenTang.vue`**
+- [x] **Step 5: Viết lại `src/sections/QhdNenTang.vue`**
 
 ```vue
 <template>
@@ -1915,7 +1915,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -1923,12 +1923,16 @@ Expected: PASS toàn bộ.
 Run: `npm run build`
 Expected: build sạch.
 
-- [ ] **Step 7: Kiểm tra widget trên trình duyệt**
+- [ ] **Step 7: Kiểm tra widget trên trình duyệt** — CHƯA kiểm chứng bằng mắt (agent
+  không mở được trình duyệt); id DOM widget `d6FibView`/`d6FibCaption`/`d6FibPrev`/
+  `d6FibNext`/`d6FibReset`/`d6FibStepNum`/`d6FibStepTotal` đã rà lại đủ và test/build
+  đều xanh, nhưng cần người mở `npm run dev` xác nhận layout và widget Fibonacci chạy
+  được trước khi coi Step này là xong.
 
 Run: `npm run dev`, mở nhóm "QHĐ nền tảng", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/QhdNenTang.vue src/data/lessons/qhd-nen-tang.js src/data/lessons/index.js

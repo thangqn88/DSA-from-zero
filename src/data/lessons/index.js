@@ -2,9 +2,11 @@
 import quayLuiXauNhiPhan from './quay-lui-xau-nhi-phan.js'
 import toHop from './to-hop.js'
 import thamLam from './tham-lam.js'
+import qhdNenTang from './qhd-nen-tang.js'
 
 export const lessons = {
   'quay-lui-xau-nhi-phan': quayLuiXauNhiPhan,
   'to-hop': toHop,
   'tham-lam': thamLam,
+  'qhd-nen-tang': qhdNenTang,
 }
