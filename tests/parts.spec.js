@@ -6,15 +6,21 @@ import {
 } from '../src/lesson/parts.js'
 
 describe('parts', () => {
-  it('có đúng 7 mục theo thứ tự chuẩn', () => {
+  it('có đúng 8 mục theo thứ tự chuẩn', () => {
     expect(LESSON_PARTS.map(p => p.key)).toEqual([
-      'muc-tieu', 'ly-thuyet', 'vi-sao', 'quiz', 'vi-du', 'bai-tap', 'leetcode',
+      'muc-tieu', 'ly-thuyet', 'vi-sao', 'quiz', 'vi-du', 'bai-tap', 'leetcode', 'du-an',
     ])
   })
 
-  it('đánh số 1..6 cho 6 phần sau phần mở đầu', () => {
+  it('đánh số 1..7 cho 7 phần sau phần mở đầu', () => {
     expect(LESSON_PARTS[0].num).toBe(0)
-    expect(LESSON_PARTS.slice(1).map(p => p.num)).toEqual([1, 2, 3, 4, 5, 6])
+    expect(LESSON_PARTS.slice(1).map(p => p.num)).toEqual([1, 2, 3, 4, 5, 6, 7])
+  })
+
+  it('mục cuối là Dự án thực hành', () => {
+    const last = LESSON_PARTS.at(-1)
+    expect(last.key).toBe('du-an')
+    expect(partTitle('du-an')).toBe('7. Dự án thực hành')
   })
 
   it('partId ghép sid với key bằng hai gạch ngang', () => {

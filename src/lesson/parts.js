@@ -8,6 +8,7 @@ export const LESSON_PARTS = [
   { key: 'vi-du', num: 4, title: 'Ví dụ điển hình' },
   { key: 'bai-tap', num: 5, title: 'Bài tập kiểm tra' },
   { key: 'leetcode', num: 6, title: 'Tài nguyên tự luyện LeetCode' },
+  { key: 'du-an', num: 7, title: 'Dự án thực hành' },
 ]
 
 const BY_KEY = Object.fromEntries(LESSON_PARTS.map(p => [p.key, p]))

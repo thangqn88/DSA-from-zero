@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildMenu } from '../src/data/menu.js'
+import { buildMenu, menuTuDuLieu } from '../src/data/menu.js'
 import { lessons } from '../src/data/lessons/index.js'
 import menusData from '../src/data/menus.json'
 
@@ -19,6 +19,18 @@ describe('buildMenu', () => {
     expect(menu[at + 1].id).toBe(first.id)
     expect(menu[at + 1].level).toBe(4)
     expect(menu[at + 1].official).toBe(first.official)
+  })
+
+  it('không sinh mục Dự án thực hành cho bài chưa có dữ liệu project', () => {
+    const menu = buildMenu('dsu')
+    expect(lessons['dsu'].project).toBeUndefined()
+    expect(menu.map(m => m.id)).not.toContain('dsu--du-an')
+  })
+
+  it('sinh mục Dự án thực hành khi bài đã có dữ liệu project', () => {
+    const menu = menuTuDuLieu('vi-du-sid', { ...lessons['dsu'], project: { title: 'x' } })
+    expect(menu.map(m => m.id)).toContain('vi-du-sid--du-an')
+    expect(menu.at(-1).label).toBe('7. Dự án thực hành')
   })
 
   it('trả về menu từ menus.json cho section không phải bài học', () => {

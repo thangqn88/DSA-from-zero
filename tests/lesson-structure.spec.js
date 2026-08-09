@@ -17,8 +17,12 @@ describe.each(done)('cấu trúc section: $sid', ({ sid, file }) => {
     expect(src).toContain('defineProps({ active: Boolean })')
   })
 
-  it('dùng đủ 7 mục chuẩn của khung bài học', () => {
+  it('dùng đủ các mục chuẩn của khung bài học', () => {
+    const sec = LESSON_SECTIONS.find(s => s.sid === sid)
     for (const p of LESSON_PARTS) {
+      // Phần 7 chỉ bắt buộc với bài đã được bổ sung Dự án thực hành. Giai đoạn 4
+      // sẽ bật cờ duAn cho cả 10 bài cũ, lúc đó luật này phủ toàn bộ 30 bài.
+      if (p.key === 'du-an' && !sec.duAn) continue
       if (p.key === 'muc-tieu') {
         expect(src).toContain('<LessonGoal')
       } else {
