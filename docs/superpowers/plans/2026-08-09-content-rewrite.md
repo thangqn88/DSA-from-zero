@@ -77,6 +77,7 @@ Claude phải:
 | 2026-08-09 | Task 0–7 (trọn PHASE 0) | Opus | Inline | Hạ tầng xong: Vitest 3 + jsdom, 6 component dùng chung, schema dữ liệu, menu sinh tự động. `tests/lesson-structure.spec.js` đỏ 3 test cho `quay-lui-xau-nhi-phan` — đúng thiết kế Task 6, Task 8 sẽ làm xanh. |
 | 2026-08-09 | Task 8 (section pilot Quay lui) | Opus | Inline | Toàn bộ 35 test xanh, build sạch. Widget kiểm chứng bằng test tạm mount section trong jsdom (đã xóa sau khi chạy) — đủ 18 id DOM còn nguyên, stepper phản hồi đúng. **Phiên sau bắt đầu Task 9, phải đổi sang Sonnet bằng `/model` và chạy subagent tuần tự.** |
 | 2026-08-09 | Task 9–18 | Sonnet | Subagent, đúng 1 agent mỗi lần, tuần tự | Trọn 10 nhóm kiến thức đã viết lại theo khung 6 phần. Vòng chính vẫn là Opus nhưng chỉ điều phối; toàn bộ việc viết nội dung do subagent Sonnet làm, đúng tinh thần bảng chi phí. 145 test xanh sau Task 18. |
+| 2026-08-10 | Đợt mới, Giai đoạn 0–2 | Opus | Inline | **Kế hoạch này đã kết thúc.** Đợt mở rộng 10 → 30 nhóm bắt đầu, xem `docs/superpowers/plans/2026-08-09-mo-rong-30-nhom-gd0-2.md` và spec kèm theo. 225 test xanh, build sạch. Chưa kiểm chứng giao diện bằng mắt. |
 | 2026-08-09 | Task 19–20 | Opus | Inline | Rà góc nhìn người mới: 9/10 nhóm đạt, sửa nhóm QHĐ nâng cao thiếu ví dụ đời thường mở đầu; gỡ 8 thẻ `<em>` sót lại. Task 20 sửa lỗi HTML `<tr>` trong `LeetCodeList.vue` (build hết cảnh báo) và bọc bảng LeetCode cho cuộn ngang. **Còn nợ Step 1, 2, 3, 5 của Task 20** — phiên này không có công cụ trình duyệt nên chưa kiểm chứng giao diện bằng mắt. |
 
 ---

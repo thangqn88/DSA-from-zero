@@ -11,17 +11,42 @@ hàng đợi được nạp — thay vì phải tự tưởng tượng trong đ�
 
 ## Học được những gì
 
-| Nhóm | Chủ đề |
-|---|---|
-| 1 — Vét cạn | Quay lui & sinh xâu nhị phân · Sinh tổ hợp, chỉnh hợp |
-| 2 — Bài toán tối ưu | Tham lam (Activity Selection, Đổi tiền) · QHĐ nền tảng (Fibonacci, Bậc thang) · QHĐ (Knapsack, LIS, LCS, Xâu đối xứng) |
-| 3 — Cấu trúc dữ liệu | Ngăn xếp & Hàng đợi |
-| 4 — Duyệt đồ thị | BFS & DFS · DSU (Disjoint Set Union) |
-| 5 — Cây nhị phân | 3 phép duyệt, cây cha-con, BST · BST nâng cao (kiểm tra, cân bằng, LCA) |
+Chương trình gồm 30 nhóm kiến thức chia 7 chương, đi từ nền móng lên. Những nhóm chưa
+viết xong hiện mờ trên menu kèm nhãn "sắp có", để bạn nhìn thấy trước lộ trình.
 
-Mỗi nhóm đi theo cùng một khung 6 phần: mục tiêu bài học → lý thuyết cơ bản → vì sao
-kiến thức này quan trọng → quiz kiểm tra → ví dụ điển hình → bài tập kèm danh sách
-LeetCode để tự luyện.
+| Chương | Nhóm kiến thức |
+|---|---|
+| 1 — Nền móng | Độ phức tạp thuật toán · Mảng, chuỗi và mảng động · Đệ quy · Danh sách liên kết |
+| 2 — Xử lý dãy | Sắp xếp · Tìm kiếm nhị phân · Hai con trỏ và cửa sổ trượt · Tổng tiền tố |
+| 3 — Tra cứu | Ngăn xếp và hàng đợi · Bảng băm · Heap và hàng đợi ưu tiên · Trie |
+| 4 — Cây | Cây nhị phân và BST · BST nâng cao · Fenwick và Segment Tree |
+| 5 — Đồ thị | DFS và BFS · DSU · Sắp xếp tô-pô · Đường đi ngắn nhất · Cây khung nhỏ nhất |
+| 6 — Thiết kế thuật toán | Quay lui · Tổ hợp · Tham lam · QHĐ nền tảng · QHĐ nâng cao |
+| 7 — Chuyên đề và giới hạn | Thao tác bit · Toán và số học · Chuỗi nâng cao · Work/Span · Độ khó bài toán |
+
+Mỗi nhóm đi theo cùng một khung 8 mục: mục tiêu bài học → lý thuyết cơ bản → vì sao
+kiến thức này quan trọng → quiz kiểm tra → ví dụ điển hình → bài tập → danh sách LeetCode
+để tự luyện → **dự án thực hành**.
+
+## Dự án thực hành
+
+Học để vận dụng thì phải dựng ra thứ gì đó chạy được. Mỗi nhóm kiến thức có một bài
+luyện tay khoảng một tới hai giờ, và mỗi chương kết thúc bằng một dự án MVP quy mô một
+cuối tuần:
+
+| Chương | Dự án MVP |
+|---|---|
+| 1 | `core` + `bench` — thư viện nền tự cài và công cụ đo hiệu năng |
+| 2 | Bộ phân tích log máy chủ, chạy trên log Nginx thật |
+| 3 | Máy gợi ý tìm kiếm có xếp hạng và bộ nhớ đệm LRU |
+| 4 | Mini database có index, chạy lại truy vấn của Chương 2 để so tốc độ |
+| 5 | Trình lập lộ trình giao hàng trên dữ liệu bản đồ thật |
+| 6 | Công cụ xếp lịch và tối ưu ngân sách |
+| 7 | Công cụ phát hiện tài liệu trùng lặp |
+
+Bảy dự án này không rời rạc: chúng là **một bộ công cụ lớn dần**, và mỗi dự án bắt buộc
+liên kết với module bạn đã viết ở chương trước. Nhờ vậy bạn không thể quên chương cũ —
+biên dịch sẽ không chạy nếu code cũ sai.
 
 ## Cách học hiệu quả nhất
 

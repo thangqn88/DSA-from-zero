@@ -143,10 +143,20 @@ Hai công cụ còn lại đủ lớn để thành nhóm riêng, đã nằm ở 
 
 - `project` — bài luyện tay, bắt buộc ở cả 30 bài, quy mô 1–2 giờ, sản phẩm là một
   module có test.
-- `capstone` — MVP, đúng 7 cái, nằm ở bài cuối mỗi chương, quy mô một cuối tuần, sản
-  phẩm là một chương trình chạy được độc lập.
+- `capstone` — MVP, đúng 7 cái, một cái cho mỗi chương, quy mô một cuối tuần, sản phẩm
+  là một chương trình chạy được độc lập.
 
 Cả hai dùng chung một component hiển thị, khác nhau ở nhãn và độ dài nội dung.
+
+**Sửa so với bản đầu:** `capstone` nằm ở `src/data/capstones/<chapter-key>.js`, không
+nằm trong dữ liệu bài cuối chương. Hai lý do:
+
+1. MVP Chương 1 (`bench`) phải viết ngay ở Giai đoạn 2, nhưng bài cuối Chương 1
+   (`danh-sach-lien-ket`) mãi Giai đoạn 3 mới viết. Gắn vào bài sẽ chặn tiến độ.
+2. MVP thuộc về cả chương chứ không thuộc về một bài. Đặt trong dữ liệu một bài là gán
+   sai chủ sở hữu.
+
+Hiển thị không đổi: MVP vẫn hiện trong Phần 7 của bài cuối chương.
 
 ### 6.2. Bảy MVP là một dòng sản phẩm, không phải bảy thứ rời rạc
 
@@ -248,17 +258,20 @@ project: {
 },
 ```
 
-Riêng bài cuối chương có thêm:
+MVP của chương nằm ở file riêng, `src/data/capstones/<chapter-key>.js`:
 
 ```js
-capstone: {
+export default {
   // ...các trường như project, cộng:
   uses: ['bang-bam', 'heap-hang-doi-uu-tien'],   // nhóm kiến thức được ghép
   reuses: [{ chapter: 2, module: 'sort' }, ...], // module bắt buộc dùng lại
   stretch: ['Mở rộng nếu còn hứng'],
-  data: { format: '...', sample: '20 dòng mẫu', url: 'link tải bộ dữ liệu công khai' },
-},
+  data: { format: '...', sample: '20 dòng mẫu', url: 'link tải, tuỳ chọn' },
+}
 ```
+
+`data.url` là tuỳ chọn: MVP Chương 1 không đọc dữ liệu ngoài nào, nó tự sinh số đo của
+chính mình. Ép một link tải vào đó sẽ là bịa đặt.
 
 ### 7.4. Component
 
