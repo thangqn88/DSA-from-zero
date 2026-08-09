@@ -2471,7 +2471,7 @@ git commit -m "content: rewrite DSU lesson in 6-part format"
 - **Quiz (4 câu):** (1) duyệt giữa của BST cho ra dãy gì — "dãy tăng dần"; (2) tìm số nhỏ nhất trong BST ở đâu — "đi hết về bên trái"; (3) xóa node có 2 con thì thay bằng ai — "node nhỏ nhất của cây con phải hoặc lớn nhất của cây con trái"; (4) cây 7 node cân bằng có chiều cao bao nhiêu — "3 mức, chiều cao 2 nếu tính từ 0".
 - **Bài tập (3):** tính chiều cao cây; đếm số lá; tìm 1 giá trị trong BST và trả về số phép so sánh đã dùng.
 
-- [ ] **Step 1: Tạo `src/data/lessons/cay-nhi-phan-bst.js`**
+- [x] **Step 1: Tạo `src/data/lessons/cay-nhi-phan-bst.js`**
 
 ```js
 export default {
@@ -2501,7 +2501,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import cayNhiPhanBst from './cay-nhi-phan-bst.js'
@@ -2509,18 +2509,18 @@ import cayNhiPhanBst from './cay-nhi-phan-bst.js'
   'cay-nhi-phan-bst': cayNhiPhanBst,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/cay-nhi-phan-bst.js | sort -u
 ```
 
-- [ ] **Step 5: Viết lại `src/sections/CayNhiPhanBst.vue`**
+- [x] **Step 5: Viết lại `src/sections/CayNhiPhanBst.vue`**
 
 ```vue
 <template>
@@ -2596,7 +2596,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -2609,7 +2609,13 @@ Expected: build sạch.
 Run: `npm run dev`, mở nhóm "3 phép duyệt, Cây cha-con, BST", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+**Chưa kiểm chứng bằng mắt** — bước này cần chạy `npm run dev` và quan sát trực tiếp trên trình
+duyệt, không thể xác nhận qua test/build. Toàn bộ id DOM mà widget cần (`d13TreeSvg`,
+`d13Caption`, `d13Order`, `d13ModeNlr`, `d13ModeLnr`, `d13ModeLrn`, và các id do `makeStepper('d13')`
+suy ra: `d13Prev`, `d13Next`, `d13Reset`, `d13StepNum`, `d13StepTotal`) đã được xác nhận có mặt
+nguyên vẹn trong template mới, nhưng chưa có ai bấm thử trên trình duyệt thật.
+
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/CayNhiPhanBst.vue src/data/lessons/cay-nhi-phan-bst.js src/data/lessons/index.js

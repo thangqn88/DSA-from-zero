@@ -6,6 +6,7 @@ import qhdNenTang from './qhd-nen-tang.js'
 import nganXepHangDoi from './ngan-xep-hang-doi.js'
 import dfsBfs from './dfs-bfs.js'
 import dsu from './dsu.js'
+import cayNhiPhanBst from './cay-nhi-phan-bst.js'
 
 export const lessons = {
   'quay-lui-xau-nhi-phan': quayLuiXauNhiPhan,
@@ -15,4 +16,5 @@ export const lessons = {
   'ngan-xep-hang-doi': nganXepHangDoi,
   'dfs-bfs': dfsBfs,
   'dsu': dsu,
+  'cay-nhi-phan-bst': cayNhiPhanBst,
 }
