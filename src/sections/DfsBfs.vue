@@ -1,15 +1,13 @@
 <template>
 <section id="dfs-bfs" class="day-section" data-sid="dfs-bfs" v-show="active">
 
-<h2>Duyệt Đồ Thị — BFS &amp; DFS <span class="exam-tag">★ Đề ôn tập — Bài 9 · Đề bổ sung — D04014, D04015, D04010, D04005, D04006</span></h2>
-<div class="mini-toc">
-  <span class="mt-label">Chuyển nhanh tới</span>
-  <a href="#thuat-ngu-do-thi">Thuật ngữ cơ bản</a>
-  <a href="#bieu-dien-do-thi">3 cách biểu diễn đồ thị</a>
-  <a class="mt-exam" href="#bai9-graph-matrix">★ Bài 9 — Ma trận kề, liên thông, BFS</a>
-  <a class="mt-exam" href="#cay-khung-duong-di">D04014, D04015, D04010 — Cây khung &amp; đường đi</a>
-  <a class="mt-exam" href="#dinh-tru-canh-cau">D04005, D04006 — Đỉnh trụ &amp; cạnh cầu</a>
-</div>
+<h2>BFS &amp; DFS <span class="exam-tag">★ Đề ôn tập — Bài 9 · Đề bổ sung — D04014, D04015, D04010, D04005, D04006</span></h2>
+
+<LessonGoal :sid="'dfs-bfs'">
+  <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>
+</LessonGoal>
+
+<LessonPart :sid="'dfs-bfs'" part="ly-thuyet">
 
 <h3 id="auto-do-thi-la-gi">Đồ thị là gì</h3>
 <p class="idea-label">🧩 Ý tưởng cốt lõi</p>
@@ -17,7 +15,7 @@
 
 <h3 id="thuat-ngu-do-thi">Thuật ngữ cơ bản — hiểu qua 1 đồ thị mẫu dùng xuyên suốt</h3>
 <p class="idea-label">🧩 Ý tưởng cốt lõi</p>
-<p>Thay vì học thuộc định nghĩa suông, ta dùng đúng 1 đồ thị mẫu <strong>G</strong> (6 đỉnh, 9 cạnh) cho toàn bộ phần này — slide thầy cũng dùng đúng đồ thị này để minh họa 3 cách biểu diễn. Cứ mỗi khi quên 1 thuật ngữ, quay lại nhìn hình này.</p>
+<p>Thay vì học thuộc định nghĩa suông, ta dùng đúng 1 đồ thị mẫu <strong>G</strong> (6 đỉnh, 9 cạnh) cho toàn bộ phần này. Cứ mỗi khi quên 1 thuật ngữ, quay lại nhìn hình này.</p>
 
 <div style="text-align:center; margin: 1rem 0;">
 <svg width="100%" height="230" viewBox="0 0 600 230" style="max-width:420px;">
@@ -42,18 +40,18 @@
 
 <table class="formula-table">
 <tr><th>Thuật ngữ</th><th>Định nghĩa (nói đơn giản)</th><th>Ví dụ trên G</th></tr>
-<tr><td><strong>Đỉnh kề</strong></td><td>u và v kề nhau nếu có 1 cạnh nối thẳng chúng</td><td>1 kề 2 và kề 3, nhưng 1 <em>không</em> kề 4</td></tr>
+<tr><td><strong>Đỉnh kề</strong></td><td>u và v kề nhau nếu có 1 cạnh nối thẳng chúng</td><td>1 kề 2 và kề 3, nhưng 1 không kề 4</td></tr>
 <tr><td><strong>Bậc deg(v)</strong></td><td>Số cạnh "mọc ra" từ đỉnh v = đếm số đỉnh kề với v</td><td>deg(2)=4 (nối 1,3,4,5); deg(1)=2 (nối 2,3)</td></tr>
 <tr><td><strong>Đường đi</strong></td><td>Dãy đỉnh nối tiếp nhau, mỗi cặp liền kề đều có cạnh thật</td><td>1→2→4→6 là 1 đường đi hợp lệ (đúng 3 cạnh có thật)</td></tr>
 <tr><td><strong>Chu trình</strong></td><td>Đường đi mà đỉnh cuối trùng đỉnh đầu</td><td>1→2→3→1 là 1 chu trình</td></tr>
 <tr><td><strong>Liên thông</strong></td><td>Từ bất kỳ đỉnh nào cũng có đường đi tới bất kỳ đỉnh nào khác</td><td>G liên thông: đi từ 1 tới 6 được (1→2→4→6)</td></tr>
 <tr><td><strong>Thành phần liên thông</strong></td><td>Nếu đồ thị KHÔNG liên thông, mỗi "cụm" tách rời là 1 thành phần</td><td>Nếu bỏ hết cạnh nối tới đỉnh 6 thì G tách thành 2 cụm = 2 thành phần</td></tr>
 </table>
-<blockquote><p>💡 <strong>Đỉnh trụ</strong> (articulation point) và <strong>cạnh cầu</strong> (bridge) — hai khái niệm hay gặp trong đề bổ sung — chỉ là mở rộng của "liên thông": đỉnh trụ là đỉnh mà <em>bỏ nó đi</em> làm đồ thị tách thành nhiều thành phần hơn; cạnh cầu tương tự nhưng bỏ 1 cạnh. Xem phần "Đỉnh trụ &amp; Cạnh cầu" bên dưới để có code đầy đủ.</p></blockquote>
+<blockquote><p>💡 <strong>Đỉnh trụ</strong> (articulation point) và <strong>cạnh cầu</strong> (bridge) — hai khái niệm hay gặp trong đề bổ sung — chỉ là mở rộng của "liên thông": đỉnh trụ là đỉnh mà bỏ nó đi làm đồ thị tách thành nhiều thành phần hơn; cạnh cầu tương tự nhưng bỏ 1 cạnh. Xem phần "Đỉnh trụ &amp; Cạnh cầu" ở khối tài nguyên tự luyện bên dưới để có code đầy đủ.</p></blockquote>
 
 <h3 id="bieu-dien-do-thi">3 cách biểu diễn đồ thị — và nên chọn cách nào khi đi thi</h3>
 <p class="idea-label">🧩 Ý tưởng cốt lõi</p>
-<p>Cùng 1 đồ thị G ở trên, có 3 cách "lưu" nó trong máy — khác nhau ở việc <strong>đánh đổi bộ nhớ lấy tốc độ tra cứu</strong>. Hiểu rõ trade-off này giúp bạn không hoang mang khi đề bài yêu cầu 1 cách cụ thể (ví dụ Bài 9 yêu cầu đúng ma trận kề).</p>
+<p>Cùng 1 đồ thị G ở trên, có 3 cách "lưu" nó trong máy — khác nhau ở việc <strong>đánh đổi bộ nhớ lấy tốc độ tra cứu</strong>. Hiểu rõ trade-off này giúp bạn không hoang mang khi đề bài yêu cầu 1 cách cụ thể.</p>
 
 <table class="formula-table">
 <tr><th>Cách biểu diễn</th><th>Lưu gì</th><th>Bộ nhớ</th><th>Kiểm tra u,v có kề không</th><th>Duyệt DFS/BFS toàn đồ thị</th></tr>
@@ -61,7 +59,7 @@
 <tr><td><strong>2. Danh sách cạnh</strong></td><td>Mảng các cặp (u,v) — chỉ liệt kê cạnh có thật</td><td>O(m)</td><td>O(m) — phải quét hết cạnh</td><td>O(n·m)</td></tr>
 <tr><td><strong>3. Danh sách kề</strong> <code>List[u]</code></td><td>Mỗi đỉnh giữ 1 danh sách các đỉnh kề với nó</td><td>O(n+m)</td><td>O(deg(u)) — quét riêng List[u]</td><td>O(max(n,m))</td></tr>
 </table>
-<p>(n = số đỉnh, m = số cạnh — đúng số liệu thầy đưa trong slide.)</p>
+<p>(n = số đỉnh, m = số cạnh.)</p>
 
 <table class="formula-table">
 <tr><th>Cách</th><th>G biểu diễn thế nào (n=6, m=9)</th></tr>
@@ -85,11 +83,11 @@ for (int e = 0; e &lt; m; e++) {
     List[v].push_back(u);       // vô hướng → thêm cả 2 chiều
 }</code></pre>
 
-<blockquote><p>📌 <strong>Chọn cách nào khi đi thi?</strong> Mặc định dùng <strong>danh sách kề</strong> (<code>List[]</code>) — đó là code thầy gửi và nhanh/tiết kiệm bộ nhớ nhất khi đồ thị thưa (m không quá lớn so với n²), là trường hợp thường gặp trong đề thi. <strong>Chỉ chuyển sang ma trận kề</strong> khi đề <strong>yêu cầu rõ ràng</strong> "cài đặt bằng ma trận kề" (như Bài 9 bên dưới) hoặc khi n rất nhỏ (≤ vài chục) và bạn cần tra kề cực nhanh nhiều lần. Danh sách cạnh ít khi dùng để duyệt — chủ yếu dùng cho các thuật toán chỉ cần "nhìn qua từng cạnh 1 lần" như Kruskal.</p></blockquote>
+<blockquote><p>📌 <strong>Chọn cách nào khi đi thi?</strong> Mặc định dùng <strong>danh sách kề</strong> (<code>List[]</code>) — nhanh và tiết kiệm bộ nhớ nhất khi đồ thị thưa (m không quá lớn so với n²), là trường hợp thường gặp trong đề thi. <strong>Chỉ chuyển sang ma trận kề</strong> khi đề <strong>yêu cầu rõ ràng</strong> "cài đặt bằng ma trận kề" hoặc khi n rất nhỏ (≤ vài chục) và bạn cần tra kề cực nhanh nhiều lần. Danh sách cạnh ít khi dùng để duyệt — chủ yếu dùng cho các thuật toán chỉ cần "nhìn qua từng cạnh 1 lần" như Kruskal.</p></blockquote>
 
 <div class="problem-box">
-<span class="pb-title">📋 Đúng code + cách đặt tên biến thầy đã gửi (List[], chuaxet[])</span>
-<p>Thầy dùng <strong>danh sách kề</strong> (<code>vector&lt;int&gt; List[]</code>) — mỗi đỉnh <code>u</code> lưu 1 danh sách các đỉnh kề với nó, thay vì ma trận. Trạng thái mỗi đỉnh lưu trong <code>chuaxet[]</code> — chú ý kỹ chiều ngược của tên biến này: <code>chuaxet[u] = true</code> nghĩa là đỉnh u <strong>CHƯA</strong> được xét (khởi tạo toàn bộ là <code>true</code>), và ta gán về <code>false</code> ngay khi đã thăm nó. Đây là chiều <strong>ngược lại</strong> với cách đặt tên "trực quan" hơn là <code>visited[]</code> (true = đã thăm) mà nhiều tài liệu khác dùng — đọc kỹ để không hiểu nhầm điều kiện <code>if</code>.</p>
+<span class="pb-title">📋 Cách đặt tên biến hay gặp — <code>List[]</code>, <code>chuaxet[]</code></span>
+<p>Cách phổ biến: dùng <strong>danh sách kề</strong> (<code>vector&lt;int&gt; List[]</code>) — mỗi đỉnh <code>u</code> lưu 1 danh sách các đỉnh kề với nó, thay vì ma trận. Trạng thái mỗi đỉnh lưu trong <code>chuaxet[]</code> — chú ý kỹ chiều ngược của tên biến này: <code>chuaxet[u] = true</code> nghĩa là đỉnh u <strong>CHƯA</strong> được xét (khởi tạo toàn bộ là <code>true</code>), và ta gán về <code>false</code> ngay khi đã thăm nó. Đây là chiều <strong>ngược lại</strong> với cách đặt tên "trực quan" hơn là <code>visited[]</code> (true = đã thăm) mà nhiều tài liệu khác dùng — đọc kỹ để không hiểu nhầm điều kiện <code>if</code>.</p>
 </div>
 
 <pre v-pre><code>#include&lt;bits/stdc++.h&gt;
@@ -121,7 +119,7 @@ int main(){
 	}
 }</code></pre>
 
-<blockquote><p>⚠️ <strong>Lưu ý quan trọng khi đối chiếu với file BFS.cpp thầy gửi</strong>: file BFS mẫu của thầy lại dùng biến <code>daxet[]</code> (kiểu <code>int</code>, <code>1</code> = ĐÃ xét — chiều <strong>THUẬN</strong>, ngược với <code>chuaxet[]</code> ở trên). Hai file mẫu của thầy dùng 2 quy ước khác nhau — mỗi file tự nó đúng và nhất quán bên trong, nhưng <strong>đừng trộn lẫn</strong> 2 file khi copy code. Luôn đọc lại đúng dòng khai báo và dòng khởi tạo trước khi viết điều kiện <code>if</code>.</p></blockquote>
+<blockquote><p>⚠️ <strong>Lưu ý khi đối chiếu 2 quy ước khác nhau</strong>: nhiều nơi (kể cả file mẫu BFS bên dưới) lại dùng biến <code>daxet[]</code> (kiểu <code>int</code>, <code>1</code> = ĐÃ xét — chiều <strong>THUẬN</strong>, ngược với <code>chuaxet[]</code> ở trên). Hai quy ước này mỗi cái tự nó đúng và nhất quán bên trong, nhưng <strong>đừng trộn lẫn</strong> khi copy code. Luôn đọc lại đúng dòng khai báo và dòng khởi tạo trước khi viết điều kiện <code>if</code>.</p></blockquote>
 
 <pre v-pre><code>#include&lt;bits/stdc++.h&gt;
 using namespace std;
@@ -159,9 +157,42 @@ int main(){
 	}
 }</code></pre>
 
+<h3 id="auto-kiem-tra-chu-trinh-do-thi-co-huong">Kiểm tra chu trình (đồ thị có hướng)</h3>
+<p class="idea-label">🧩 Ý tưởng cốt lõi</p>
+<p>Với đồ thị VÔ hướng, chỉ cần 1 mảng chuaxet[]/visited[] là đủ để nhận ra chu trình (gặp lại đỉnh đã thăm mà không phải cha trực tiếp). Nhưng với đồ thị CÓ hướng, "đã thăm" không đủ thông tin — cần phân biệt "đang đứng trên nhánh đệ quy hiện tại" với "đã xử lý xong toàn bộ và rời khỏi nhánh đó từ lâu". Vì vậy dùng 3 trạng thái: 0 = chưa thăm, 1 = đang xử lý (đang trên đường đi hiện tại), 2 = đã xử lý xong. Gặp lại 1 đỉnh đang ở trạng thái 1 nghĩa là quay lại chính nhánh đang đứng → có chu trình.</p>
+<pre v-pre><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int n, adj[100][100];
+int state[100];   // 0=chưa thăm, 1=đang xử lý, 2=xong
+
+bool hasCycleDFS(int u) {
+    state[u] = 1;
+    for (int v = 0; v &lt; n; v++) {
+        if (adj[u][v]) {
+            if (state[v] == 1) return true;
+            if (state[v] == 0 && hasCycleDFS(v)) return true;
+        }
+    }
+    state[u] = 2;
+    return false;
+}
+
+int main() {
+    n = 3;
+    adj[0][1] = 1; adj[1][2] = 1; adj[2][0] = 1;   // 0 tới 1 tới 2 tới 0: có chu trình
+    cout &lt;&lt; hasCycleDFS(0);   // in ra: 1 (true)
+    return 0;
+}</code></pre>
+<blockquote><p>⚠️ Bẫy hay gặp: quên đổi trạng thái đỉnh từ 1 về 2 SAU KHI đã đệ quy hết mọi đỉnh kề — nếu quên, mọi đỉnh sẽ mãi mãi ở trạng thái 1 (như "đang xử lý"), và thuật toán sẽ báo có chu trình một cách sai lệch ngay cả khi đồ thị không có chu trình thật.</p></blockquote>
+
+</LessonPart>
+
+<LessonPart :sid="'dfs-bfs'" part="vi-sao">
+
 <h3 id="auto-vi-sao-dfs-di-sau-con-bfs-lan-rong-nhin-tu-ngan-xe">Vì sao DFS "đi sâu" còn BFS "lan rộng"? — nhìn từ ngăn xếp và hàng đợi</h3>
 <p class="idea-label">🧩 Ý tưởng cốt lõi</p>
-<p>Code đệ quy <code>DFS(u)</code> ở trên <strong>trông không giống</strong> có ngăn xếp nào cả — nhưng thực ra máy tính đang tự quản lý 1 ngăn xếp ẩn (call stack) cho bạn: mỗi lần gọi <code>DFS(v)</code>, lời gọi <code>DFS(u)</code> hiện tại bị "đẩy tạm xuống đáy" chờ, y hệt <code>Push(stack, u)</code>. Viết tường minh ra, DFS bằng stack trông thế này (đúng thuật toán thầy gửi trong slide):</p>
+<p>Code đệ quy <code>DFS(u)</code> ở phần lý thuyết trông không giống có ngăn xếp nào cả — nhưng thực ra máy tính đang tự quản lý 1 ngăn xếp ẩn (call stack) cho bạn: mỗi lần gọi <code>DFS(v)</code>, lời gọi <code>DFS(u)</code> hiện tại bị "đẩy tạm xuống đáy" chờ, y hệt <code>Push(stack, u)</code>. Viết tường minh ra, DFS bằng stack trông thế này:</p>
 
 <pre v-pre><code>// DFS(u) dùng stack tường minh — cùng bản chất với đệ quy ở trên
 void DFS_stack(int start) {
@@ -192,7 +223,7 @@ void DFS_stack(int start) {
 <tr><td>Hình dung</td><td>Đi vào ngõ cụt rồi mới lùi lại thử ngõ khác</td><td>Thăm hết hàng xóm tầng 1, rồi mới sang tầng 2</td></tr>
 <tr><td>Trong code</td><td>Đệ quy (ngăn xếp ẩn của hệ thống) hoặc <code>stack</code> tường minh</td><td><code>queue</code> tường minh — không thể thay bằng đệ quy đơn giản</td></tr>
 </table>
-<blockquote><p>💡 <strong>Tự kiểm tra hiểu bài</strong>: nếu đổi đúng 1 chữ trong code BFS — thay <code>queue&lt;int&gt; Q</code> bằng <code>stack&lt;int&gt; Q</code> (và đổi <code>Q.front()</code> thành <code>Q.top()</code>) — thuật toán sẽ chạy giống DFS chứ không còn là BFS nữa. Đây là bằng chứng rõ nhất: <strong>DFS và BFS chỉ khác nhau ở cấu trúc dữ liệu chờ xử lý</strong>, ý tưởng "thăm rồi lan ra các đỉnh kề chưa thăm" là giống hệt nhau.</p></blockquote>
+<blockquote><p>💡 <strong>Tự kiểm tra hiểu bài</strong>: nếu đổi đúng 1 chữ trong code BFS — thay <code>queue&lt;int&gt; Q</code> bằng <code>stack&lt;int&gt; Q</code> (và đổi <code>Q.front()</code> thành <code>Q.top()</code>) — thuật toán sẽ chạy giống DFS chứ không còn là BFS nữa. Đây là bằng chứng rõ nhất: <strong>DFS và BFS chỉ khác nhau ở cấu trúc dữ liệu chờ xử lý</strong>, ý tưởng "thăm rồi lan ra các đỉnh kề chưa thăm" là giống hệt nhau. Đây cũng chính là mối liên hệ ngược lại với ngăn xếp/hàng đợi đã học ở nhóm trước: DFS về bản chất là <strong>quay lui trên đồ thị</strong>, dùng đúng ngăn xếp (đệ quy) làm bộ nhớ tạm; BFS dùng đúng hàng đợi.</p></blockquote>
 
 <p>Đồ thị mẫu G (đúng đồ thị đã dùng ở phần thuật ngữ): 6 đỉnh, cạnh (1,2)(1,3)(2,3)(2,4)(2,5)(3,4)(4,5)(4,6)(5,6). Chọn cách duyệt để xem trực quan — chú ý DFS và BFS cho ra <strong>thứ tự thăm khác nhau</strong> dù cùng xuất phát từ đỉnh 1 và cùng dùng chung 1 <code>List[]</code>:</p>
 
@@ -214,10 +245,66 @@ void DFS_stack(int start) {
   <div class="step-info"><span id="d10StepNum">0</span> / <span id="d10StepTotal">0</span> bước — thứ tự thăm: <span id="d10Order" style="font-family: monospace;"></span></div>
 </div>
 
-<blockquote><p>📎 <strong>Vì sao Bài 9 trong đề ôn tập (phía dưới) lại dùng ma trận kề <code>adj[][]</code> chứ không dùng <code>List[]</code>?</strong> Vì đề bài đó <strong>yêu cầu rõ</strong> "cài đặt bằng ma trận kề" — đây là yêu cầu của đề, không phải quy tắc chung. Với DFS/BFS thông thường không có yêu cầu cụ thể, danh sách kề (<code>List[]</code>) như code của thầy thường nhanh hơn và tốn ít bộ nhớ hơn khi đồ thị thưa (ít cạnh so với số đỉnh).</p></blockquote>
+<div class="realworld">
+  <span class="rw-title">🌐 Ứng dụng thực tế</span>
+  <dl>
+    <dt>Dùng ở đâu</dt>
+    <dd>BFS: tìm số bước ngắn nhất trong mạng xã hội (gợi ý kết bạn "bạn của bạn"), lan truyền thông tin trong mạng lưới, định tuyến gói tin. DFS: quét toàn bộ file trong ổ đĩa, giải mê cung/tìm đường trong game world, phát hiện chu trình trong hệ thống quản lý phụ thuộc (dependency resolver như npm/pip).</dd>
+    <dt>Giải quyết vấn đề gì</dt>
+    <dd>Duyệt hết mọi đỉnh có thể tới được từ 1 điểm xuất phát, theo 1 trong 2 chiến lược khác nhau.</dd>
+    <dt class="good">Khi nào NÊN dùng</dt>
+    <dd class="good">BFS: cần đường đi ít cạnh nhất (không trọng số). DFS: cần duyệt hết/kiểm tra tính chất toàn cục (chu trình, liên thông), không quan tâm thứ tự.</dd>
+    <dt class="bad">Khi nào KHÔNG NÊN dùng</dt>
+    <dd class="bad">BFS cho đồ thị có trọng số khác nhau trên các cạnh — cần Dijkstra thay vì BFS thuần.</dd>
+  </dl>
+</div>
 
-<h3 id="auto-ung-dung-dem-so-thanh-phan-lien-thong">Ứng dụng: Đếm số thành phần liên thông</h3>
-<blockquote><p>📎 <strong>Ngữ cảnh</strong>: hàm này dùng chung <code>n, List[], chuaxet[], DFS()</code> đã khai báo ở ví dụ phía trên (đúng theo code thầy gửi).</p></blockquote>
+</LessonPart>
+
+<LessonPart :sid="'dfs-bfs'" part="quiz">
+  <QuizBlock :questions="data.quiz" />
+</LessonPart>
+
+<LessonPart :sid="'dfs-bfs'" part="vi-du">
+
+<WorkedExample id="vd-lien-thong" title="Đếm số thành phần liên thông" :official="true">
+  <template #de-bai>
+    <div class="problem-box">
+    <span class="pb-title">📋 Đề bài</span>
+    <p>Cho một đồ thị vô hướng gồm n đỉnh và m cạnh, biểu diễn bằng danh sách kề. Đếm xem đồ thị có bao nhiêu thành phần liên thông (bao nhiêu "cụm" đỉnh tách rời nhau, không có cạnh nào nối giữa 2 cụm khác nhau).</p>
+    <p><strong>Input:</strong> n, m rồi m cặp cạnh (u, v).</p>
+    <p><strong>Output:</strong> Số thành phần liên thông.</p>
+    <table class="formula-table"><tr><th>Input</th><th>Output</th></tr>
+    <tr><td>6 3<br>1 2<br>2 3<br>4 5</td><td>3</td></tr></table>
+    </div>
+  </template>
+
+  <template #y-tuong>
+    <p>Nếu đồ thị liên thông hoàn toàn, chỉ cần DFS/BFS đúng 1 lần từ 1 đỉnh bất kỳ là thăm hết mọi đỉnh. Khi đồ thị KHÔNG liên thông, DFS/BFS 1 lần chỉ thăm hết đúng 1 "cụm" mà nó xuất phát trong đó, các đỉnh còn lại vẫn chưa thăm. Ý tưởng: <strong>mỗi lần bắt đầu duyệt từ 1 đỉnh chưa thăm là thêm 1 thành phần liên thông mới</strong> — cứ lặp lại việc "tìm đỉnh chưa thăm, DFS từ đó, tăng biến đếm" cho tới khi mọi đỉnh đều đã thăm.</p>
+  </template>
+
+  <template #thuat-toan>
+    <ol>
+      <li>Khởi tạo mọi đỉnh là chuaxet[u] = true (chưa thăm), biến đếm count = 0.</li>
+      <li>Duyệt u từ 1 tới n: nếu chuaxet[u] vẫn còn true (chưa thăm) → đây là 1 thành phần liên thông mới, tăng count, rồi DFS(u) để đánh dấu "đã thăm" hết cả cụm chứa u.</li>
+      <li>Duyệt hết mọi đỉnh, trả về count.</li>
+    </ol>
+  </template>
+
+  <template #chay-tay>
+    <p>Với đồ thị 6 đỉnh, 3 cạnh (1,2)(2,3)(4,5) — đỉnh 6 không có cạnh nào (cô lập):</p>
+    <table class="formula-table">
+      <tr><th>u đang xét</th><th>chuaxet[u]?</th><th>Hành động</th><th>count sau bước</th></tr>
+      <tr><td>1</td><td>true (chưa thăm)</td><td>Thành phần mới → DFS(1) thăm hết {1,2,3}</td><td>1</td></tr>
+      <tr><td>2, 3</td><td>false (đã thăm nhờ DFS(1))</td><td>Bỏ qua</td><td>1</td></tr>
+      <tr><td>4</td><td>true (chưa thăm)</td><td>Thành phần mới → DFS(4) thăm hết {4,5}</td><td>2</td></tr>
+      <tr><td>5</td><td>false (đã thăm nhờ DFS(4))</td><td>Bỏ qua</td><td>2</td></tr>
+      <tr><td>6</td><td>true (chưa thăm, không có cạnh nào)</td><td>Thành phần mới → DFS(6) chỉ thăm được chính nó</td><td>3</td></tr>
+    </table>
+    <p>Kết quả: <strong>3</strong> thành phần liên thông ({1,2,3}, {4,5}, {6}) — khớp đề.</p>
+  </template>
+
+  <template #code>
 <pre v-pre><code>#include&lt;bits/stdc++.h&gt;
 using namespace std;
 
@@ -248,73 +335,59 @@ int main() {
     cout &lt;&lt; countComponents();
     return 0;
 }</code></pre>
+  </template>
 
-<h3 id="auto-kiem-tra-chu-trinh-do-thi-co-huong">Kiểm tra chu trình (đồ thị có hướng)</h3>
-<p class="idea-label">🧩 Ý tưởng cốt lõi</p>
-<pre v-pre><code>#include &lt;bits/stdc++.h&gt;
-using namespace std;
+  <template #toi-uu>
+    <p><strong>Chuyển sang danh sách kề khi đồ thị thưa.</strong> Nếu đề không bắt buộc dùng ma trận kề, ưu tiên <code>List[]</code>: với đồ thị thưa (m nhỏ hơn nhiều so với n²) — trường hợp rất thường gặp — duyệt DFS/BFS bằng danh sách kề tốn O(n+m), trong khi bằng ma trận kề tốn O(n²) vì phải quét hết n cột cho mỗi đỉnh dù đa số ô là 0. Với n lớn (ví dụ n=10⁵) mà m chỉ vài nghìn, chênh lệch này là khác biệt giữa chạy được và bị time limit exceeded.</p>
+    <p>Nếu đề yêu cầu cụ thể "cài bằng ma trận kề" (như ví dụ 2 phía dưới), cứ dùng — với n nhỏ (vài trăm, vài nghìn) sự khác biệt tốc độ không đáng kể, và ma trận kề có ưu điểm tra <code>adj[u][v]</code> trong O(1) nếu cần kiểm tra kề nhiều lần.</p>
+  </template>
+</WorkedExample>
 
-int n, adj[100][100];
-int state[100];   // 0=chưa thăm, 1=đang xử lý, 2=xong
+<blockquote><p>📎 <strong>Vì sao ví dụ dưới đây lại dùng ma trận kề <code>adj[][]</code> chứ không dùng <code>List[]</code>?</strong> Vì đề bài đó <strong>yêu cầu rõ</strong> "cài đặt bằng ma trận kề" — đây là yêu cầu của đề, không phải quy tắc chung. Với DFS/BFS thông thường không có yêu cầu cụ thể, danh sách kề (<code>List[]</code>) thường nhanh hơn và tốn ít bộ nhớ hơn khi đồ thị thưa (ít cạnh so với số đỉnh).</p></blockquote>
 
-bool hasCycleDFS(int u) {
-    state[u] = 1;
-    for (int v = 0; v &lt; n; v++) {
-        if (adj[u][v]) {
-            if (state[v] == 1) return true;
-            if (state[v] == 0 && hasCycleDFS(v)) return true;
-        }
-    }
-    state[u] = 2;
-    return false;
-}
+<WorkedExample id="vd-duong-di-bfs" title="Tìm đường đi ngắn nhất bằng BFS" :official="true">
+  <template #de-bai>
+    <blockquote><p>📌 Các phần DFS/BFS/kiểm tra chu trình ở phần lý thuyết là nền tảng bắt buộc phải nắm. <strong>Đây mới là bài bạn sẽ gặp đúng nguyên văn trong đề thi</strong> — nó dùng lại đúng BFS bạn vừa học, chỉ thêm bước truy vết đường đi.</p></blockquote>
+    <div class="problem-box">
+    <span class="pb-title">📋 Nguyên văn đề bài (7 điểm)</span>
+    <ol>
+      <li>Cài đặt đồ thị vô hướng bằng ma trận kề, mỗi đỉnh lưu một kí tự (1 điểm)</li>
+      <li>Viết phép toán thêm 1 đỉnh vào đồ thị (1 điểm)</li>
+      <li>Viết phép toán thêm 1 cạnh vào đồ thị (1 điểm)</li>
+      <li>Tạo một đồ thị có n đỉnh gồm n kí tự với m cạnh (1 điểm)</li>
+      <li>Kiểm tra đồ thị có liên thông không (1 điểm)</li>
+      <li>Tìm đường đi giữa hai đỉnh u và v trên đồ thị bằng thuật toán duyệt theo chiều rộng BFS. Nếu hai đỉnh không có đường đi thì thông báo "not found", nếu có đường đi giữa hai đỉnh thì hiển thị danh sách các đỉnh trên đường đi từ u đến v trên 1 dòng (2 điểm)</li>
+    </ol>
+    <p><strong>Input:</strong> Dòng 1 chứa hai số nguyên n và m (1≤n, m≤20). m dòng tiếp theo mỗi dòng chứa hai số nguyên i và j là cạnh của đồ thị (0≤i, j≤n-1). Dòng cuối cùng là hai đỉnh u, v của đồ thị.</p>
+    <p><strong>Output:</strong> Dòng 1: điền số 1 nếu đồ thị liên thông, 0 nếu đồ thị không liên thông. Dòng 2: điền "not found" nếu không tồn tại đường đi từ u đến v, nếu tồn tại đường đi thì liệt kê các đỉnh trên đường đi từ u đến v, mỗi đỉnh cách nhau bởi 1 dấu cách.</p>
+    <table class="formula-table"><tr><th>Input</th><th>Output</th></tr>
+    <tr><td>4 4<br>0 1<br>0 2<br>1 2<br>2 3<br>1 3</td><td>1<br>1 2 3</td></tr>
+    <tr><td>5 4<br>0 1<br>0 2<br>1 2<br>2 3<br>1 4</td><td>0<br>Not found</td></tr></table>
+    </div>
+  </template>
 
-int main() {
-    n = 3;
-    adj[0][1] = 1; adj[1][2] = 1; adj[2][0] = 1;   // 0 tới 1 tới 2 tới 0: có chu trình
-    cout &lt;&lt; hasCycleDFS(0);   // in ra: 1 (true)
-    return 0;
-}</code></pre>
+  <template #y-tuong>
+    <p>Bài này gộp đúng 3 việc: (1) cài đặt đồ thị bằng <strong>ma trận kề</strong> — <code>adj[i][j]=1</code> nghĩa là có cạnh nối đỉnh i và đỉnh j; (2) <strong>kiểm tra liên thông toàn đồ thị</strong> — chạy BFS/DFS 1 lần từ đỉnh 0, nếu thăm được HẾT n đỉnh thì liên thông; (3) <strong>tìm đường đi cụ thể</strong> giữa 2 đỉnh u, v bằng BFS — không chỉ trả lời "có nối không" mà phải <strong>liệt kê đúng các đỉnh trên đường đi</strong>, và vì BFS loang đều theo từng lớp, đường đi tìm được luôn là đường có ít cạnh nhất.</p>
+  </template>
 
-<div class="realworld">
-  <span class="rw-title">🌐 Ứng dụng thực tế</span>
-  <dl>
-    <dt>Dùng ở đâu</dt>
-    <dd>BFS: tìm số bước ngắn nhất trong mạng xã hội (gợi ý kết bạn "bạn của bạn"), lan truyền thông tin trong mạng lưới. DFS: quét toàn bộ file trong ổ đĩa, giải mê cung/game world, phát hiện chu trình trong hệ thống quản lý phụ thuộc (dependency resolver như npm/pip).</dd>
-    <dt>Giải quyết vấn đề gì</dt>
-    <dd>Duyệt hết mọi đỉnh có thể tới được từ 1 điểm xuất phát, theo 1 trong 2 chiến lược khác nhau.</dd>
-    <dt class="good">Khi nào NÊN dùng</dt>
-    <dd class="good">BFS: cần đường đi ít cạnh nhất (không trọng số). DFS: cần duyệt hết/kiểm tra tính chất toàn cục (chu trình, liên thông), không quan tâm thứ tự.</dd>
-    <dt class="bad">Khi nào KHÔNG NÊN dùng</dt>
-    <dd class="bad">BFS cho đồ thị có trọng số khác nhau trên các cạnh — cần Dijkstra thay vì BFS thuần.</dd>
-  </dl>
-</div>
+  <template #thuat-toan>
+    <p>Chìa khóa cho việc (3): khi BFS lan ra từng lớp, mỗi lần thăm 1 đỉnh mới <code>v</code> từ đỉnh <code>u</code>, ta ghi nhớ lại "<code>v</code> được thăm tới TỪ đâu" bằng mảng <code>parent[v] = u</code>. Sau khi BFS xong, muốn biết đường đi từ start tới v, ta chỉ cần "đi ngược" theo <code>parent[]</code> từ v về tới start, rồi đảo ngược lại thứ tự.</p>
+  </template>
 
-<h3 id="bai9-graph-matrix">★ Bài chính thức trong Đề ôn tập — Bài 9: Đồ thị bằng ma trận kề — liên thông &amp; tìm đường đi bằng BFS</h3>
+  <template #chay-tay>
+    <p><strong>Đối chiếu đúng ví dụ 1 trong đề</strong>: n=4, m=4, cạnh (0,1)(0,2)(1,2)(2,3), tìm đường u=1 → v=3.</p>
+    <table class="formula-table">
+      <tr><th>Bước BFS từ u=1</th><th>Hàng đợi</th><th>parent[] cập nhật</th></tr>
+      <tr><td>Bắt đầu, thăm 1</td><td>[1]</td><td>—</td></tr>
+      <tr><td>Xét 1 → láng giềng 0, 2 (đều đi từ 1 mà tới)</td><td>[0, 2]</td><td>parent[0]=1, parent[2]=1</td></tr>
+      <tr><td>Xét 0 → láng giềng 2 đã thăm, bỏ qua</td><td>[2]</td><td>—</td></tr>
+      <tr><td>Xét 2 → láng giềng 3 (đi từ 2 mà tới)</td><td>[3]</td><td>parent[3]=2</td></tr>
+      <tr><td>Gặp target=3, dừng. Truy vết: 3→parent=2→parent=1→parent=-1</td><td colspan="2">Đảo ngược: <strong>1 2 3</strong></td></tr>
+    </table>
+    <p>Khớp đúng: liên thông = 1 (cả 4 đỉnh cùng thăm được), đường đi = <strong>"1 2 3"</strong>. Với ví dụ 2 (đỉnh 4 bị cô lập, u=1,v=4), <code>isConnected()</code> đếm chỉ được 4 trong 5 đỉnh → in 0; <code>bfsPath</code> không bao giờ thăm được đỉnh 4 → in "Not found".</p>
+  </template>
 
-<div class="problem-box">
-<span class="pb-title">📋 Nguyên văn đề bài (7 điểm)</span>
-<ol>
-  <li>Cài đặt đồ thị vô hướng bằng ma trận kề, mỗi đỉnh lưu một kí tự (1 điểm)</li>
-  <li>Viết phép toán thêm 1 đỉnh vào đồ thị (1 điểm)</li>
-  <li>Viết phép toán thêm 1 cạnh vào đồ thị (1 điểm)</li>
-  <li>Tạo một đồ thị có n đỉnh gồm n kí tự với m cạnh (1 điểm)</li>
-  <li>Kiểm tra đồ thị có liên thông không (1 điểm)</li>
-  <li>Tìm đường đi giữa hai đỉnh u và v trên đồ thị bằng thuật toán duyệt theo chiều rộng BFS. Nếu hai đỉnh không có đường đi thì thông báo "not found", nếu có đường đi giữa hai đỉnh thì hiển thị danh sách các đỉnh trên đường đi từ u đến v trên 1 dòng (2 điểm)</li>
-</ol>
-<p><strong>Input:</strong> Dòng 1 chứa hai số nguyên n và m (1≤n, m≤20). m dòng tiếp theo mỗi dòng chứa hai số nguyên i và j là cạnh của đồ thị (0≤i, j≤n-1). Dòng cuối cùng là hai đỉnh u, v của đồ thị.</p>
-<p><strong>Output:</strong> Dòng 1: điền số 1 nếu đồ thị liên thông, 0 nếu đồ thị không liên thông. Dòng 2: điền "not found" nếu không tồn tại đường đi từ u đến v, nếu tồn tại đường đi thì liệt kê các đỉnh trên đường đi từ u đến v, mỗi đỉnh cách nhau bởi 1 dấu cách.</p>
-<table class="formula-table"><tr><th>Input</th><th>Output</th></tr>
-<tr><td>4 4<br>0 1<br>0 2<br>1 2<br>2 3<br>1 3</td><td>1<br>1 2 3</td></tr>
-<tr><td>5 4<br>0 1<br>0 2<br>1 2<br>2 3<br>1 4</td><td>0<br>Not found</td></tr></table>
-</div>
-
-<blockquote><p>📌 Các phần DFS/BFS/kiểm tra chu trình ở trên là nền tảng bắt buộc phải nắm. <strong>Đây mới là bài bạn sẽ gặp đúng nguyên văn trong đề thi</strong> — nó dùng lại đúng BFS bạn vừa học, chỉ thêm bước truy vết đường đi.</p></blockquote>
-<p class="idea-label">🧩 Ý tưởng cốt lõi</p>
-<p>Bài này gộp đúng 3 việc đã học ở trên vào 1 đề: (1) cài đặt đồ thị bằng <strong>ma trận kề</strong> — <code>adj[i][j]=1</code> nghĩa là có cạnh nối đỉnh i và đỉnh j; (2) <strong>kiểm tra liên thông toàn đồ thị</strong> — chạy BFS/DFS 1 lần từ đỉnh 0, nếu thăm được HẾT n đỉnh thì liên thông; (3) <strong>tìm đường đi cụ thể</strong> giữa 2 đỉnh u, v bằng BFS — không chỉ trả lời "có nối không" mà phải <strong>liệt kê đúng các đỉnh trên đường đi</strong>.</p>
-
-<p>Chìa khóa cho việc (3): khi BFS lan ra từng lớp, mỗi lần thăm 1 đỉnh mới <code>v</code> từ đỉnh <code>u</code>, ta ghi nhớ lại "<code>v</code> được thăm tới TỪ đâu" bằng mảng <code>parent[v] = u</code>. Sau khi BFS xong, muốn biết đường đi từ start tới v, ta chỉ cần "đi ngược" theo <code>parent[]</code> từ v về tới start, rồi đảo ngược lại thứ tự.</p>
-
+  <template #code>
 <pre v-pre><code>#include &lt;bits/stdc++.h&gt;
 using namespace std;
 
@@ -382,46 +455,57 @@ int main() {
     else { for (int x : path) cout &lt;&lt; x &lt;&lt; " "; cout &lt;&lt; "\n"; }
     return 0;
 }</code></pre>
+  </template>
 
-<p><strong>Đối chiếu đúng ví dụ 1 trong đề</strong>: n=4, m=4, cạnh (0,1)(0,2)(1,2)(2,3), tìm đường u=1 → v=3.</p>
-<table class="formula-table">
-  <tr><th>Bước BFS từ u=1</th><th>Hàng đợi</th><th>parent[] cập nhật</th></tr>
-  <tr><td>Bắt đầu, thăm 1</td><td>[1]</td><td>—</td></tr>
-  <tr><td>Xét 1 → láng giềng 0, 2 (đều đi từ 1 mà tới)</td><td>[0, 2]</td><td>parent[0]=1, parent[2]=1</td></tr>
-  <tr><td>Xét 0 → láng giềng 2 đã thăm, bỏ qua</td><td>[2]</td><td>—</td></tr>
-  <tr><td>Xét 2 → láng giềng 3 (đi từ 2 mà tới)</td><td>[3]</td><td>parent[3]=2</td></tr>
-  <tr><td>Gặp target=3, dừng. Truy vết: 3→parent=2→parent=1→parent=-1</td><td colspan="2">Đảo ngược: <strong>1 2 3</strong></td></tr>
-</table>
-<p>Khớp đúng: liên thông = 1 (cả 4 đỉnh cùng thăm được), đường đi = <strong>"1 2 3"</strong>. Với ví dụ 2 (đỉnh 4 bị cô lập, u=1,v=4), <code>isConnected()</code> đếm chỉ được 4 trong 5 đỉnh → in 0; <code>bfsPath</code> không bao giờ thăm được đỉnh 4 → in "Not found".</p>
+  <template #toi-uu>
+    <p><strong>BFS 2 đầu (bidirectional BFS).</strong> Khi đồ thị lớn và cần tìm đường đi ngắn nhất giữa đúng 2 đỉnh cụ thể (không phải tới mọi đỉnh), có thể loang đồng thời từ cả u và v, mỗi bên 1 hàng đợi riêng, và dừng ngay khi 2 vùng đã loang gặp nhau. Cách này giảm số đỉnh phải thăm từ khoảng O(b^d) xuống khoảng O(b^(d/2)) (b là số nhánh trung bình, d là độ dài đường đi) — hữu ích khi n rất lớn, còn với ràng buộc nhỏ như đề này (n≤20) BFS 1 chiều đã đủ nhanh.</p>
+    <p><strong>Lưu ý quan trọng</strong>: BFS chỉ đảm bảo tìm đường ngắn nhất khi mọi cạnh có <strong>cùng trọng số</strong> (hoặc không trọng số, coi mỗi cạnh "giá" bằng nhau). Nếu đề đổi thành đồ thị có trọng số khác nhau trên từng cạnh, phải dùng Dijkstra — BFS thuần sẽ ra kết quả sai vì nó chỉ đếm SỐ CẠNH, không cộng trọng số.</p>
+    <blockquote><p>📎 <strong>Đỉnh có nhãn ký tự</strong> (đề yêu cầu "mỗi đỉnh lưu một kí tự"): chỉ cần thêm 1 mảng phụ <code>char label[25]</code> song song với chỉ số 0..n-1 — mọi thao tác BFS/liên thông vẫn làm việc HOÀN TOÀN trên chỉ số nguyên như trên, chỉ khi IN KẾT QUẢ mới tra <code>label[đỉnh]</code> để hiển thị đúng ký tự. Tách biệt "chỉ số dùng để tính toán" và "nhãn dùng để hiển thị" là nguyên tắc chung, áp dụng được cho rất nhiều bài khác.</p></blockquote>
+  </template>
+</WorkedExample>
 
-<blockquote><p>📎 <strong>Đỉnh có nhãn ký tự</strong> (đề yêu cầu "mỗi đỉnh lưu một kí tự"): chỉ cần thêm 1 mảng phụ <code>char label[25]</code> song song với chỉ số 0..n-1 — mọi thao tác BFS/liên thông vẫn làm việc HOÀN TOÀN trên chỉ số nguyên như trên, chỉ khi IN KẾT QUẢ mới tra <code>label[đỉnh]</code> để hiển thị đúng ký tự. Tách biệt "chỉ số dùng để tính toán" và "nhãn dùng để hiển thị" là nguyên tắc chung, áp dụng được cho rất nhiều bài khác.</p></blockquote>
+</LessonPart>
 
-<h4 id="auto-luyen-tap">Luyện tập</h4>
-<ol class="practice">
-  <li>Tự chạy tay ví dụ 2 trong đề (n=5, cạnh 0-1,0-2,1-2,2-3, u=1,v=4) bằng bảng như trên trước khi đối chiếu code.
-    <div class="idea"><em>Ý tưởng:</em> BFS từ đỉnh 1 sẽ thăm được đúng {1,0,2,3} rồi hàng đợi rỗng — đỉnh 4 không hề xuất hiện trong toàn bộ quá trình vì không có cạnh nào nối tới nó.</div>
-  </li>
-  <li>Viết thêm hàm <code>addVertex()</code> và <code>addEdge(i,j)</code> tường minh thay vì đọc trực tiếp vào mảng toàn cục.
-    <div class="hint"><em>Hướng dẫn:</em> <code>addVertex()</code> chỉ cần tăng biến đếm <code>n</code>; <code>addEdge(i,j)</code> chính là dòng <code>adj[i][j]=adj[j][i]=1</code> đã có, tách thành hàm riêng để code rõ ràng hơn khi chấm điểm từng phần.</div>
-  </li>
-  <li>Vì sao dùng BFS (không phải DFS) để tìm đường đi trong bài này, dù DFS cũng tìm ra 1 đường đi hợp lệ?
-    <div class="hint"><em>Hướng dẫn:</em> đề không yêu cầu đường đi ngắn nhất, nhưng BFS có sẵn tính chất "đường đi tìm được là ngắn nhất về số cạnh" mà không tốn thêm chi phí — nên dùng BFS luôn là lựa chọn an toàn hơn khi không chắc đề có ẩn ý cần đường ngắn nhất hay không.</div>
-  </li>
-</ol>
+<LessonPart :sid="'dfs-bfs'" part="bai-tap">
+  <PracticeSet :items="data.practice" />
 
-<h4 id="auto-luyen-tap-chung-phan-bfs-dfs">Luyện tập (chung phần BFS/DFS)</h4>
-<ol class="practice">
-  <li>Vẽ 1 đồ thị 6 đỉnh, chạy tay DFS và BFS từ 2 đỉnh khác nhau.
-    <div class="idea"><em>Ý tưởng:</em> tự hỏi ở mỗi bước "tôi đang dùng ngăn xếp (đi sâu 1 nhánh trước) hay hàng đợi (đi rộng từng lớp trước)?" — vẽ sai thứ tự thường là do lẫn lộn 2 nguyên tắc này.</div>
-  </li>
-  <li>Đếm "hòn đảo" trong ma trận 0/1 (1=đất).
-    <div class="idea"><em>Ý tưởng:</em> 1 lưới ô vuông cũng là 1 đồ thị — chỉ khác cách biểu diễn cạnh (kề nhau theo 4 hướng thay vì tra ma trận adj[][]). Nhận ra được điều này, bạn không cần học thuật toán mới, chỉ cần "dịch" lại khái niệm kề.</div>
-    <div class="hint"><em>Hướng dẫn:</em> dùng đúng code countComponents, chỉ thay điều kiện kề bằng 4 hướng trên/dưới/trái/phải.</div>
-  </li>
-  <li>Với đồ thị vô hướng, cách kiểm tra chu trình khác: gặp lại đỉnh đã thăm mà không phải cha trực tiếp → có chu trình.
-    <div class="idea"><em>Ý tưởng:</em> trong đồ thị vô hướng, mỗi cạnh được "nhìn thấy" 2 lần khi duyệt (từ cả 2 đầu) — nên phải nhớ "tôi vừa đi từ ai tới đây" để không tưởng nhầm việc đi ngược lại cha là 1 chu trình.</div>
-  </li>
-</ol>
+  <h4 id="auto-luyen-tap">Luyện tập</h4>
+  <ol class="practice">
+    <li>Tự chạy tay ví dụ 2 trong đề BFS (n=5, cạnh 0-1,0-2,1-2,2-3, u=1,v=4) bằng bảng như trên trước khi đối chiếu code.
+      <div class="idea">Ý tưởng: BFS từ đỉnh 1 sẽ thăm được đúng {1,0,2,3} rồi hàng đợi rỗng — đỉnh 4 không hề xuất hiện trong toàn bộ quá trình vì không có cạnh nào nối tới nó.</div>
+    </li>
+    <li>Viết thêm hàm <code>addVertex()</code> và <code>addEdge(i,j)</code> tường minh thay vì đọc trực tiếp vào mảng toàn cục.
+      <div class="hint">Hướng dẫn: <code>addVertex()</code> chỉ cần tăng biến đếm <code>n</code>; <code>addEdge(i,j)</code> chính là dòng <code>adj[i][j]=adj[j][i]=1</code> đã có, tách thành hàm riêng để code rõ ràng hơn khi chấm điểm từng phần.</div>
+    </li>
+    <li>Vì sao dùng BFS (không phải DFS) để tìm đường đi trong bài này, dù DFS cũng tìm ra 1 đường đi hợp lệ?
+      <div class="hint">Hướng dẫn: đề không yêu cầu đường đi ngắn nhất, nhưng BFS có sẵn tính chất "đường đi tìm được là ngắn nhất về số cạnh" mà không tốn thêm chi phí — nên dùng BFS luôn là lựa chọn an toàn hơn khi không chắc đề có ẩn ý cần đường ngắn nhất hay không.</div>
+    </li>
+  </ol>
+
+  <h4 id="auto-luyen-tap-chung-phan-bfs-dfs">Luyện tập (chung phần BFS/DFS)</h4>
+  <ol class="practice">
+    <li>Vẽ 1 đồ thị 6 đỉnh, chạy tay DFS và BFS từ 2 đỉnh khác nhau.
+      <div class="idea">Ý tưởng: tự hỏi ở mỗi bước "tôi đang dùng ngăn xếp (đi sâu 1 nhánh trước) hay hàng đợi (đi rộng từng lớp trước)?" — vẽ sai thứ tự thường là do lẫn lộn 2 nguyên tắc này.</div>
+    </li>
+    <li>Đếm "hòn đảo" trong ma trận 0/1 (1=đất).
+      <div class="idea">Ý tưởng: 1 lưới ô vuông cũng là 1 đồ thị — chỉ khác cách biểu diễn cạnh (kề nhau theo 4 hướng thay vì tra ma trận adj[][]). Nhận ra được điều này, bạn không cần học thuật toán mới, chỉ cần "dịch" lại khái niệm kề.</div>
+      <div class="hint">Hướng dẫn: dùng đúng code countComponents, chỉ thay điều kiện kề bằng 4 hướng trên/dưới/trái/phải.</div>
+    </li>
+    <li>Với đồ thị vô hướng, cách kiểm tra chu trình khác: gặp lại đỉnh đã thăm mà không phải cha trực tiếp → có chu trình.
+      <div class="idea">Ý tưởng: trong đồ thị vô hướng, mỗi cạnh được "nhìn thấy" 2 lần khi duyệt (từ cả 2 đầu) — nên phải nhớ "tôi vừa đi từ ai tới đây" để không tưởng nhầm việc đi ngược lại cha là 1 chu trình.</div>
+    </li>
+  </ol>
+
+  <h4 id="auto-luyen-tap-2">Luyện tập</h4>
+  <ol class="practice">
+    <li>Tự vẽ lại đúng đồ thị 5 đỉnh trong ví dụ đề đỉnh trụ/cạnh cầu, tự tay thử xóa từng đỉnh và từng cạnh một, đối chiếu với bảng chạy tay ở khối tài nguyên tự luyện trước khi xem code.
+      <div class="idea">Ý tưởng: cùng 1 đồ thị dùng chung cho cả đỉnh trụ và cạnh cầu — quan sát xem đỉnh trụ và cạnh cầu ở đây có liên quan gì tới nhau không (gợi ý: mọi cạnh cầu luôn có ít nhất 1 đầu mút là đỉnh trụ, trừ trường hợp đồ thị chỉ có đúng 2 đỉnh).</div>
+    </li>
+  </ol>
+</LessonPart>
+
+<LessonPart :sid="'dfs-bfs'" part="leetcode">
+  <LeetCodeList :items="data.leetcode" />
 
 <h3 id="cay-khung-duong-di">★ Bài chính thức trong Đề bổ sung — D04014/D04015 Cây khung DFS/BFS &amp; D04010 Đường đi DFS-BFS</h3>
 
@@ -432,7 +516,7 @@ int main() {
 <p><strong>Output:</strong> N-1 cạnh cây khung theo thứ tự duyệt DFS, mỗi cạnh 1 dòng; nếu không có cây khung, in -1.</p>
 <table class="formula-table"><tr><th>Input</th><th>Output</th></tr>
 <tr><td>2<br>4 4 2<br>1 2<br>1 3<br>2 4<br>3 4<br>4 2 2<br>1 2<br>3 4</td><td>2 1<br>1 3<br>3 4<br>-1</td></tr></table>
-<p style="margin-top:0.5rem;"><em>D04015 — Cây khung theo BFS: giống hệt D04014 nhưng chọn cạnh theo thứ tự duyệt BFS thay vì DFS, cùng định dạng input/output.</em></p>
+<p style="margin-top:0.5rem;">D04015 — Cây khung theo BFS: giống hệt D04014 nhưng chọn cạnh theo thứ tự duyệt BFS thay vì DFS, cùng định dạng input/output.</p>
 </div>
 
 <div class="problem-box">
@@ -559,19 +643,20 @@ void canhcau(){
 
 <blockquote><p>📎 <strong>Vì sao cách này chấp nhận được dù có vẻ "chạy lại DFS rất nhiều lần"</strong>? Với N≤10³, độ phức tạp O(N·(N+M)) cho đỉnh trụ và O(M·(N+M)) cho cạnh cầu vẫn đủ nhanh trong giới hạn thời gian thi. Thuật toán tối ưu hơn (Tarjan, dùng <code>low[]</code>/<code>num[]</code>, chỉ 1 lần DFS duy nhất) tồn tại nhưng phức tạp hơn nhiều để nhớ chính xác trong phòng thi — chỉ nên học thêm nếu còn thời gian sau khi đã chắc cách "thử xóa" này.</p></blockquote>
 
-<h4 id="auto-luyen-tap-2">Luyện tập</h4>
-<ol class="practice">
-  <li>Tự vẽ lại đúng đồ thị 5 đỉnh trong ví dụ đề (D04005/D04006), tự tay thử xóa từng đỉnh và từng cạnh một, đối chiếu với bảng chạy tay ở trên trước khi xem code.
-    <div class="idea"><em>Ý tưởng:</em> cùng 1 đồ thị dùng chung cho cả đỉnh trụ và cạnh cầu — quan sát xem đỉnh trụ và cạnh cầu ở đây có liên quan gì tới nhau không (gợi ý: mọi cạnh cầu luôn có ít nhất 1 đầu mút là đỉnh trụ, trừ trường hợp đồ thị chỉ có đúng 2 đỉnh).</div>
-  </li>
-</ol>
-
+</LessonPart>
 
 </section>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
+import LessonGoal from '../components/LessonGoal.vue'
+import LessonPart from '../components/LessonPart.vue'
+import QuizBlock from '../components/QuizBlock.vue'
+import WorkedExample from '../components/WorkedExample.vue'
+import PracticeSet from '../components/PracticeSet.vue'
+import LeetCodeList from '../components/LeetCodeList.vue'
+import data from '../data/lessons/dfs-bfs.js'
 import { initDfsBfsWidgets } from '../widgets/dfs-bfs.js'
 
 defineProps({ active: Boolean })

@@ -2134,7 +2134,7 @@ git commit -m "content: rewrite stack and queue lesson in 6-part format"
 - **Quiz (4 câu):** (1) DFS dùng cấu trúc nào, BFS dùng cấu trúc nào — "ngăn xếp/đệ quy và hàng đợi"; (2) muốn tìm đường ít cạnh nhất thì dùng gì — "BFS"; (3) bỏ mảng visited[] thì chuyện gì xảy ra — "lặp vô hạn khi đồ thị có chu trình"; (4) ma trận kề tốn bao nhiêu bộ nhớ — "O(n²) bất kể số cạnh".
 - **Bài tập (3):** đếm số đảo trên lưới ký tự; loang từ nhiều nguồn cùng lúc (cam thối); kiểm tra đồ thị có chu trình bằng DFS.
 
-- [ ] **Step 1: Tạo `src/data/lessons/dfs-bfs.js`**
+- [x] **Step 1: Tạo `src/data/lessons/dfs-bfs.js`**
 
 ```js
 export default {
@@ -2165,7 +2165,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import dfsBfs from './dfs-bfs.js'
@@ -2173,18 +2173,18 @@ import dfsBfs from './dfs-bfs.js'
   'dfs-bfs': dfsBfs,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS.
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/dfs-bfs.js | sort -u
 ```
 
-- [ ] **Step 5: Viết lại `src/sections/DfsBfs.vue`**
+- [x] **Step 5: Viết lại `src/sections/DfsBfs.vue`**
 
 ```vue
 <template>
@@ -2260,7 +2260,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ.
@@ -2268,12 +2268,12 @@ Expected: PASS toàn bộ.
 Run: `npm run build`
 Expected: build sạch.
 
-- [ ] **Step 7: Kiểm tra widget trên trình duyệt**
+- [ ] **Step 7: Kiểm tra widget trên trình duyệt** — CHƯA kiểm chứng bằng mắt trong phiên này (không chạy `npm run dev` để xem trực tiếp); mọi id DOM widget đã được đối chiếu tĩnh bằng grep và khớp 100%.
 
 Run: `npm run dev`, mở nhóm "BFS & DFS", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/DfsBfs.vue src/data/lessons/dfs-bfs.js src/data/lessons/index.js
