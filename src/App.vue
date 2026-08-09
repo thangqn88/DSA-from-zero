@@ -111,7 +111,7 @@
 <script setup>
 import { ref, computed, onMounted, nextTick } from "vue";
 import { navTop, navGroups, allSectionIds, DEFAULT_ID } from "./data/nav.js";
-import menusData from "./data/menus.json";
+import { buildMenu } from "./data/menu.js";
 
 import TrangChu from "./sections/TrangChu.vue";
 import CamNang from "./sections/CamNang.vue";
@@ -129,7 +129,7 @@ import BstNangCao from "./sections/BstNangCao.vue";
 const activeSection = ref(DEFAULT_ID);
 const contentMainEl = ref(null);
 
-const currentMenu = computed(() => menusData[activeSection.value] || []);
+const currentMenu = computed(() => buildMenu(activeSection.value));
 
 function closestSectionId(el) {
   const sectionEl = el.closest ? el.closest(".day-section") : null;
