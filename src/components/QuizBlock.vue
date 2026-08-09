@@ -6,7 +6,9 @@
 
     <div v-for="(item, qi) in questions" :key="qi" class="quiz-q">
       <p class="quiz-prompt">
-        <strong>Câu {{ qi + 1 }}.</strong> {{ item.q }}
+        <strong>Câu {{ qi + 1 }}.</strong>
+        <span v-if="item.recall" class="quiz-recall">Ôn lại bài trước</span>
+        {{ item.q }}
       </p>
       <button
         v-for="(opt, oi) in item.options"

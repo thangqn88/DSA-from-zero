@@ -669,3 +669,16 @@
     color: var(--navy);
     font-weight: 600;
   }
+
+  /* Nhãn câu ôn tập. #0F6B42 trên nền --success-bg đã dùng cho nhãn Easy và
+     đạt AA — dùng lại đúng cặp đó thay vì tự đặt màu mới. */
+  .quiz-recall {
+    display: inline-block;
+    margin: 0 0.35rem 0 0.15rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--success-bg);
+    color: #0F6B42;
+  }

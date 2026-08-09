@@ -46,3 +46,18 @@ describe('QuizBlock', () => {
     expect(w.get('.quiz-score').text()).toContain('đúng 1')
   })
 })
+
+describe('QuizBlock — câu ôn tập', () => {
+  it('câu ôn tập có nhãn riêng, câu thường thì không', () => {
+    const w = mount(QuizBlock, {
+      props: {
+        questions: [
+          { q: 'Câu ôn', options: ['a', 'b'], answer: 0, why: 'vì thế', recall: true },
+          { q: 'Câu thường', options: ['a', 'b'], answer: 1, why: 'vì vậy' },
+        ],
+      },
+    })
+    expect(w.findAll('.quiz-recall')).toHaveLength(1)
+    expect(w.text()).toContain('Ôn lại bài trước')
+  })
+})
