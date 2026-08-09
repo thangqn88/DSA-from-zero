@@ -522,3 +522,29 @@
     border-bottom: 1px dashed var(--border);
     padding-bottom: 0.4rem;
   }
+
+  /* ===== Quiz ===== */
+  .quiz {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.3rem;
+    background: var(--surface);
+    margin: 1.2rem 0;
+  }
+  .quiz-score {
+    font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--muted-2); font-weight: 700; margin-bottom: 0.8rem;
+  }
+  .quiz-q { padding: 0.8rem 0; border-top: 1px dashed var(--border); }
+  .quiz-q:first-of-type { border-top: none; padding-top: 0; }
+  .quiz-prompt { margin: 0 0 0.6rem; }
+  .quiz-opt {
+    display: block; width: 100%; text-align: left;
+    background: var(--card-bg); color: var(--ink);
+    border: 1px solid var(--border); margin: 0 0 0.4rem;
+    font-weight: 500; min-height: 44px;
+  }
+  .quiz-opt:disabled { cursor: default; opacity: 1; }
+  .quiz-opt.correct { background: var(--success-bg); border-color: var(--success); color: #17694B; font-weight: 700; }
+  .quiz-opt.wrong { background: var(--danger-bg); border-color: var(--danger); color: #A13A2E; }
+  .quiz-why { font-size: 0.92rem; color: var(--muted); margin: 0.5rem 0 0; }
