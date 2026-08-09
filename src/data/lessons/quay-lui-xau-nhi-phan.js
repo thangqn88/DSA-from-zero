@@ -5,6 +5,7 @@ export default {
   ],
   examples: [
     { id: 'vd-sinh-xau-nhi-phan', title: 'Sinh mọi xâu nhị phân độ dài n', official: true },
+    { id: 'vd-n-queens', title: 'Xếp n quân hậu (N-Queens)', official: false },
   ],
   quiz: [
     {
