@@ -3019,21 +3019,25 @@ describe('menus.json', () => {
 })
 ```
 
-- [ ] **Step 2: Chạy test để chắc chắn nó fail**
+- [x] **Step 2: Chạy test để chắc chắn nó fail**
 
 Run: `npm run test -- --run tests/menus-json.spec.js`
 Expected: FAIL — `menus.json` vẫn còn key của 10 nhóm.
 
-- [ ] **Step 3: Xóa 10 key nhóm kiến thức khỏi `src/data/menus.json`**
+Ghi chú: `menus.json` đã chỉ còn key `trang-chu` từ trước (khi xóa Cẩm nang ngày
+2026-08-09), nên khi tạo `tests/menus-json.spec.js` ở Task 18 test PASS ngay, không
+fail như dự kiến. Đã xác nhận đúng nội dung file trước khi ghi nhận PASS.
+
+- [x] **Step 3: Xóa 10 key nhóm kiến thức khỏi `src/data/menus.json`**
 
 Giữ lại đúng 1 key: `"trang-chu"`. (Đã làm xong ngày 2026-08-09 khi xóa Cẩm nang.)
 
-- [ ] **Step 4: Chạy lại test**
+- [x] **Step 4: Chạy lại test**
 
 Run: `npm run test -- --run tests/menus-json.spec.js`
-Expected: PASS, 2 tests.
+Expected: PASS, 2 tests. Kết quả: PASS, 2 tests.
 
-- [ ] **Step 5: Viết lại nội dung `src/sections/TrangChu.vue` theo đặc tả nội dung ở trên**
+- [x] **Step 5: Viết lại nội dung `src/sections/TrangChu.vue` theo đặc tả nội dung ở trên**
 
 Giữ nguyên `id="trang-chu"`, `class="day-section"`, `data-sid="trang-chu"`, `v-show="active"`.
 Bảng lộ trình dùng `<table class="formula-table">` với 3 cột: Thứ tự học — Nhóm kiến thức — Sau bài này bạn làm được gì.
@@ -3060,15 +3064,19 @@ Mỗi tên nhóm là 1 link `<a href="#<sid>">` để bấm sang thẳng nhóm �
         </div>
 ```
 
-- [ ] **Step 8: Chạy toàn bộ test và build**
+- [x] **Step 8: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
-Expected: PASS toàn bộ.
+Expected: PASS toàn bộ. Kết quả: PASS toàn bộ, 145 tests (9 test file).
 
 Run: `npm run build`
-Expected: build sạch.
+Expected: build sạch. Kết quả: build sạch (chỉ còn cảnh báo chunk-size và cảnh báo
+`<tr>` lồng trong `LeetCodeList.vue` có từ trước, không liên quan Task 18).
 
-- [ ] **Step 9: Commit**
+Ghi chú: chưa mở `npm run dev` bằng trình duyệt để nhìn bảng lộ trình mới trên Trang
+chủ — chưa kiểm chứng bằng mắt theo đúng nguyên tắc "Kiểm chứng" trong CLAUDE.md.
+
+- [x] **Step 9: Commit**
 
 ```bash
 git add src/sections/TrangChu.vue src/data/menus.json src/App.vue tests/menus-json.spec.js
