@@ -22,17 +22,85 @@ export function partTitle(key) {
   return p.num === 0 ? p.title : `${p.num}. ${p.title}`
 }
 
-// 10 nhóm kiến thức theo khung 6 phần. "trang-chu" không nằm ở đây vì nó là
-// trang giới thiệu, không phải bài học.
-export const LESSON_SECTIONS = [
-  { sid: 'quay-lui-xau-nhi-phan', file: 'src/sections/QuayLuiXauNhiPhan.vue', title: 'Quay lui & Xâu nhị phân' },
-  { sid: 'to-hop', file: 'src/sections/ToHop.vue', title: 'Tổ hợp' },
-  { sid: 'tham-lam', file: 'src/sections/ThamLam.vue', title: 'Tham lam' },
-  { sid: 'qhd-nen-tang', file: 'src/sections/QhdNenTang.vue', title: 'Quy hoạch động nền tảng' },
-  { sid: 'qhd-lis-lcs-doixung', file: 'src/sections/QhdLisLcsDoixung.vue', title: 'QHĐ nâng cao: Knapsack, LIS, LCS, Xâu đối xứng' },
-  { sid: 'ngan-xep-hang-doi', file: 'src/sections/NganXepHangDoi.vue', title: 'Ngăn xếp & Hàng đợi' },
-  { sid: 'dfs-bfs', file: 'src/sections/DfsBfs.vue', title: 'DFS & BFS' },
-  { sid: 'dsu', file: 'src/sections/Dsu.vue', title: 'DSU — Disjoint Set Union' },
-  { sid: 'cay-nhi-phan-bst', file: 'src/sections/CayNhiPhanBst.vue', title: 'Cây nhị phân & BST' },
-  { sid: 'bst-nang-cao', file: 'src/sections/BstNangCao.vue', title: 'BST nâng cao' },
+// sid 'dfs-bfs' -> 'src/sections/DfsBfs.vue'. Quy ước này đúng với cả 10 file cũ,
+// nên không còn phải viết tay đường dẫn ở hai nơi.
+export function sidToFile(sid) {
+  const pascal = sid.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join('')
+  return `src/sections/${pascal}.vue`
+}
+
+// Nguồn sự thật duy nhất về thứ tự học. LESSON_SECTIONS và menu trái đều suy ra
+// từ đây — đừng định nghĩa thứ tự bài học ở bất kỳ chỗ nào khác.
+// ready: đã có file section. duAn: đã có Phần 7 Dự án thực hành.
+// "trang-chu" không nằm ở đây vì nó là trang giới thiệu, không phải bài học.
+export const CHAPTERS = [
+  {
+    key: 'nen-mong', num: 1, title: 'Nền móng', capstoneReady: false,
+    lessons: [
+      { sid: 'do-phuc-tap', title: 'Độ phức tạp thuật toán và mô hình chi phí', ready: false, duAn: false },
+      { sid: 'mang-chuoi', title: 'Mảng, chuỗi và mảng động', ready: false, duAn: false },
+      { sid: 'de-quy', title: 'Đệ quy và hệ thức truy hồi', ready: false, duAn: false },
+      { sid: 'danh-sach-lien-ket', title: 'Danh sách liên kết', ready: false, duAn: false },
+    ],
+  },
+  {
+    key: 'xu-ly-day', num: 2, title: 'Xử lý dãy', capstoneReady: false,
+    lessons: [
+      { sid: 'sap-xep', title: 'Sắp xếp: merge, quick, counting', ready: false, duAn: false },
+      { sid: 'tim-kiem-nhi-phan', title: 'Tìm kiếm nhị phân và tìm nhị phân trên đáp án', ready: false, duAn: false },
+      { sid: 'hai-con-tro-cua-so-truot', title: 'Hai con trỏ và cửa sổ trượt', ready: false, duAn: false },
+      { sid: 'tong-tien-to', title: 'Tổng tiền tố và mảng hiệu', ready: false, duAn: false },
+    ],
+  },
+  {
+    key: 'tra-cuu', num: 3, title: 'Tra cứu', capstoneReady: false,
+    lessons: [
+      { sid: 'ngan-xep-hang-doi', title: 'Ngăn xếp và hàng đợi', ready: true, duAn: false },
+      { sid: 'bang-bam', title: 'Bảng băm', ready: false, duAn: false },
+      { sid: 'heap-hang-doi-uu-tien', title: 'Heap và hàng đợi ưu tiên', ready: false, duAn: false },
+      { sid: 'trie', title: 'Trie — cây tiền tố', ready: false, duAn: false },
+    ],
+  },
+  {
+    key: 'cay', num: 4, title: 'Cây', capstoneReady: false,
+    lessons: [
+      { sid: 'cay-nhi-phan-bst', title: 'Cây nhị phân và BST', ready: true, duAn: false },
+      { sid: 'bst-nang-cao', title: 'BST nâng cao', ready: true, duAn: false },
+      { sid: 'fenwick-segment-tree', title: 'Fenwick và Segment Tree', ready: false, duAn: false },
+    ],
+  },
+  {
+    key: 'do-thi', num: 5, title: 'Đồ thị', capstoneReady: false,
+    lessons: [
+      { sid: 'dfs-bfs', title: 'DFS và BFS', ready: true, duAn: false },
+      { sid: 'dsu', title: 'DSU — Disjoint Set Union', ready: true, duAn: false },
+      { sid: 'sap-xep-to-po', title: 'Sắp xếp tô-pô', ready: false, duAn: false },
+      { sid: 'duong-di-ngan-nhat', title: 'Đường đi ngắn nhất có trọng số', ready: false, duAn: false },
+      { sid: 'cay-khung-nho-nhat', title: 'Cây khung nhỏ nhất', ready: false, duAn: false },
+    ],
+  },
+  {
+    key: 'thiet-ke-thuat-toan', num: 6, title: 'Thiết kế thuật toán', capstoneReady: false,
+    lessons: [
+      { sid: 'quay-lui-xau-nhi-phan', title: 'Quay lui và xâu nhị phân', ready: true, duAn: false },
+      { sid: 'to-hop', title: 'Tổ hợp', ready: true, duAn: false },
+      { sid: 'tham-lam', title: 'Tham lam', ready: true, duAn: false },
+      { sid: 'qhd-nen-tang', title: 'Quy hoạch động nền tảng', ready: true, duAn: false },
+      { sid: 'qhd-lis-lcs-doixung', title: 'QHĐ nâng cao: Knapsack, LIS, LCS, xâu đối xứng', ready: true, duAn: false },
+    ],
+  },
+  {
+    key: 'chuyen-de', num: 7, title: 'Chuyên đề và giới hạn', capstoneReady: false,
+    lessons: [
+      { sid: 'thao-tac-bit', title: 'Thao tác bit', ready: false, duAn: false },
+      { sid: 'toan-so-hoc', title: 'Toán và số học: GCD, modulo, sàng, luỹ thừa nhanh', ready: false, duAn: false },
+      { sid: 'chuoi-nang-cao', title: 'Chuỗi nâng cao: KMP và hash chuỗi', ready: false, duAn: false },
+      { sid: 'work-span', title: 'Work/Span và tư duy song song', ready: false, duAn: false },
+      { sid: 'do-kho-bai-toan', title: 'Độ khó bài toán: NP-đầy đủ và khi nào dùng xấp xỉ', ready: false, duAn: false },
+    ],
+  },
 ]
+
+export const LESSON_SECTIONS = CHAPTERS.flatMap(c =>
+  c.lessons.map(l => ({ ...l, chapter: c.key, file: sidToFile(l.sid) })),
+)
