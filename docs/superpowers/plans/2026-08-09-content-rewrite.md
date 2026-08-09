@@ -2820,7 +2820,7 @@ git commit -m "content: rewrite advanced DP lesson in 6-part format"
 - **Quiz (4 câu):** (1) vì sao chỉ so sánh node với 2 con là sai — "một node ở sâu bên trái vẫn có thể lớn hơn gốc"; (2) chiều cao BST xấu nhất là bao nhiêu — "n, khi cây lệch thành danh sách"; (3) trên BST, tìm LCA của 2 giá trị bằng cách nào — "đi xuống tới khi 2 giá trị nằm về 2 phía của node hiện tại"; (4) duyệt giữa của cây có đúng là BST khi nào — "khi dãy thu được tăng nghiêm ngặt".
 - **Bài tập (3):** kiểm tra cây có cân bằng chiều cao không; chuyển mảng đã sắp xếp thành BST cân bằng; khôi phục BST khi 2 node bị hoán đổi nhầm.
 
-- [ ] **Step 1: Tạo `src/data/lessons/bst-nang-cao.js`**
+- [x] **Step 1: Tạo `src/data/lessons/bst-nang-cao.js`**
 
 ```js
 export default {
@@ -2851,7 +2851,7 @@ export default {
 }
 ```
 
-- [ ] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
+- [x] **Step 2: Đăng ký vào `src/data/lessons/index.js`**
 
 ```js
 import bstNangCao from './bst-nang-cao.js'
@@ -2859,18 +2859,18 @@ import bstNangCao from './bst-nang-cao.js'
   'bst-nang-cao': bstNangCao,
 ```
 
-- [ ] **Step 3: Chạy test dữ liệu**
+- [x] **Step 3: Chạy test dữ liệu**
 
 Run: `npm run test -- --run tests/lesson-data.spec.js`
 Expected: PASS, và test tiến độ in ra "Còn thiếu dữ liệu: (không còn)".
 
-- [ ] **Step 4: Ghi lại id widget đang dùng**
+- [x] **Step 4: Ghi lại id widget đang dùng**
 
 ```bash
 grep -o "getElementById('[^']*'" src/widgets/bst-nang-cao.js | sort -u
 ```
 
-- [ ] **Step 5: Viết lại `src/sections/BstNangCao.vue`**
+- [x] **Step 5: Viết lại `src/sections/BstNangCao.vue`**
 
 ```vue
 <template>
@@ -2946,7 +2946,7 @@ onMounted(() => {
 </script>
 ```
 
-- [ ] **Step 6: Chạy toàn bộ test và build**
+- [x] **Step 6: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
 Expected: PASS toàn bộ — lúc này `tests/lesson-structure.spec.js` chạy đủ cả 10 section.
@@ -2959,7 +2959,13 @@ Expected: build sạch.
 Run: `npm run dev`, mở nhóm "BST nâng cao", chạy hết các nút của widget.
 Expected: không lỗi console.
 
-- [ ] **Step 8: Commit**
+Ghi chú: id DOM (`d14ValidSvg`, `d14ValidCaption`, `d14LcaSvg`, `d14LcaCaption`, và các id suy ra
+từ `makeStepper('d14Valid', ...)` / `makeStepper('d14Lca', ...)`: `d14ValidPrev`, `d14ValidNext`,
+`d14ValidReset`, `d14ValidStepNum`, `d14ValidStepTotal`, `d14LcaPrev`, `d14LcaNext`, `d14LcaReset`,
+`d14LcaStepNum`, `d14LcaStepTotal`) đã được xác nhận có mặt nguyên vẹn trong template mới, nhưng
+chưa có ai bấm thử trên trình duyệt thật — chưa kiểm chứng bằng mắt.
+
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/sections/BstNangCao.vue src/data/lessons/bst-nang-cao.js src/data/lessons/index.js
