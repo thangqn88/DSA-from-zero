@@ -108,70 +108,61 @@
     >
       <span class="rw-title"
         >📋 Đối chiếu trực tiếp với Đề bài ôn tập thực hành (9 bài) — bấm để
-        nhảy tới cẩm nang giải</span
+        nhảy tới phần lý thuyết tương ứng</span
       >
       <table class="formula-table" style="margin: 0.3rem 0 0">
         <tr>
           <th>Bài</th>
           <th>Đề bài</th>
           <th>Thuộc nhóm kiến thức</th>
-          <th>Cẩm nang giải</th>
           <th>Lý thuyết + code</th>
         </tr>
         <tr>
           <td>1</td>
           <td>Hoán vị kế tiếp (Next Permutation)</td>
           <td>Quay lui / Tổ hợp</td>
-          <td><a href="#guide-bai12">Hướng dẫn</a></td>
           <td><a href="#bai1-hoanvi-ke-tiep">Tổ hợp</a></td>
         </tr>
         <tr>
           <td>2</td>
           <td>Đếm cách đặt N quân hậu (N-Queens)</td>
           <td>Quay lui</td>
-          <td><a href="#guide-bai12">Hướng dẫn</a></td>
-          <td><a href="#bai2-nqueens">Quay lui</a></td>
+          <td><a href="#vd-n-queens">Quay lui</a></td>
         </tr>
         <tr>
           <td>3</td>
           <td>Activity Selection</td>
           <td>Tham lam</td>
-          <td><a href="#guide-bai3">Hướng dẫn</a></td>
           <td><a href="#tham-lam">Tham lam</a></td>
         </tr>
         <tr>
           <td>4</td>
           <td>Xâu con chung dài nhất (LCS)</td>
           <td>Quy hoạch động</td>
-          <td><a href="#guide-bai4">Hướng dẫn</a></td>
           <td><a href="#bai4-lcs">QHĐ</a></td>
         </tr>
         <tr>
           <td>5</td>
           <td>Đảo ngược từng từ trong xâu</td>
           <td>Xử lý xâu cơ bản</td>
-          <td><a href="#guide-bai5">Hướng dẫn</a></td>
           <td><a href="#bai5-reverse-words">Ngăn xếp</a></td>
         </tr>
         <tr>
           <td>6</td>
           <td>Kiểm tra dãy ngoặc hợp lệ (3 loại ngoặc)</td>
           <td>Ngăn xếp</td>
-          <td><a href="#guide-bai6">Hướng dẫn</a></td>
           <td><a href="#bai6-ngoac-hop-le">Ngăn xếp</a></td>
         </tr>
         <tr>
           <td>7</td>
           <td>Xây BST rồi in Post Order</td>
           <td>Cây nhị phân / BST</td>
-          <td><a href="#guide-bai78">Hướng dẫn</a></td>
           <td><a href="#bai7-8-bst-build-delete">Cây nhị phân</a></td>
         </tr>
         <tr>
           <td>8</td>
           <td>BST đầy đủ: chèn, xóa (copy), duyệt <strong>(7đ)</strong></td>
           <td>Cây nhị phân / BST</td>
-          <td><a href="#guide-bai78">Hướng dẫn</a></td>
           <td><a href="#bai7-8-bst-build-delete">Cây nhị phân</a></td>
         </tr>
         <tr>
@@ -180,7 +171,6 @@
             Đồ thị ma trận kề, liên thông, đường đi BFS <strong>(7đ)</strong>
           </td>
           <td>Duyệt đồ thị</td>
-          <td><a href="#guide-bai9">Hướng dẫn</a></td>
           <td><a href="#bai9-graph-matrix">Duyệt đồ thị</a></td>
         </tr>
       </table>
@@ -190,15 +180,12 @@
       class="realworld"
       style="background: var(--success-bg); border-left-color: var(--success)"
     >
-      <span class="rw-title"
-        >🎯 Mới: Cẩm nang giải đề theo lộ trình 5 ngày</span
-      >
+      <span class="rw-title">🎯 Mỗi nhóm kiến thức học theo đúng 6 phần</span>
       <p style="margin: 0">
-        Nếu bạn chưa tự tin làm bài, đừng học lý thuyết trước — hãy bắt đầu ngay
-        từ <a href="#cam-nang"><strong>Cẩm nang giải đề</strong></a> ngay bên
-        dưới. Nó dạy đúng quy trình suy nghĩ cho từng bài theo thứ tự ưu tiên
-        phù hợp với 5 ngày còn lại của bạn (3/8 → 7/8), rồi mới dẫn bạn quay lại
-        đúng phần lý thuyết cần đọc.
+        Mọi nhóm kiến thức đều đi theo cùng một khung: mục tiêu bài học → lý
+        thuyết cơ bản → vì sao kiến thức này quan trọng → quiz kiểm tra → ví dụ
+        điển hình giải đủ 6 bước → bài tập kiểm tra → danh sách LeetCode để tự
+        luyện. Bạn chỉ cần quen khung này một lần là học được cả 10 nhóm.
       </p>
     </div>
 

@@ -2,7 +2,6 @@
 // "exam" = true nghĩa là nhóm có bài chính thức trong đề ôn tập (đánh dấu nổi bật).
 export const navTop = [
   { id: 'trang-chu', label: '📘 Trang chủ' },
-  { id: 'cam-nang', label: '🎯 Cẩm nang giải đề' },
 ];
 
 export const navGroups = [

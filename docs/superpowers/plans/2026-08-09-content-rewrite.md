@@ -19,7 +19,7 @@
 - Code mẫu trong bài: **C++**, đặt trong `<pre v-pre><code>`, escape `<` thành `&lt;` và `&` thành `&amp;`.
 - Mỗi section giữ nguyên `id`, `class="day-section"`, `data-sid`, `v-show="active"` và prop `active: Boolean` — App.vue phụ thuộc vào đúng các thuộc tính này.
 - Mỗi section giữ nguyên toàn bộ widget tương tác hiện có (đúng các `id` DOM cũ) — các file `src/widgets/*.js` query theo id, đổi id sẽ vỡ widget.
-- 10 nhóm kiến thức phải viết lại: `quay-lui-xau-nhi-phan`, `to-hop`, `tham-lam`, `qhd-nen-tang`, `qhd-lis-lcs-doixung`, `ngan-xep-hang-doi`, `dfs-bfs`, `dsu`, `cay-nhi-phan-bst`, `bst-nang-cao`. Hai section `trang-chu` và `cam-nang` **không** theo khung 6 phần (chỉ chỉnh ở Task 18).
+- 10 nhóm kiến thức phải viết lại: `quay-lui-xau-nhi-phan`, `to-hop`, `tham-lam`, `qhd-nen-tang`, `qhd-lis-lcs-doixung`, `ngan-xep-hang-doi`, `dfs-bfs`, `dsu`, `cay-nhi-phan-bst`, `bst-nang-cao`. Section `trang-chu` **không** theo khung 6 phần (chỉ chỉnh ở Task 18). Section `cam-nang` đã bị xóa khỏi dự án ngày 2026-08-09.
 - Số lượng bắt buộc mỗi nhóm: quiz **3–5** câu, bài tập kiểm tra **đúng 3** bài, LeetCode **8–12** bài xếp từ Easy → Medium → Hard.
 - Mỗi ví dụ điển hình phải đủ 6 khối: đề bài → ý tưởng cốt lõi → thuật toán → chạy tay → code mẫu → cách tối ưu hơn.
 - Mọi task kết thúc bằng: `npm run test -- --run` xanh **và** `npm run build` sạch, rồi commit.
@@ -40,7 +40,7 @@
 | 0–7 | Dựng hạ tầng, thiết kế component + schema | **Opus** | Inline (file nhỏ, phụ thuộc chặt, tái dùng context) |
 | 8 | Section mẫu — định hình khuôn mẫu và giọng văn | **Opus** | Inline (bài này quyết định chất lượng 9 bài sau) |
 | 9–17 | 9 nhóm kiến thức còn lại | **Sonnet** | Subagent, **mỗi lần đúng 1 agent, tuần tự** |
-| 18 | Trang chủ, Cẩm nang, dọn `menus.json` | **Sonnet** | Inline |
+| 18 | Trang chủ, dọn `menus.json` | **Sonnet** | Inline |
 | 19–20 | Rà soát người mới, giọng văn, responsive, README | **Opus** | Inline (cần nhìn tổng thể xuyên suốt) |
 
 **Vì sao Task 9–17 dùng Sonnet:** tới lúc đó đã có bài mẫu (Task 8), đặc tả nội dung
@@ -108,7 +108,7 @@ Claude phải:
 | `src/style.css` | Thêm CSS cho các block mới (quiz, example, leetcode) |
 | `src/App.vue:132` | `currentMenu` dùng `buildMenu(sid)` |
 | `src/sections/*.vue` (10 file) | Viết lại nội dung theo khung 6 phần |
-| `src/data/menus.json` | Xóa 10 key của các nhóm kiến thức, giữ `trang-chu` + `cam-nang` |
+| `src/data/menus.json` | Xóa 10 key của các nhóm kiến thức, chỉ giữ `trang-chu` |
 
 ---
 
@@ -2954,15 +2954,20 @@ git commit -m "content: rewrite advanced BST lesson in 6-part format"
 
 ## PHASE 3 — Hoàn thiện và duyệt chất lượng
 
-### Task 18: Cập nhật Trang chủ, Cẩm nang và dọn `menus.json`
+### Task 18: Cập nhật Trang chủ và dọn `menus.json`
+
+> **Cập nhật 2026-08-09:** section `cam-nang` (Cẩm nang giải đề) **đã bị xóa khỏi dự án**
+> theo yêu cầu của người dùng — nội dung của nó gắn với một kỳ thi 5 ngày cụ thể, không
+> liên quan tới lộ trình dạy học. `menus.json` hiện chỉ còn đúng 1 key `trang-chu`, và
+> `CamNang.vue` không còn tồn tại. Bỏ qua mọi bước liên quan tới Cẩm nang bên dưới.
 
 **Files:**
-- Modify: `src/sections/TrangChu.vue`, `src/sections/CamNang.vue`, `src/data/menus.json`, `src/App.vue:39-73` (phần header)
+- Modify: `src/sections/TrangChu.vue`, `src/data/menus.json`, `src/App.vue:39-73` (phần header)
 - Create: `tests/menus-json.spec.js`
 
 **Interfaces:**
 - Consumes: `LESSON_SECTIONS` từ `src/lesson/parts.js`; `buildMenu` từ `src/data/menu.js`
-- Produces: `menus.json` chỉ còn 2 key `trang-chu` và `cam-nang`; Trang chủ mô tả đúng khung 6 phần mới
+- Produces: `menus.json` chỉ còn 1 key `trang-chu`; Trang chủ mô tả đúng khung 6 phần mới
 
 **Đặc tả nội dung:**
 
@@ -2986,9 +2991,8 @@ describe('menus.json', () => {
     }
   })
 
-  it('vẫn giữ menu cho trang chủ và cẩm nang', () => {
-    expect(menusData['cam-nang']).toBeDefined()
-    expect(menusData['cam-nang'].length).toBeGreaterThan(0)
+  it('vẫn giữ key cho trang chủ', () => {
+    expect(menusData['trang-chu']).toBeDefined()
   })
 })
 ```
@@ -3000,7 +3004,7 @@ Expected: FAIL — `menus.json` vẫn còn key của 10 nhóm.
 
 - [ ] **Step 3: Xóa 10 key nhóm kiến thức khỏi `src/data/menus.json`**
 
-Giữ lại đúng 2 key: `"trang-chu"` và `"cam-nang"`.
+Giữ lại đúng 1 key: `"trang-chu"`. (Đã làm xong ngày 2026-08-09 khi xóa Cẩm nang.)
 
 - [ ] **Step 4: Chạy lại test**
 
@@ -3013,13 +3017,7 @@ Giữ nguyên `id="trang-chu"`, `class="day-section"`, `data-sid="trang-chu"`, `
 Bảng lộ trình dùng `<table class="formula-table">` với 3 cột: Thứ tự học — Nhóm kiến thức — Sau bài này bạn làm được gì.
 Mỗi tên nhóm là 1 link `<a href="#<sid>">` để bấm sang thẳng nhóm đó.
 
-- [ ] **Step 6: Thêm liên kết chéo trong `src/sections/CamNang.vue`**
-
-Mỗi mục giải đề thêm 1 dòng dạng:
-
-```html
-<p class="hint"><em>Cần ôn lại lý thuyết?</em> Xem <a href="#dfs-bfs--ly-thuyet">phần lý thuyết của nhóm BFS &amp; DFS</a>.</p>
-```
+- [x] **Step 6: ~~Thêm liên kết chéo trong `src/sections/CamNang.vue`~~ — BỎ, section đã bị xóa**
 
 - [ ] **Step 7: Cập nhật 3 thẻ bước học trong `src/App.vue`**
 
@@ -3051,8 +3049,8 @@ Expected: build sạch.
 - [ ] **Step 9: Commit**
 
 ```bash
-git add src/sections/TrangChu.vue src/sections/CamNang.vue src/data/menus.json src/App.vue tests/menus-json.spec.js
-git commit -m "content: update home, handbook and drop hand-written menus"
+git add src/sections/TrangChu.vue src/data/menus.json src/App.vue tests/menus-json.spec.js
+git commit -m "content: update home and drop hand-written menus"
 ```
 
 ---

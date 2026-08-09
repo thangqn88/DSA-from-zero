@@ -22,8 +22,8 @@ export function partTitle(key) {
   return p.num === 0 ? p.title : `${p.num}. ${p.title}`
 }
 
-// 10 nhóm kiến thức theo khung 6 phần. "trang-chu" và "cam-nang" không nằm ở đây
-// vì chúng là trang giới thiệu/ôn đề, không phải bài học.
+// 10 nhóm kiến thức theo khung 6 phần. "trang-chu" không nằm ở đây vì nó là
+// trang giới thiệu, không phải bài học.
 export const LESSON_SECTIONS = [
   { sid: 'quay-lui-xau-nhi-phan', file: 'src/sections/QuayLuiXauNhiPhan.vue', title: 'Quay lui & Xâu nhị phân' },
   { sid: 'to-hop', file: 'src/sections/ToHop.vue', title: 'Tổ hợp' },

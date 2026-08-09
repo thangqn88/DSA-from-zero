@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { buildMenu } from '../src/data/menu.js'
 import { lessons } from '../src/data/lessons/index.js'
+import menusData from '../src/data/menus.json'
 
 describe('buildMenu', () => {
   it('sinh 7 mục chuẩn cho section có dữ liệu bài học', () => {
@@ -21,9 +22,7 @@ describe('buildMenu', () => {
   })
 
   it('trả về menu từ menus.json cho section không phải bài học', () => {
-    const menu = buildMenu('cam-nang')
-    expect(menu.length).toBeGreaterThan(0)
-    expect(menu[0]).toHaveProperty('label')
+    expect(buildMenu('trang-chu')).toEqual(menusData['trang-chu'])
   })
 
   it('trả mảng rỗng cho id lạ', () => {

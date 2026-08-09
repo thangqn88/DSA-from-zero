@@ -19,8 +19,9 @@ hàng đợi được nạp — thay vì phải tự tưởng tượng trong đ�
 | 4 — Duyệt đồ thị | BFS & DFS · DSU (Disjoint Set Union) |
 | 5 — Cây nhị phân | 3 phép duyệt, cây cha-con, BST · BST nâng cao (kiểm tra, cân bằng, LCA) |
 
-Kèm theo là mục **Cẩm nang giải đề** — hướng dẫn nhận dạng đề bài thuộc dạng nào và nên
-dùng thuật toán gì.
+Mỗi nhóm đi theo cùng một khung 6 phần: mục tiêu bài học → lý thuyết cơ bản → vì sao
+kiến thức này quan trọng → quiz kiểm tra → ví dụ điển hình → bài tập kèm danh sách
+LeetCode để tự luyện.
 
 ## Cách học hiệu quả nhất
 

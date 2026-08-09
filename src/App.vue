@@ -1,8 +1,8 @@
 <template>
   <div class="layout">
     <nav class="sidebar" aria-label="Điều hướng chủ đề học">
-      <a class="sb-top sb-start" href="#" @click.prevent="goToId('cam-nang')"
-        >▶ Bắt đầu ở Cẩm nang</a
+      <a class="sb-top sb-start" href="#" @click.prevent="goToId('quay-lui-xau-nhi-phan')"
+        >▶ Bắt đầu học</a
       >
       <a
         v-for="item in navTop"
@@ -43,7 +43,7 @@
             </p>
           </div>
           <div class="header-badges">
-            <span class="header-pill">Bắt đầu từ Cẩm nang</span>
+            <span class="header-pill">Học theo khung 6 phần</span>
             <span class="header-pill secondary">Học theo nhóm kiến thức</span>
           </div>
         </div>
@@ -52,7 +52,7 @@
           <div class="step-card">
             <strong>1. Bắt đầu</strong>
             <span
-              >Chọn Cẩm nang để thấy cách giải từng bài trước khi học lý
+              >Chọn một nhóm kiến thức và đọc mục tiêu bài học trước khi vào lý
               thuyết.</span
             >
           </div>
@@ -76,7 +76,6 @@
       <div class="content-row">
         <div class="content-main" ref="contentMainEl">
           <TrangChu :active="activeSection === 'trang-chu'" />
-          <CamNang :active="activeSection === 'cam-nang'" />
           <QuayLuiXauNhiPhan
             :active="activeSection === 'quay-lui-xau-nhi-phan'"
           />
@@ -114,7 +113,6 @@ import { navTop, navGroups, allSectionIds, DEFAULT_ID } from "./data/nav.js";
 import { buildMenu } from "./data/menu.js";
 
 import TrangChu from "./sections/TrangChu.vue";
-import CamNang from "./sections/CamNang.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
 import ToHop from "./sections/ToHop.vue";
 import ThamLam from "./sections/ThamLam.vue";
