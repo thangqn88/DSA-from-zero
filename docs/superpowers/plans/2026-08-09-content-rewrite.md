@@ -76,6 +76,8 @@ Claude phải:
 |---|---|---|---|---|
 | 2026-08-09 | Task 0–7 (trọn PHASE 0) | Opus | Inline | Hạ tầng xong: Vitest 3 + jsdom, 6 component dùng chung, schema dữ liệu, menu sinh tự động. `tests/lesson-structure.spec.js` đỏ 3 test cho `quay-lui-xau-nhi-phan` — đúng thiết kế Task 6, Task 8 sẽ làm xanh. |
 | 2026-08-09 | Task 8 (section pilot Quay lui) | Opus | Inline | Toàn bộ 35 test xanh, build sạch. Widget kiểm chứng bằng test tạm mount section trong jsdom (đã xóa sau khi chạy) — đủ 18 id DOM còn nguyên, stepper phản hồi đúng. **Phiên sau bắt đầu Task 9, phải đổi sang Sonnet bằng `/model` và chạy subagent tuần tự.** |
+| 2026-08-09 | Task 9–18 | Sonnet | Subagent, đúng 1 agent mỗi lần, tuần tự | Trọn 10 nhóm kiến thức đã viết lại theo khung 6 phần. Vòng chính vẫn là Opus nhưng chỉ điều phối; toàn bộ việc viết nội dung do subagent Sonnet làm, đúng tinh thần bảng chi phí. 145 test xanh sau Task 18. |
+| 2026-08-09 | Task 19–20 | Opus | Inline | Rà góc nhìn người mới: 9/10 nhóm đạt, sửa nhóm QHĐ nâng cao thiếu ví dụ đời thường mở đầu; gỡ 8 thẻ `<em>` sót lại. Task 20 sửa lỗi HTML `<tr>` trong `LeetCodeList.vue` (build hết cảnh báo) và bọc bảng LeetCode cho cuộn ngang. **Còn nợ Step 1, 2, 3, 5 của Task 20** — phiên này không có công cụ trình duyệt nên chưa kiểm chứng giao diện bằng mắt. |
 
 ---
 
@@ -3193,24 +3195,37 @@ git commit -m "content: beginner-perspective review and tone normalization"
 - Consumes: toàn bộ app sau Task 19
 - Produces: app chạy đúng trên màn hình hẹp, README mô tả đúng kiến trúc mới
 
-- [ ] **Step 1: Kiểm tra toàn bộ điều hướng**
+- [ ] **Step 1: Kiểm tra toàn bộ điều hướng** — CÒN NỢ, cần người dùng làm
 
 Run: `npm run dev`. Với **mỗi** nhóm trong 12 mục ở menu trái: bấm vào nhóm, rồi bấm lần lượt **mọi** mục trong menu phải.
 Expected: mỗi lần bấm đều cuộn đúng tới phần tương ứng, URL đổi thành `#<sid>--<phan>`, không lỗi console.
 
-- [ ] **Step 2: Kiểm tra nút Back/Forward của trình duyệt**
+Phiên này không có công cụ điều khiển trình duyệt nên **chưa kiểm chứng bằng mắt**.
+
+- [ ] **Step 2: Kiểm tra nút Back/Forward của trình duyệt** — CÒN NỢ, cần người dùng làm
 
 Bấm qua 5 mục khác nhau rồi bấm Back 5 lần, Forward 5 lần.
 Expected: nội dung hiển thị luôn khớp với URL, không trang trắng.
 
-- [ ] **Step 3: Kiểm tra giao diện ở 3 bề rộng**
+Chưa kiểm chứng bằng mắt, lý do như Step 1.
+
+- [ ] **Step 3: Kiểm tra giao diện ở 3 bề rộng** — CÒN NỢ, cần người dùng làm
 
 Dùng DevTools đặt bề rộng 1440px, 980px, 390px. Với mỗi bề rộng, mở 3 nhóm bất kỳ và kiểm tra:
 - bảng LeetCode không tràn ngang (nếu tràn, thêm khối bọc `overflow-x: auto`);
 - nút quiz đủ rộng và cao tối thiểu 44px để bấm được trên điện thoại;
 - menu phải chuyển lên trên nội dung ở bề rộng ≤ 980px.
 
-- [ ] **Step 4: Sửa CSS nếu Step 3 phát hiện vấn đề**
+Chưa nhìn được bằng mắt, nhưng đã soát tĩnh 3 tiêu chí trên trong `src/style.css`:
+
+| Tiêu chí | Kết quả soát tĩnh |
+|---|---|
+| Nút quiz cao ≥ 44px | Đạt — `.quiz-opt` có `min-height: 44px`; mục menu trái `.sidebar a` cũng 44px, mốc 900px chỉ đổi padding nên không phá chiều cao |
+| Menu phải xuống dưới nội dung | Đạt — `@media (max-width: 1023px)` đặt `.content-row { flex-direction: column }`. Lưu ý: mốc thật là **1023px** theo `CLAUDE.md`, không phải 980px như kế hoạch viết; kế hoạch viết trước khi chốt mốc nên lấy `CLAUDE.md` làm chuẩn |
+| Bảng LeetCode không tràn ngang | Không kết luận được bằng mắt. Đã bọc phòng vệ, xem Step 4 |
+| Bề ngang khung trang | Đạt — `.content-row` chỉ được định nghĩa đúng 1 lần (dòng 462) và không có `max-width` riêng, đúng luật trong `CLAUDE.md` |
+
+- [x] **Step 4: Sửa CSS nếu Step 3 phát hiện vấn đề**
 
 Nếu bảng LeetCode tràn ngang, thêm vào `src/style.css`:
 
@@ -3221,28 +3236,52 @@ Nếu bảng LeetCode tràn ngang, thêm vào `src/style.css`:
   }
 ```
 
-- [ ] **Step 5: Kiểm tra bản build tĩnh**
+Đã làm khác kế hoạch, có lý do:
+
+1. **Không dùng `display: block` trên chính thẻ `table`** và **không ẩn cột 4**. Cột 4 là
+   "Vì sao nên làm" — phần có giá trị dạy học nhất của bảng, ẩn đi trên điện thoại là mất
+   nội dung chứ không phải sửa layout. Thay vào đó bọc bảng trong `<div class="table-scroll">`
+   với `overflow-x: auto` (`LeetCodeList.vue` + `src/style.css`): trên màn rộng bảng không
+   đổi gì, trên màn hẹp bảng tự cuộn trong khung của nó thay vì đẩy cả trang trôi ngang.
+2. **Sửa một lỗi HTML thật**: `LeetCodeList.vue` đặt `<tr>` làm con trực tiếp của `<table>`,
+   khiến mỗi lần build đều có cảnh báo. Đã thêm `<thead>`/`<tbody>` — cảnh báo biến mất,
+   build giờ hoàn toàn sạch.
+
+- [ ] **Step 5: Kiểm tra bản build tĩnh** — CÒN NỢ, cần người dùng làm
 
 Run: `npm run build && npm run preview`
 Mở địa chỉ hiện ra, thử lại 3 nhóm bất kỳ và 3 widget bất kỳ.
 Expected: giống hệt bản dev, không lỗi console.
 
-- [ ] **Step 6: Cập nhật `README.md`**
+`npm run build` chạy sạch, nhưng phần mở trình duyệt thử widget thì chưa kiểm chứng bằng mắt.
+
+- [x] **Step 6: Cập nhật `README.md`**
 
 Thay mục "Cấu trúc thư mục" và "Cách hoạt động" để mô tả kiến trúc mới:
 `src/lesson/parts.js` là nguồn sự thật về khung 6 phần; `src/components/` chứa component dùng chung;
 `src/data/lessons/` chứa dữ liệu quiz/bài tập/LeetCode có test kiểm; menu phải được sinh tự động;
 thêm mục "Chạy test" với lệnh `npm run test`.
 
-- [ ] **Step 7: Chạy toàn bộ test lần cuối**
+Đã viết lại mục "Cấu trúc mã nguồn", thêm mới mục "Cách hoạt động" và mục "Chạy test".
+Sửa luôn 2 chỗ README nói sai so với mã nguồn hiện tại: "12 component sections" (thật ra 11)
+và "menus.json là menu phải" (giờ menu phải sinh từ `src/data/menu.js`).
+
+Còn một chỗ chưa động tới, cần người dùng quyết: tiêu đề README vẫn là "Học Cấu trúc dữ
+liệu & Giải thuật để qua môn" và phần mở đầu vẫn nói tới "sinh viên đang chuẩn bị thi",
+trong khi 3 commit gần đây đã cố ý gỡ định hướng thi cử khỏi Trang chủ để thành web học
+tập public. Đây là quyết định về định vị sản phẩm nên không tự đổi.
+
+- [x] **Step 7: Chạy toàn bộ test lần cuối**
 
 Run: `npm run test -- --run`
-Expected: PASS toàn bộ, không có test nào bị bỏ qua.
+Expected: PASS toàn bộ, không có test nào bị bỏ qua. Kết quả: 145 test xanh, 9 test file,
+0 test bị bỏ qua.
 
 Run: `npm run build`
-Expected: build sạch.
+Expected: build sạch. Kết quả: build sạch, cảnh báo `<tr>` đã hết, chỉ còn cảnh báo
+chunk-size của Vite (không liên quan nội dung).
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add -A

@@ -587,6 +587,8 @@
   .practice-item { margin-bottom: 1rem; }
   .practice-item details { padding: 0.5rem 0.9rem; margin: 0.4rem 0 0; }
   .practice-item details summary { font-size: 0.88rem; }
+  /* Bảng LeetCode tự cuộn ngang trong khung của nó, không đẩy cả trang trôi ngang */
+  .table-scroll { overflow-x: auto; }
   .lc-table td:first-child { width: 3.5rem; color: var(--muted-2); }
   .lc-level {
     display: inline-block; font-size: 0.72rem; font-weight: 700;

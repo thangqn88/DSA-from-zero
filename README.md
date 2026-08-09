@@ -73,21 +73,65 @@ chặn nhiều tính năng. Hãy chạy qua một server tĩnh, ví dụ `npx se
 src/
   App.vue              layout chính: menu trái + nội dung + menu phải
   style.css            toàn bộ CSS
+  lesson/parts.js      nguồn sự thật duy nhất về khung 6 phần của mọi bài học
+  components/          6 component dùng chung cho mọi bài học
+                       LessonGoal, LessonPart, QuizBlock,
+                       WorkedExample, PracticeSet, LeetCodeList
   data/
-    nav.js             menu trái — 5 nhóm kiến thức
-    menus.json         menu phải — mục con của từng nhóm
-  sections/            12 component Vue, mỗi component là 1 nhóm kiến thức
+    nav.js             menu trái — 5 nhóm, 10 bài học
+    lessons/           dữ liệu từng bài: mục tiêu, quiz, bài tập, danh sách LeetCode
+    menu.js            sinh menu phải từ khung 6 phần + dữ liệu bài học
+    menus.json         chỉ còn phần menu của Trang chủ
+  sections/            11 component Vue: Trang chủ + 10 nhóm kiến thức
   widgets/             logic của các widget tương tác
   utils/stepper.js     engine chạy-từng-bước dùng chung
+tests/                 bộ test Vitest, xem mục "Chạy test" bên dưới
 ```
 
-Chuyển nhóm kiến thức bằng `v-show` trên state trong `App.vue`, không dùng router. Mỗi
-widget khởi tạo trong `onMounted()` của component tương ứng và thao tác DOM trực tiếp qua
-`getElementById` — nên khi sửa nội dung, **không được đổi các `id` mà widget đang query**.
+## Cách hoạt động
 
-Thêm một nhóm kiến thức mới: tạo file trong `src/sections/`, thêm entry vào
-[src/data/nav.js](src/data/nav.js), thêm dữ liệu vào [src/data/menus.json](src/data/menus.json),
-rồi import và gắn `<TenComponent :active="..."/>` vào [src/App.vue](src/App.vue).
+**Khung 6 phần là bắt buộc, không phải quy ước lỏng lẻo.** Mọi bài học đều gồm đúng 6 phần
+theo thứ tự cố định: lý thuyết → vì sao quan trọng → quiz → ví dụ điển hình → bài tập →
+LeetCode. Danh sách đó khai báo ở [src/lesson/parts.js](src/lesson/parts.js) và chỉ ở đó.
+Sửa khung thì sửa đúng một chỗ này, không rải rác trong các section.
+
+**Nội dung tách làm hai lớp.** Phần văn xuôi, bảng, code mẫu và widget nằm trong
+`src/sections/*.vue`. Phần dữ liệu có cấu trúc — mục tiêu bài học, câu quiz, bài tập, danh
+sách LeetCode — nằm trong `src/data/lessons/*.js` và được test kiểm tra: đủ số câu, đúng
+trường, đáp án hợp lệ, danh sách LeetCode xếp từ Easy tới Hard.
+
+**Menu phải được sinh tự động, không viết tay.** [src/data/menu.js](src/data/menu.js) ghép
+khung 6 phần với danh sách ví dụ điển hình của bài để dựng menu, nên menu không bao giờ
+lệch với nội dung thật. `menus.json` giờ chỉ còn lại phần của Trang chủ.
+
+**Chuyển nhóm bằng `v-show`, không dùng router.** Mỗi widget khởi tạo trong `onMounted()`
+của component tương ứng và thao tác DOM trực tiếp qua `getElementById` — nên khi sửa nội
+dung, **không được đổi các `id` mà widget đang query**.
+
+Thêm một nhóm kiến thức mới: tạo file dữ liệu trong `src/data/lessons/` và đăng ký vào
+`src/data/lessons/index.js`, tạo component trong `src/sections/` dùng 6 component chung,
+thêm entry vào [src/data/nav.js](src/data/nav.js), rồi import và gắn
+`<TenComponent :active="..."/>` vào [src/App.vue](src/App.vue). Test sẽ báo ngay nếu thiếu
+phần nào của khung.
+
+## Chạy test
+
+```bash
+npm run test -- --run    # chạy một lượt rồi thoát
+npm run test             # chế độ theo dõi, tự chạy lại khi sửa file
+```
+
+Bộ test ([Vitest](https://vitest.dev/) + jsdom) kiểm 4 nhóm việc:
+
+- `tests/parts.spec.js` — khung 6 phần đúng thứ tự, id sinh ra ổn định.
+- `tests/lesson-data.spec.js` — dữ liệu 10 bài đủ trường và hợp lệ.
+- `tests/lesson-structure.spec.js` — mỗi section giữ đúng `id`, `data-sid`, đủ 6 phần, mỗi
+  ví dụ điển hình đủ 6 khối.
+- `tests/menu.spec.js`, `tests/menus-json.spec.js`, `tests/components/` — menu sinh đúng và
+  component dùng chung hoạt động.
+
+Test xanh **không** chứng minh được giao diện. Sửa layout hay CSS thì vẫn phải mở
+`npm run dev` nhìn bằng mắt.
 
 Xây dựng bằng [Vue 3](https://vuejs.org/) + [Vite](https://vite.dev/). Mỗi lần push vào
 `main` sẽ tự động build và deploy lên GitHub Pages qua
