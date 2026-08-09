@@ -10,6 +10,8 @@
 <LessonPart :sid="'qhd-lis-lcs-doixung'" part="ly-thuyet">
 
 <h3 id="auto-4-buoc-dat-bai-qhd">4 bước đặt bài quy hoạch động — dùng lại cho mọi bài trong nhóm này</h3>
+<p class="idea-label">🧩 Ý tưởng cốt lõi</p>
+<p>Bạn sắp đi chơi xa và chỉ có một chiếc ba lô chịu được 10kg. Trước mặt là máy ảnh, áo khoác, sách, đồ ăn — mỗi món một cân nặng, một mức "đáng mang theo" khác nhau. Bạn không thể nhét hết, nên phải quyết định từng món một: mang hay bỏ lại. Và mỗi lần quyết định xong một món, câu hỏi còn lại vẫn y hệt câu hỏi ban đầu, chỉ nhỏ hơn: "với số cân còn trống, những món còn lại nên chọn thế nào?" Bốn bài trong nhóm này — xếp ba lô, dãy con tăng dài nhất, dãy con chung dài nhất, xâu đối xứng — đều là cùng một tình huống đó: quyết định từng bước, và phần còn lại luôn là một bản thu nhỏ của bài toán ban đầu.</p>
 <p><strong>Đây là gì?</strong> Mọi bài QHĐ ở bài này — Knapsack, LIS, LCS, Xâu đối xứng — đều được đặt ra bằng đúng 4 câu hỏi theo thứ tự cố định:</p>
 <ol>
   <li><strong>Trạng thái là gì</strong>: <code>dp[...]</code> đại diện cho câu hỏi nào (ví dụ "giá trị tốt nhất khi xét i món đầu, sức chứa j" hay "độ dài LIS kết thúc tại vị trí i").</li>

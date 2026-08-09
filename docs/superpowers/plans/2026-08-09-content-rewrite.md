@@ -3094,7 +3094,7 @@ git commit -m "content: update home and drop hand-written menus"
 - Consumes: toàn bộ nội dung đã viết ở Phase 2
 - Produces: một lượt rà soát có bằng chứng, mọi chỗ vi phạm được sửa tại chỗ
 
-- [ ] **Step 1: Lập bảng kiểm cho từng nhóm**
+- [x] **Step 1: Lập bảng kiểm cho từng nhóm**
 
 Với **mỗi** section trong 10 nhóm, trả lời 5 câu và ghi vào file tạm `docs/superpowers/plans/review-notes.md`:
 1. Phần lý thuyết có mở đầu bằng ví dụ đời thường trước khi có thuật ngữ không?
@@ -3103,7 +3103,35 @@ Với **mỗi** section trong 10 nhóm, trả lời 5 câu và ghi vào file t�
 4. Phần "vì sao quan trọng" có liên hệ tới ít nhất 1 kiến thức đã học trước đó không?
 5. Có đoạn nào dài quá 6 câu liên tục mà không có ví dụ, bảng, hay code không?
 
-- [ ] **Step 2: Kiểm tra giọng văn nhất quán bằng máy**
+Lệch khỏi kế hoạch: ghi kết quả rà thẳng vào đây thay vì file tạm rồi xóa, để bằng chứng
+còn lại sau khi commit.
+
+| Nhóm | (1) Mở bằng ví dụ đời thường | (4) Nối kiến thức đã học | Ghi chú |
+|---|---|---|---|
+| Quay lui & Xâu nhị phân | Đạt — xếp hàng mua vé | Đạt — mở đường sang Tổ hợp | |
+| Tổ hợp | Đạt — chọn 2 trong 4 người bạn | Đạt — dùng lại khung quay lui | |
+| Tham lam | Đạt — trả tiền thối 60k | Đạt — bắc cầu sang QHĐ | |
+| QHĐ nền tảng | Đạt — ghi đáp án ra giấy nháp | Đạt — giải lại bài đổi tiền Tham lam làm sai | |
+| Ngăn xếp & Hàng đợi | Đạt — chồng đĩa trong quán ăn | Đạt — call stack của Quay lui, nền của BFS | |
+| DFS & BFS | Đạt — bản đồ tuyến xe buýt | Đạt — DFS chính là đệ quy + quay lui | |
+| DSU | Đạt — vòng tay màu theo nhóm | Đạt — so DSU với DFS bài trước | |
+| Cây nhị phân & BST | Đạt — sơ đồ gia phả | Đạt — duyệt cây chính là DFS | |
+| QHĐ nâng cao | **Không đạt lúc rà** — mở thẳng bằng "4 bước đặt bài QHĐ" | Đạt — từ bảng 1 chiều lên 2 chiều | Đã sửa ở Step 4 |
+| BST nâng cao | Đạt — cây chèn 1,2,3,4,5 suy biến thành chuỗi | Đạt — nối tiếp BST cơ bản | |
+
+Câu (2): không tìm thấy thuật ngữ nào xuất hiện trần trụi — mọi thuật ngữ tiếng Anh đều
+kèm tên tiếng Việt và một câu giải thích ngay tại chỗ (base case, memoization, LIFO, FIFO,
+path compression, subsequence/substring, amortized).
+
+Câu (3): đã được test tự động ép — `tests/lesson-structure.spec.js` bắt buộc mỗi ví dụ
+điển hình có đủ 6 khối, `tests/lesson-data.spec.js` ép đủ quiz/practice/leetcode. 145 test xanh.
+
+Câu (5): quét bằng máy tìm chuỗi thẻ `<p>` liên tiếp — chỗ dài nhất là 5 thẻ
+(`BstNangCao.vue`, `CayNhiPhanBst.vue`, `NganXepHangDoi.vue`), nhưng đều là các đoạn ngắn
+có nhãn riêng (Đây là gì / Vì sao quan trọng / Làm sao dùng) và liền sau là bảng hoặc code.
+Không có vi phạm.
+
+- [x] **Step 2: Kiểm tra giọng văn nhất quán bằng máy**
 
 ```bash
 grep -rn "chúng ta\|ta sẽ\|các bạn" src/sections/ | head -50
@@ -3111,7 +3139,10 @@ grep -rn "chúng ta\|ta sẽ\|các bạn" src/sections/ | head -50
 
 Chuẩn thống nhất: xưng "bạn" với người học, không dùng "các bạn"/"chúng ta" lẫn lộn. Sửa mọi dòng lệch.
 
-- [ ] **Step 3: Kiểm tra không còn chữ nghiêng viết tay**
+Kết quả: 0 dòng lệch trên cả `src/sections/` lẫn `src/data/lessons/` (quét thêm cả
+"chúng mình"). Không phải sửa gì.
+
+- [x] **Step 3: Kiểm tra không còn chữ nghiêng viết tay**
 
 ```bash
 grep -rn "<i>\|font-style: *italic" src/ | grep -v "font-style: normal"
@@ -3119,19 +3150,31 @@ grep -rn "<i>\|font-style: *italic" src/ | grep -v "font-style: normal"
 
 Expected: không có kết quả nào.
 
-- [ ] **Step 4: Sửa mọi vi phạm tìm được ở Step 1–3**
+Kết quả: không có `<i>` nào, không có `font-style: italic` nào. Quét rộng thêm thẻ `<em>`
+thì thấy 8 chỗ trong `NganXepHangDoi.vue` (nội dung cũ được giữ lại từ Task 12) — đã gỡ ở
+Step 4. Hai chỗ `<em>` còn lại nằm trong `PracticeSet.vue` là cố ý: `src/style.css` dòng
+350/352 tạo kiểu riêng cho `.hint em` và `.idea em` với `font-style: normal` + đậm + đổi màu,
+tức là nhãn màu chứ không phải chữ nghiêng — giữ nguyên.
+
+- [x] **Step 4: Sửa mọi vi phạm tìm được ở Step 1–3**
 
 Sửa trực tiếp trong file section hoặc file dữ liệu tương ứng.
 
-- [ ] **Step 5: Chạy toàn bộ test và build**
+Đã sửa 2 chỗ:
+1. `src/sections/NganXepHangDoi.vue` — gỡ 8 cặp thẻ `<em>` bọc phần trả lời, giữ nguyên chữ.
+2. `src/sections/QhdLisLcsDoixung.vue` — thêm đoạn mở đầu bằng ví dụ đời thường (xếp đồ vào
+   ba lô 10kg) trước khi vào "4 bước đặt bài QHĐ", vì đây là nhóm duy nhất mở thẳng bằng
+   khung trừu tượng, trái nguyên tắc Feynman.
+
+- [x] **Step 5: Chạy toàn bộ test và build**
 
 Run: `npm run test -- --run`
-Expected: PASS toàn bộ.
+Expected: PASS toàn bộ. Kết quả: 145 test xanh (9 test file).
 
 Run: `npm run build`
-Expected: build sạch.
+Expected: build sạch. Kết quả: build sạch, chỉ còn cảnh báo chunk-size có sẵn từ trước.
 
-- [ ] **Step 6: Xóa file ghi chú tạm và commit**
+- [x] **Step 6: Xóa file ghi chú tạm và commit**
 
 ```bash
 rm docs/superpowers/plans/review-notes.md

@@ -444,9 +444,9 @@ int main() {
 <p>Vẫn là <strong>ngăn xếp</strong> như bài kiểm tra dãy ngoặc hợp lệ, nhưng lần này ngăn xếp lưu <strong>chỉ số (index)</strong> thay vì ký tự — vì cần tính độ dài đoạn khớp, không chỉ biết "có khớp hay không".</p>
 <p class="idea-label">🪜 Quy trình suy nghĩ từng bước</p>
 <ol>
-  <li>Vì sao cần đẩy sẵn -1 vào đáy ngăn xếp trước khi bắt đầu? <em>→ Đóng vai trò "mốc biên trái ảo" — khi 1 dấu ')' khớp hết mọi dấu '(' trước nó, ta cần 1 điểm tham chiếu để tính độ dài đoạn khớp từ đầu xâu.</em></li>
-  <li>Gặp '(' thì làm gì? <em>→ Đẩy chỉ số i vào ngăn xếp (đánh dấu "đang chờ khớp").</em></li>
-  <li>Gặp ')' thì làm gì? <em>→ Pop 1 phần tử ra trước (giả định vừa khớp được 1 cặp). Nếu ngăn xếp sau khi pop KHÔNG rỗng → đoạn khớp hiện tại kéo dài từ <code>stack.top()+1</code> đến i, độ dài = <code>i - stack.top()</code>, cập nhật max. Nếu rỗng → dấu ')' này KHÔNG có gì để khớp → đẩy chính chỉ số i vào làm "mốc biên trái mới".</em></li>
+  <li>Vì sao cần đẩy sẵn -1 vào đáy ngăn xếp trước khi bắt đầu? → Đóng vai trò "mốc biên trái ảo" — khi 1 dấu ')' khớp hết mọi dấu '(' trước nó, ta cần 1 điểm tham chiếu để tính độ dài đoạn khớp từ đầu xâu.</li>
+  <li>Gặp '(' thì làm gì? → Đẩy chỉ số i vào ngăn xếp (đánh dấu "đang chờ khớp").</li>
+  <li>Gặp ')' thì làm gì? → Pop 1 phần tử ra trước (giả định vừa khớp được 1 cặp). Nếu ngăn xếp sau khi pop KHÔNG rỗng → đoạn khớp hiện tại kéo dài từ <code>stack.top()+1</code> đến i, độ dài = <code>i - stack.top()</code>, cập nhật max. Nếu rỗng → dấu ')' này KHÔNG có gì để khớp → đẩy chính chỉ số i vào làm "mốc biên trái mới".</li>
 </ol>
 <blockquote><p>⚠️ Bẫy: nhầm lẫn giữa "pop rồi kiểm tra rỗng" và "kiểm tra rỗng rồi mới pop" — thứ tự đúng là pop trước, vì phần tử vừa pop ra chính là dấu '(' vừa được khớp bởi dấu ')' hiện tại; phần tử còn lại trên đỉnh SAU KHI pop mới là mốc biên trái cần dùng để tính độ dài.</p></blockquote>
 <pre v-pre><code>// Dayngoacdungdainhat.cpp
@@ -496,9 +496,9 @@ int tinh(string s){
 <p>Cách làm đơn giản và trực quan nhất: <strong>BFS xuôi từ S</strong>, coi mỗi số nguyên là 1 "đỉnh", với 2 cạnh đi ra từ đỉnh x: sang <code>x-1</code> và sang <code>x*2</code> — đúng bằng 2 phép toán (a),(b) trong đề. Bài toán trở thành: tìm đường đi ngắn nhất từ đỉnh S đến đỉnh T trên đồ thị vô hạn này.</p>
 <p class="idea-label">🪜 Quy trình suy nghĩ từng bước</p>
 <ol>
-  <li>Vì sao BFS (không phải DFS) là lựa chọn đúng ở đây? <em>→ Đề hỏi "số thao tác ÍT NHẤT" — đúng là bài toán đường đi ngắn nhất trên đồ thị không trọng số, BFS luôn cho lời giải tối ưu.</em></li>
-  <li>Mảng <code>a[]</code> đóng vai trò gì? <em>→ Vừa là "đã thăm" (khác 0 nghĩa là đã tới), vừa lưu luôn số bước để tới đó — 2 trong 1, đỡ cần thêm mảng riêng.</em></li>
-  <li>Vì sao vòng lặp là <code>while(a[t]==0)</code> thay vì <code>while(!Q.empty())</code> như BFS thông thường? <em>→ Tối ưu nhỏ: dừng NGAY khi tới đích T thay vì quét hết toàn bộ đồ thị — nhưng cách viết này giả định chắc chắn sẽ tới được T (không xử lý trường hợp T không tới được), cần cẩn thận nếu đề có ràng buộc khác.</em></li>
+  <li>Vì sao BFS (không phải DFS) là lựa chọn đúng ở đây? → Đề hỏi "số thao tác ÍT NHẤT" — đúng là bài toán đường đi ngắn nhất trên đồ thị không trọng số, BFS luôn cho lời giải tối ưu.</li>
+  <li>Mảng <code>a[]</code> đóng vai trò gì? → Vừa là "đã thăm" (khác 0 nghĩa là đã tới), vừa lưu luôn số bước để tới đó — 2 trong 1, đỡ cần thêm mảng riêng.</li>
+  <li>Vì sao vòng lặp là <code>while(a[t]==0)</code> thay vì <code>while(!Q.empty())</code> như BFS thông thường? → Tối ưu nhỏ: dừng NGAY khi tới đích T thay vì quét hết toàn bộ đồ thị — nhưng cách viết này giả định chắc chắn sẽ tới được T (không xử lý trường hợp T không tới được), cần cẩn thận nếu đề có ràng buộc khác.</li>
 </ol>
 <pre v-pre><code>// BiendoiST.cpp
 int biendoi(int s, int t){
@@ -538,7 +538,7 @@ int biendoi(int s, int t){
 <table class="formula-table"><tr><th>Input</th><th>Output</th></tr>
 <tr><td>1<br>5</td><td>1 10 11 100 101</td></tr></table>
 </div>
-<p>Câu hỏi mấu chốt: làm sao sinh ra đúng thứ tự 1, 10, 11, 100, 101,... mà không cần đổi cơ số? <em>→ Nhận ra rằng số nhị phân của (2k) chính là số nhị phân của k nối thêm "0", và số nhị phân của (2k+1) là nối thêm "1" — quan hệ cha-con này CHÍNH LÀ cấu trúc cây nhị phân, và duyệt theo mức (BFS) trên cây đó cho ra đúng thứ tự tăng dần.</em></p>
+<p>Câu hỏi mấu chốt: làm sao sinh ra đúng thứ tự 1, 10, 11, 100, 101,... mà không cần đổi cơ số? → Nhận ra rằng số nhị phân của (2k) chính là số nhị phân của k nối thêm "0", và số nhị phân của (2k+1) là nối thêm "1" — quan hệ cha-con này CHÍNH LÀ cấu trúc cây nhị phân, và duyệt theo mức (BFS) trên cây đó cho ra đúng thứ tự tăng dần.</p>
 <pre v-pre><code>// SoNhiPhan.cpp
 void nhiphan(int n){
     queue&lt;string&gt; Q;
@@ -663,7 +663,7 @@ void xuly(int n){
     }
 }</code></pre>
 <p><strong>Chạy tay n=5</strong>: Q=[9]. x=9, 9%5≠0, đẩy 90, 99 → Q=[90,99]. x=90, 90%5=0 → in <strong>90</strong>, dừng — khớp đề.</p>
-<blockquote><p>⚠️ Bẫy: vì sao phải dùng <strong>hàng đợi (BFS)</strong> mà không phải đệ quy/DFS thử tăng dần số chữ số? <em>→ DFS đi sâu theo 1 nhánh trước (ví dụ luôn thêm "0" trước) sẽ không đảm bảo tìm thấy số nhỏ nhất trước — chỉ có BFS mới đảm bảo mọi số ít chữ số hơn được xét hết trước khi xét số nhiều chữ số hơn.</em></p></blockquote>
+<blockquote><p>⚠️ Bẫy: vì sao phải dùng <strong>hàng đợi (BFS)</strong> mà không phải đệ quy/DFS thử tăng dần số chữ số? → DFS đi sâu theo 1 nhánh trước (ví dụ luôn thêm "0" trước) sẽ không đảm bảo tìm thấy số nhỏ nhất trước — chỉ có BFS mới đảm bảo mọi số ít chữ số hơn được xét hết trước khi xét số nhiều chữ số hơn.</p></blockquote>
 
 </LessonPart>
 
