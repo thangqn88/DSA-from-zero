@@ -1,6 +1,7 @@
 // Gom dữ liệu các nhóm kiến thức đã viết. Mỗi lần thêm 1 nhóm mới, thêm đúng 2
 // dòng ở đây, và bật cờ ready trong CHAPTERS ở src/lesson/parts.js.
 import doPhucTap from './do-phuc-tap.js'
+import mangChuoi from './mang-chuoi.js'
 import bangBam from './bang-bam.js'
 import quayLuiXauNhiPhan from './quay-lui-xau-nhi-phan.js'
 import toHop from './to-hop.js'
@@ -15,6 +16,7 @@ import bstNangCao from './bst-nang-cao.js'
 
 export const lessons = {
   'do-phuc-tap': doPhucTap,
+  'mang-chuoi': mangChuoi,
   'bang-bam': bangBam,
   'quay-lui-xau-nhi-phan': quayLuiXauNhiPhan,
   'to-hop': toHop,
