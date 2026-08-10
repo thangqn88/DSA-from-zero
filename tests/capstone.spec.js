@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { CHAPTERS } from '../src/lesson/parts.js'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { CHAPTERS, sidToFile } from '../src/lesson/parts.js'
 import { capstones, capstoneCuaChuong } from '../src/data/capstones/index.js'
 
 const san = CHAPTERS.filter(c => c.capstoneReady)
@@ -56,6 +58,35 @@ describe('capstone', () => {
       // Chương 1 là gốc, không có chương trước để kế thừa.
       if (num === 1) expect(cap.reuses).toHaveLength(0)
       else expect(cap.reuses.length).toBeGreaterThanOrEqual(2)
+    })
+  })
+})
+
+// MVP của chương hiện trong Phần 7 của bài cuối chương. Luật này chỉ ép khi cả
+// hai đã sẵn sàng — chương đã có dữ liệu MVP và bài cuối đã được viết — nên nó
+// không đỏ oan trong lúc MVP viết trước bài cuối.
+describe('bài cuối chương hiển thị MVP của chương', () => {
+  const root = resolve(__dirname, '..')
+  const canKiem = CHAPTERS.filter(c => c.capstoneReady && c.lessons.at(-1).ready)
+
+  it('có ít nhất một chương đủ điều kiện kiểm, hoặc chưa tới lúc', () => {
+    expect(Array.isArray(canKiem)).toBe(true)
+  })
+
+  describe.each(canKiem)('chương $key', ({ key, lessons }) => {
+    const cuoi = lessons.at(-1)
+    const src = readFileSync(resolve(root, sidToFile(cuoi.sid)), 'utf8')
+
+    it('bài cuối render ProjectBrief ở chế độ capstone', () => {
+      expect(src).toContain('mode="capstone"')
+    })
+
+    it('bài cuối lấy MVP đúng khoá chương của mình', () => {
+      expect(src).toContain(`capstoneCuaChuong('${key}')`)
+    })
+
+    it('bài cuối vẫn giữ cả bài luyện tay của riêng nó', () => {
+      expect(src).toContain(':brief="data.project"')
     })
   })
 })
