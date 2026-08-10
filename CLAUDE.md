@@ -14,6 +14,7 @@ Dự án thực hành** vào khung bài học.
 - Thiết kế: `docs/superpowers/specs/2026-08-09-mo-rong-30-nhom-design.md`
 - Đặc tả 7 MVP: `docs/superpowers/specs/2026-08-09-dac-ta-7-mvp.md`
 - Kế hoạch Giai đoạn 0–2: `docs/superpowers/plans/2026-08-09-mo-rong-30-nhom-gd0-2.md`
+- Kế hoạch Giai đoạn 3: `docs/superpowers/plans/2026-08-09-gd3-18-bai-moi.md`
 
 **Đọc spec và kế hoạch trước khi làm bất kỳ task nào.**
 
@@ -24,6 +25,8 @@ Dự án thực hành** vào khung bài học.
 
 Giai đoạn 0–2 xong: hạ tầng 7 chương, Phần 7, `ProjectBrief.vue`, MVP Chương 1, và hai
 bài mẫu `do-phuc-tap` + `bang-bam`. Còn lại 18 bài mới, 6 MVP, và Giai đoạn 4–5.
+
+Kế hoạch Giai đoạn 3 đã viết xong (26 task, chạy tuần tự), chưa thực thi task nào.
 
 ### Hai cờ trạng thái trong `CHAPTERS`
 
