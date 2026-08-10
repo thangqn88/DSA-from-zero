@@ -3,6 +3,7 @@
 import doPhucTap from './do-phuc-tap.js'
 import mangChuoi from './mang-chuoi.js'
 import deQuy from './de-quy.js'
+import danhSachLienKet from './danh-sach-lien-ket.js'
 import bangBam from './bang-bam.js'
 import quayLuiXauNhiPhan from './quay-lui-xau-nhi-phan.js'
 import toHop from './to-hop.js'
@@ -19,6 +20,7 @@ export const lessons = {
   'do-phuc-tap': doPhucTap,
   'mang-chuoi': mangChuoi,
   'de-quy': deQuy,
+  'danh-sach-lien-ket': danhSachLienKet,
   'bang-bam': bangBam,
   'quay-lui-xau-nhi-phan': quayLuiXauNhiPhan,
   'to-hop': toHop,

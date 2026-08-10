@@ -73,6 +73,7 @@
           <DoPhucTap :active="activeSection === 'do-phuc-tap'" />
           <MangChuoi :active="activeSection === 'mang-chuoi'" />
           <DeQuy :active="activeSection === 'de-quy'" />
+          <DanhSachLienKet :active="activeSection === 'danh-sach-lien-ket'" />
           <QuayLuiXauNhiPhan
             :active="activeSection === 'quay-lui-xau-nhi-phan'"
           />
@@ -144,6 +145,7 @@ import TrangChu from "./sections/TrangChu.vue";
 import DoPhucTap from "./sections/DoPhucTap.vue";
 import MangChuoi from "./sections/MangChuoi.vue";
 import DeQuy from "./sections/DeQuy.vue";
+import DanhSachLienKet from "./sections/DanhSachLienKet.vue";
 import BangBam from "./sections/BangBam.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
 import ToHop from "./sections/ToHop.vue";
