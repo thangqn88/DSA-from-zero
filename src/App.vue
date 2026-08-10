@@ -72,6 +72,7 @@
           <TrangChu :active="activeSection === 'trang-chu'" />
           <DoPhucTap :active="activeSection === 'do-phuc-tap'" />
           <MangChuoi :active="activeSection === 'mang-chuoi'" />
+          <DeQuy :active="activeSection === 'de-quy'" />
           <QuayLuiXauNhiPhan
             :active="activeSection === 'quay-lui-xau-nhi-phan'"
           />
@@ -142,6 +143,7 @@ import { buildMenu } from "./data/menu.js";
 import TrangChu from "./sections/TrangChu.vue";
 import DoPhucTap from "./sections/DoPhucTap.vue";
 import MangChuoi from "./sections/MangChuoi.vue";
+import DeQuy from "./sections/DeQuy.vue";
 import BangBam from "./sections/BangBam.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
 import ToHop from "./sections/ToHop.vue";

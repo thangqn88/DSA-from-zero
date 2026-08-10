@@ -40,7 +40,7 @@ export const CHAPTERS = [
     lessons: [
       { sid: 'do-phuc-tap', title: 'Độ phức tạp thuật toán và mô hình chi phí', ready: true, duAn: true },
       { sid: 'mang-chuoi', title: 'Mảng, chuỗi và mảng động', ready: true, duAn: true },
-      { sid: 'de-quy', title: 'Đệ quy và hệ thức truy hồi', ready: false, duAn: false },
+      { sid: 'de-quy', title: 'Đệ quy và hệ thức truy hồi', ready: true, duAn: true },
       { sid: 'danh-sach-lien-ket', title: 'Danh sách liên kết', ready: false, duAn: false },
     ],
   },
