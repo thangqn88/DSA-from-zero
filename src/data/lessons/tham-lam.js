@@ -4,10 +4,8 @@ export default {
     'Chỉ ra được một trường hợp tham lam cho kết quả sai và nói được vì sao.',
     'Giải đúng bài Activity Selection và bài Đổi tiền trong đề.',
   ],
-  examples: [
-    { id: 'vd-activity-selection', title: 'Activity Selection — chọn nhiều việc nhất', official: true },
-    { id: 'vd-doi-tien', title: 'Đổi tiền với số tờ ít nhất', official: true },
-  ],
+  // Không có trường examples ở đây: bài này viết bằng Markdown, danh sách ví dụ
+  // rút ra từ các chỉ thị @vidu trong src/content/tham-lam.md.
   quiz: [
     {
       q: 'Tham lam khác vét cạn (thử mọi khả năng) ở điểm cốt lõi nào?',

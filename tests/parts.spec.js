@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
-  LESSON_PARTS, LESSON_SECTIONS, CHAPTERS, sidToFile, partId, partTitle,
+  LESSON_PARTS, LESSON_SECTIONS, CHAPTERS, sidToFile, sidToMd, partId, partTitle,
 } from '../src/lesson/parts.js'
 
 describe('parts', () => {
@@ -95,9 +95,15 @@ describe('CHAPTERS — cấu trúc 7 chương', () => {
     expect(sidToFile('do-phuc-tap')).toBe('src/sections/DoPhucTap.vue')
   })
 
-  it('mọi bài ready đều có file section tồn tại thật', () => {
+  // Một bài "đã viết" tồn tại dưới đúng một trong hai dạng: file .md trong
+  // src/content (khung do LessonRenderer.vue dựng) hoặc file .vue trong
+  // src/sections (dạng cũ). Có cả hai là hai section cùng data-sid trong DOM.
+  it('mọi bài ready đều có đúng một file nội dung tồn tại thật', () => {
     for (const s of LESSON_SECTIONS.filter(s => s.ready)) {
-      expect(existsSync(resolve(__dirname, '..', s.file))).toBe(true)
+      const coVue = existsSync(resolve(__dirname, '..', s.file))
+      const coMd = existsSync(resolve(__dirname, '..', sidToMd(s.sid)))
+      expect(coVue || coMd, `bài ${s.sid} bật ready nhưng không có file nội dung`).toBe(true)
+      expect(coVue && coMd, `bài ${s.sid} có cả .vue lẫn .md`).toBe(false)
     }
   })
 })

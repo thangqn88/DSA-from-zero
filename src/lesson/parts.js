@@ -30,6 +30,14 @@ export function sidToFile(sid) {
   return `src/sections/${pascal}.vue`
 }
 
+// Bài viết bằng Markdown nằm ở đây. Sự tồn tại của file này CHÍNH LÀ công tắc:
+// có nó thì bài render bằng LessonRenderer.vue, không có thì dùng file .vue theo
+// sidToFile ở trên. Không thêm cờ nào trong CHAPTERS cho việc này — một cờ nữa là
+// một nguồn sự thật nữa để quên bật.
+export function sidToMd(sid) {
+  return `src/content/${sid}.md`
+}
+
 // Nguồn sự thật duy nhất về thứ tự học. LESSON_SECTIONS và menu trái đều suy ra
 // từ đây — đừng định nghĩa thứ tự bài học ở bất kỳ chỗ nào khác.
 // ready: đã có file section. duAn: đã có Phần 7 Dự án thực hành.

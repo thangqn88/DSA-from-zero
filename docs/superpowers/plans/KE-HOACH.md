@@ -32,20 +32,50 @@ C++ cho code mẫu trong bài. Không backend, không DB.
 |---|---|---|---|
 | Viết lại 10 nhóm cũ | Khung 6 phần, component dùng chung, schema, menu tự sinh | Opus + Sonnet | ✅ Xong 2026-08-09 |
 | 0–2 | Hạ tầng 7 chương, Phần 7, `ProjectBrief`, MVP Chương 1, 2 bài mẫu | Opus | ✅ Xong 2026-08-10 |
-| **3** | **18 bài mới còn lại và 6 MVP cuối chương — 26 task** | **Sonnet** | ⬜ **Chưa chạy task nào** |
+| 2.4 | Kiến trúc bài học Markdown — bỏ file `.vue` mỗi bài | Opus | ✅ Xong 2026-08-11 |
+| **2.5** | **Chuyển 13 bài `.vue` còn lại sang Markdown bằng script** | **Opus** | ⬜ **Làm trước Giai đoạn 3** |
+| 3 | 18 bài mới còn lại và 6 MVP cuối chương — 26 task | Sonnet | ⬜ Chưa chạy task nào |
 | 4 | Bổ sung Phần 7 + quiz `recall` cho 10 bài cũ | Sonnet | ⬜ Chưa viết kế hoạch chi tiết |
 | 5 | Rà soát 30 bài, giọng văn, giao diện, README | Opus | ⬜ Chưa bắt đầu |
 
 **Đang có 15/30 bài** đã viết (`ready: true`), trong đó **5 bài có Phần 7** (`duAn: true`)
-và **1/7 chương có MVP** (`capstoneReady: true`).
+và **1/7 chương có MVP** (`capstoneReady: true`). Hai bài đã dùng kiến trúc Markdown:
+`bang-bam` và `tham-lam`.
+
+### Kiến trúc bài học: Markdown, không còn file `.vue` mỗi bài
+
+Từ 2026-08-11, một bài học gồm **đúng hai file nội dung**:
+
+| File | Chứa gì |
+|---|---|
+| `src/content/<sid>.md` | Toàn bộ văn xuôi: lý thuyết, vì sao, các ví dụ điển hình |
+| `src/data/lessons/<sid>.js` | Dữ liệu có cấu trúc: `goal`, `quiz`, `practice`, `leetcode`, `project` |
+
+`src/components/LessonRenderer.vue` dựng khung 8 mục cho mọi bài. **Không tạo file trong
+`src/sections/` nữa.** `src/App.vue` không phải sửa: danh sách bài Markdown suy ra từ
+`src/content/` bằng `import.meta.glob`.
+
+Vì sao đổi: mỗi bài `.vue` tốn khoảng 48 dòng dây nối lặp lại y hệt, cộng thuế thẻ HTML
+bọc quanh từng đoạn văn và từng ô bảng. Hai bài đã chuyển cho thấy **604 dòng `.vue`
+biến mất**, đổi lại 98 dòng renderer dùng chung. Chi phí sinh một bài mới giảm khoảng
+**30–40% token đầu ra**.
+
+Cú pháp đầy đủ nằm ở đầu `src/lesson/md.js`. Tóm tắt: bốn chỉ thị đầu dòng — `@part`,
+`@vidu`, `@slot`, `@ngoai` — phần còn lại là Markdown thường.
 
 ### Hai cờ trạng thái trong `CHAPTERS`
 
-- `ready` — đã có file section. Bài chưa `ready` hiện mờ trên sidebar, không bấm được.
+- `ready` — đã có file nội dung. Bài chưa `ready` hiện mờ trên sidebar, không bấm được.
 - `duAn` — đã có Phần 7 Dự án thực hành.
 
 Test schema chỉ ép với bài đã bật cờ, nên chúng không bao giờ đỏ oan trong lúc chờ nội
-dung. Viết xong một bài thì bật cờ, đừng để quên.
+dung. Viết xong một bài thì bật cờ, đừng để quên — `tests/lesson-md.spec.js` có luật đỏ
+ngay nếu có file `.md` mà quên bật `ready`, nên đây là chỗ duy nhất còn phải nhớ bằng tay.
+
+**Đã cân nhắc và quyết định KHÔNG suy ra hai cờ này tự động** từ sự tồn tại file nội
+dung: `parts.js` hiện không import gì cả, và bắt nó phụ thuộc vào dữ liệu bài học chỉ để
+tiết kiệm một dòng mỗi bài là đổi một rủi ro thật lấy một khoản lợi nhỏ. Test đã chặn
+được lỗi quên bật cờ rồi.
 
 ---
 
@@ -63,9 +93,16 @@ dung. Viết xong một bài thì bật cờ, đừng để quên.
 | Viết lại 10 nhóm cũ | Hạ tầng + bài mẫu | Opus | Inline — **đã xong** |
 | Viết lại 10 nhóm cũ | 9 nhóm còn lại | Sonnet | Subagent tuần tự — **đã xong** |
 | 0–2 | Hạ tầng 7 chương, đặc tả MVP, 2 bài mẫu | Opus | Inline — **đã xong** |
+| 2.4 | Kiến trúc bài học Markdown | Opus | Inline — **đã xong** |
+| **2.5** | **Script chuyển 13 bài `.vue` còn lại sang `.md`** | **Opus** | **Inline — viết script, KHÔNG dùng agent** |
 | **3** | **18 bài mới còn lại + 6 MVP** | **Sonnet** | **Subagent, đúng 1 agent mỗi lần, tuần tự** |
 | 4 | Bổ sung Phần 7 và quiz ôn cho 10 bài cũ | **Sonnet** | Subagent, tuần tự |
 | 5 | Rà soát 30 bài, giọng văn, giao diện, README | Opus | Inline |
+
+**Vì sao Giai đoạn 2.5 dùng script chứ không dùng agent:** chuyển 13 file `.vue` bằng
+LLM tốn khoảng 270k token (đọc ~5300 dòng rồi viết lại từng đó), trong khi khoản tiết
+kiệm trên 18 bài mới chỉ khoảng 70k. **Lỗ nặng.** HTML → Markdown là việc cơ học, một
+script Node làm được gần hết với chi phí token bằng không; người chỉ soát lại chỗ lệch.
 
 **Vì sao Giai đoạn 3–4 dùng Sonnet:** đã có hai bài mẫu (`do-phuc-tap`, `bang-bam`),
 đặc tả MVP đầy đủ, khuôn chuẩn viết bài ngay trong file này, và test tự động ép đúng
@@ -104,6 +141,79 @@ vào cùng một cửa sổ 5 giờ và chạm trần sớm. Tuần tự giữ n
 | 2026-08-10 | Đợt mới, Giai đoạn 0–2 | Opus | Inline | **Kế hoạch này đã kết thúc.** Đợt mở rộng 10 → 30 nhóm bắt đầu, xem `docs/superpowers/plans/2026-08-09-mo-rong-30-nhom-gd0-2.md` và spec kèm theo. 225 test xanh, build sạch. Chưa kiểm chứng giao diện bằng mắt. |
 | 2026-08-10 | Viết kế hoạch Giai đoạn 3 | Opus | Inline | Không đụng mã nguồn. Tạo `docs/superpowers/plans/2026-08-09-gd3-18-bai-moi.md`: 26 task cho 18 bài mới và 6 MVP còn lại, kèm khuôn chuẩn viết một bài và khuôn chuẩn viết một MVP để mỗi subagent Sonnet tự đủ ngữ cảnh. **Phiên sau bắt đầu Task 1, phải đổi sang Sonnet bằng `/model` và chạy subagent tuần tự.** |
 | 2026-08-11 | Sửa 3 lỗi người dùng báo | Opus | Inline | (1) Bổ sung thuật ngữ Big O vào bài Độ phức tạp, thống nhất cách viết "O lớn (Big O)" toàn khoá. (2) `QuizBlock.vue` giờ xáo thứ tự lựa chọn bằng PRNG có hạt giống lấy từ nội dung câu hỏi — trước đó 44/65 đáp án nằm ở vị trí 0, sau khi xáo là 22/20/23. (3) **Lỗi Phần 4 rỗng:** 5 bài viết ở Giai đoạn 0–2 đổ nội dung vào slot mặc định của `WorkedExample`, vốn chỉ render 6 slot có tên, nên Vue vứt hết mà không báo lỗi. Đã cấu trúc lại 10 ví dụ vào đúng 6 slot và thêm test đếm slot ở `lesson-structure.spec.js` để chặn tái diễn. 302 test xanh, build sạch. Chưa kiểm chứng bằng mắt qua trình duyệt. |
+| 2026-08-11 | Đường viết bài bằng Markdown (bước 1 của việc giảm chi phí sinh nội dung) | Opus | Inline | Mục tiêu: bỏ hẳn file `.vue` cho mỗi bài, vì mỗi bài đang tốn ~48 dòng dây nối lặp lại y hệt cộng thuế thẻ HTML quanh từng đoạn và từng ô bảng. Thêm `src/lesson/md.js` (parser 3 chỉ thị `@part` / `@vidu` / `@slot`, chạy lúc build nên markdown-it không vào bundle), plugin `lessonMarkdown` trong `vite.config.js`, `src/lesson/mdLessons.js`, và `src/components/LessonRenderer.vue` dựng khung 8 mục cho mọi bài Markdown. Chuyển bài `bang-bam` sang `src/content/bang-bam.md` và xoá `src/sections/BangBam.vue` — **file `.vue` giảm 322 dòng, đổi lại 0 dòng khung**. Hai đường render chạy song song: có `src/content/<sid>.md` thì dùng renderer, không thì dùng `.vue` cũ; không thêm cờ nào trong `CHAPTERS`. `examples` của bài Markdown rút từ `@vidu` chứ không chép lại vào file dữ liệu. Thêm `tests/lesson-md.spec.js` (12 luật, gồm luật bắt thiếu slot ngay lúc build). 314 test xanh, build sạch. **Chưa kiểm chứng bằng mắt qua trình duyệt** — có sửa `style.css` để `.md-body` không làm mất giới hạn `--measure`. |
+| 2026-08-11 | Bài Markdown đầu tiên có widget (bước 2) | Opus | Inline | Người dùng xác nhận bước 1 chạy tốt trên máy. Chọn `tham-lam` (282 dòng) thay vì `dfs-bfs` (667 dòng) làm bài kiểm chứng widget — cùng chứng minh được một điều với hơn một nửa chi phí. Bài này lộ ra thiếu sót của parser: mục Ví dụ điển hình của nó có văn xuôi và **hai widget xen giữa** các `WorkedExample`, trong khi parser cũ cấm văn xuôi trong `vi-du`. Đã thêm chỉ thị `@ngoai` và đổi mục này thành một **dãy khối giữ nguyên thứ tự tác giả viết**. Thêm `src/lesson/widgets.js`: quy ước widget của bài `<sid>` nằm ở `src/widgets/<sid>.js` và xuất một hàm tên bắt đầu bằng `init`; `LessonRenderer` gọi trong `onMounted`, thay cho chỗ mỗi file `.vue` tự import. **Điểm neo widget nằm trong v-html vẫn hoạt động** — test mount thật rồi bấm thật: đủ 13 id, ba stepper `d3Rope`/`d4`/`d4Coin` tiến lùi đúng, các khung vẽ được JS đổ nội dung vào. Xoá `src/sections/ThamLam.vue` (282 dòng). 315 test xanh, build sạch, gzip 207.54 kB (trước 208.09). Một thay đổi hình thức cố ý: tiêu đề mở đầu phần Lý thuyết từ `<h4>` thành `h3` cho khớp bài `bang-bam`. |
+| 2026-08-11 | Cập nhật kế hoạch theo kiến trúc Markdown | Opus | Inline | Không đụng mã nguồn. Viết lại mục "Khuôn chuẩn viết một bài" (B/C/D/E) sang định dạng `.md`; thêm mục "Kỷ luật token cho subagent" — ba luật quyết định phần lớn chi phí Giai đoạn 3, quan trọng nhất là **cấm subagent mở file kế hoạch 2500 dòng này** và chỉ cho đọc đúng một bài mẫu `src/content/bang-bam.md` thay vì cặp `.vue` + `.js`. Sửa bằng script 81 dòng tham chiếu `src/sections/*.vue` trong 26 task (giữ nguyên các dòng nhật ký vì chúng ghi lịch sử). Thêm **Giai đoạn 2.5**: chuyển 13 bài `.vue` còn lại bằng script, chạy **trước** Giai đoạn 3 — vì nó biến Giai đoạn 4 thành việc thuần dữ liệu, để mã nguồn chỉ còn một kiến trúc, và để lộ thiếu sót định dạng trên bài thật trước khi viết 18 bài mới. Số chỗ khai báo thủ công khi thêm một bài: **4 → 1**. |
+| 2026-08-11 | Sửa Phần 7: người mới không biết bắt đầu từ đâu | Opus | Inline | Người dùng báo Phần 7 bài `do-phuc-tap` đọc xong vẫn không biết làm kiểu gì, bắt đầu từ đâu, cần kiến thức gì, đầu ra là gì. Kiểm lại thì đây là **lỗ hổng của schema**, không phải của riêng bài đó: `project` có `input` mà **không có `output`**, và không có chỗ nào nói bước đầu tiên. Thêm bốn trường: `needs` (cần biết trước, ≥3 mục, nói rõ cả cái CHƯA cần biết), `output`, `outputSample` (dán đúng những gì terminal in ra), `start` (4–6 bước theo thứ tự, bước 1 phải nhỏ và chạy được ngay). Cập nhật `ProjectBrief.vue` và thứ tự đọc: vì sao → cần biết trước → đầu vào → đầu ra → bắt đầu từ đâu → yêu cầu → coi như xong → chỗ dễ sai. Điền đủ cho **cả 5 bài có Phần 7 và MVP Chương 1**, không vá riêng bài Big O. Thêm luật test ép ba trường mới. 320 test xanh, build sạch. |
+| 2026-08-11 | Chuẩn hoá Phần 7 và thêm tiêu chí nghiệm thu | Opus | Inline | Chốt **một format chuẩn chung cho Phần 7 của cả 30 bài**, gồm 9 trường theo đúng mạch người mới đọc. Đổi `done` từ mảng chuỗi thành mảng object `{ dat, kiem }` — mỗi tiêu chí phải kèm **cách kiểm chạy được hoặc quan sát được kèm ngưỡng bằng số**, vì một tiêu chí không nói cách kiểm thì chỉ là lời chúc. Giao diện tự đánh số AC1..ACn. Nâng số tiêu chí tối thiểu từ 1 lên 3 cho bài lẻ và 4 cho MVP. Viết lại toàn bộ tiêu chí cho 5 bài và MVP Chương 1 — tổng 39 AC, mỗi cái đều có lệnh hoặc ngưỡng cụ thể. Thêm luật test ở cả `lesson-data.spec.js` lẫn `capstone.spec.js` chặn kiểu viết `done` bằng chuỗi hoặc `kiem` sơ sài. Ghi luật viết AC vào khuôn chuẩn để 18 bài mới sinh ra là có sẵn. 330 test xanh, build sạch. |
+
+---
+
+# Giai đoạn 2.5: chuyển 13 bài `.vue` còn lại sang Markdown
+
+**Model: Opus, inline. Viết script, KHÔNG dùng agent.** Chạy **trước** Giai đoạn 3.
+
+13 bài còn viết bằng `.vue`: `do-phuc-tap`, `mang-chuoi`, `de-quy`, `danh-sach-lien-ket`,
+`quay-lui-xau-nhi-phan`, `to-hop`, `qhd-nen-tang`, `qhd-lis-lcs-doixung`,
+`ngan-xep-hang-doi`, `dfs-bfs`, `dsu`, `cay-nhi-phan-bst`, `bst-nang-cao`.
+
+**Vì sao chạy trước Giai đoạn 3, không phải sau:**
+
+1. Giai đoạn 4 trở thành việc thuần dữ liệu — `LessonRenderer` tự dựng Phần 7. Làm ngược
+   thì sửa `.vue` xong lại bị script ghi đè.
+2. Toàn bộ mã nguồn chỉ còn **một** kiến trúc, nên prompt gửi subagent ở Giai đoạn 3
+   không phải giải thích "có hai loại bài".
+3. Nếu định dạng `.md` còn thiếu gì, 13 bài thật sẽ lộ ra ngay — đúng như bài `tham-lam`
+   đã lộ ra chuyện văn xuôi và widget xen giữa các ví dụ, thứ mà bài `bang-bam` không có.
+   Phát hiện chuyện đó **sau khi** đã viết 18 bài mới thì đắt hơn nhiều.
+
+- [ ] **Task 2.5.1: `src/data/lessons/index.js` gom bằng `import.meta.glob`**
+
+Thay 15 dòng `import` viết tay bằng một lần glob `./*.js`, suy `sid` từ tên file, giữ
+nguyên bước hợp nhất `examples` từ `mdLessons`. Sau task này, thêm một bài mới **không
+phải sửa `index.js`** — đó là một trong ba chỗ khai báo thủ công bị xoá bỏ.
+
+Expected: test xanh, không đổi hành vi.
+
+- [ ] **Task 2.5.2: Viết `scripts/vue-sang-md.mjs`**
+
+Đọc một file `src/sections/<Pascal>.vue`, xuất `src/content/<sid>.md`. Việc phải làm:
+
+- Bỏ khung: `<template>`, `<section>`, `<h2>`, `<script setup>`, các thẻ `<LessonGoal>`,
+  `<QuizBlock>`, `<PracticeSet>`, `<LeetCodeList>`, `<ProjectBrief>`.
+- `<LessonPart part="X">` → `@part X`, chỉ giữ ba mục `ly-thuyet`, `vi-sao`, `vi-du`.
+- `<WorkedExample id title :official>` → `@vidu` hoặc `@vidu*`; `<template #slot>` → `@slot`.
+- Nội dung nằm trong `vi-du` mà **ngoài** mọi `WorkedExample` → `@ngoai`.
+- `<pre v-pre><code>` → khối ```` ```cpp ````, gỡ escape `&lt;` `&amp;` `&gt;`.
+- `<table class="formula-table">` chỉ chứa văn bản đơn giản → bảng Markdown. **Bảng có
+  `<br>`, `<code>` lồng nhau hoặc ô gộp thì giữ nguyên HTML thô** — cố chuyển sẽ hỏng.
+- `<p>` → đoạn văn; `<strong>` → `**`; `<code>` → backtick; `<ol>`/`<ul>` → danh sách;
+  `<blockquote>` → `>`. Thẻ có `class` hoặc `style` riêng (`.idea-label`, `.realworld`,
+  `.problem-box`, `.widget`) **giữ nguyên HTML thô**.
+
+Script không cần hoàn hảo. Nó cần đúng ở phần chiếm 95% khối lượng và **không được im
+lặng làm mất nội dung** — cho nó đối chiếu số ký tự văn bản trước và sau, lệch quá 2% thì
+báo tên file ra để người soát tay.
+
+- [ ] **Task 2.5.3: Chạy script cho 13 bài, soát từng bài**
+
+Với mỗi bài: chạy script, xoá `src/sections/<Pascal>.vue`, gỡ import và thẻ trong
+`src/App.vue`, gỡ `examples` khỏi `src/data/lessons/<sid>.js`, chạy test.
+
+`tests/lesson-md.spec.js` tự phủ lên bài mới chuyển: đủ 6 slot mỗi ví dụ, `examples` khớp
+`@vidu`, và với bài có widget thì đủ điểm neo cộng stepper bấm được. Bài nào có widget
+(`ngan-xep-hang-doi`, `dfs-bfs`, `dsu`, `cay-nhi-phan-bst`, `bst-nang-cao`,
+`quay-lui-xau-nhi-phan`, `to-hop`, `qhd-nen-tang`, `qhd-lis-lcs-doixung`) phải xanh cả
+hai luật widget đó mới tính là xong.
+
+**Kiểm chứng bằng mắt là bắt buộc ở task này**, không được bỏ qua: script đụng vào 13 bài
+cùng lúc, test không chứng minh được layout.
+
+- [ ] **Task 2.5.4: Chốt**
+
+`src/sections/` chỉ còn `TrangChu.vue`. Cập nhật `CLAUDE.md`: mô tả kiến trúc mới, bỏ
+luật "đường dẫn file section suy ra từ `sid` bằng `sidToFile()`", thêm luật về
+`src/content/` và bốn chỉ thị. Ghi một dòng vào nhật ký phiên làm việc.
 
 ---
 
@@ -111,9 +221,9 @@ vào cùng một cửa sổ 5 giờ và chạm trần sớm. Tuần tự giữ n
 
 **Trạng thái: chưa chạy task nào.** 26 task, chạy tuần tự.
 
-**Architecture:** Mỗi bài là hai file — dữ liệu ở `src/data/lessons/<sid>.js`, phần trình bày ở `src/sections/<Pascal>.vue` — cộng bốn chỗ khai báo: `src/data/lessons/index.js`, hai dòng trong `src/App.vue`, và cờ `ready`/`duAn` trong `CHAPTERS` của `src/lesson/parts.js`. MVP của chương nằm riêng ở `src/data/capstones/<chapter-key>.js` và hiện trong Phần 7 của bài cuối chương. Không bài nào cần widget tương tác mới.
+**Architecture:** Mỗi bài là hai file nội dung — dữ liệu ở `src/data/lessons/<sid>.js`, văn xuôi ở `src/content/<sid>.md` — cộng đúng **một** chỗ khai báo: cờ `ready`/`duAn` trong `CHAPTERS` của `src/lesson/parts.js`. Khung 8 mục do `src/components/LessonRenderer.vue` dựng; `src/App.vue` và `src/data/lessons/index.js` không phải sửa vì cả hai đều suy ra danh sách bằng `import.meta.glob`. MVP của chương nằm riêng ở `src/data/capstones/<chapter-key>.js` và hiện trong Phần 7 của bài cuối chương. Không bài nào cần widget tương tác mới.
 
-**Bài mẫu bắt buộc đọc trước khi viết bài đầu tiên:** `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue`. Đó là bài đại diện số đông; `do-phuc-tap` là bài dị biệt toàn khái niệm, chỉ tham khảo khi viết `work-span` và `do-kho-bai-toan`.
+**Bài mẫu bắt buộc đọc trước khi viết bài đầu tiên:** `src/data/lessons/bang-bam.js` và `src/content/bang-bam.md`. Đó là bài đại diện số đông; `do-phuc-tap` là bài dị biệt toàn khái niệm, chỉ tham khảo khi viết `work-span` và `do-kho-bai-toan`.
 
 ## Model và cách chạy
 
@@ -121,19 +231,33 @@ Toàn bộ kế hoạch này chạy bằng **Sonnet**, dispatch **subagent, đú
 
 **Khi dispatch mỗi task, prompt gửi cho subagent phải chứa nguyên văn ba thứ:** mục "Global Constraints" bên dưới, mục "Khuôn chuẩn viết một bài" bên dưới, và đúng task của nó. Subagent không đọc được các task khác, nên đừng để nó phải suy đoán.
 
+### Kỷ luật token cho subagent — nêu rõ trong prompt
+
+Ba luật này quyết định phần lớn chi phí của cả Giai đoạn 3. Chép vào prompt mỗi task:
+
+1. **TUYỆT ĐỐI KHÔNG mở `docs/superpowers/plans/KE-HOACH.md`.** File này dài hơn 2400
+   dòng. Mọi thứ subagent cần đã nằm trong prompt rồi. Đọc nhầm nó một lần là đốt bằng
+   cả một task.
+2. **Chỉ đọc đúng MỘT file làm mẫu: `src/content/bang-bam.md`.** Không đọc
+   `src/data/lessons/bang-bam.js` — schema đã có đủ ở mục A của khuôn chuẩn. Không đọc
+   file `.vue` nào trong `src/sections/`; kiến trúc đó đã bỏ.
+3. **Không đọc `src/App.vue`, `src/style.css`, `src/lesson/parts.js` quá phần cần sửa.**
+   Với `parts.js` chỉ cần sửa đúng một dòng cờ của bài mình — dùng Edit trực tiếp, đừng
+   đọc cả file 140 dòng.
+
 ## Global Constraints
 
 - Tiếng Việt, xưng "bạn", giọng thân thiện, giống hệt `bang-bam`. Không đổi tone giữa các bài.
 - **Không dùng chữ nghiêng** ở bất kỳ đâu. Không thẻ `<i>`. `src/style.css` ép `font-style: normal`, không được gỡ.
-- Code mẫu là C++, đặt trong `<pre v-pre><code>`, escape `<` thành `&lt;` và `&` thành `&amp;`.
+- Code mẫu là C++, đặt trong khối ```` ```cpp ````. **Không escape `<` và `&` nữa** — khối code Markdown tự xử lý. Cũng không dùng `<pre v-pre>`.
 - Giải thích theo Feynman: ví dụ đời thường trước, thuật ngữ sau. Mỗi khái niệm trả lời đủ "Đây là gì? / Vì sao quan trọng? / Làm sao dùng?".
-- Mỗi section giữ nguyên `id`, `class="day-section"`, `data-sid`, `v-show="active"`, `defineProps({ active: Boolean })`.
+- **Không tạo file trong `src/sections/`, không sửa `src/App.vue`.** Khung section (`id`, `class="day-section"`, `data-sid`, `v-show`) do `LessonRenderer.vue` dựng sẵn cho mọi bài.
 - Không đổi `sid` của bất kỳ bài nào. Không sửa 12 bài đã có.
 - Không sửa `src/style.css`, không thêm CSS mới. 18 bài này dùng hết các lớp đã có: `idea-label`, `formula-table`, và các component sẵn có.
 - Không thêm widget tương tác. Không tạo file trong `src/widgets/`.
 - Không đặt `max-width` riêng cho `.content-row`. Không thêm mốc responsive.
 - Ràng buộc số lượng do test ép, không được lệch: `goal` 2–4 dòng; `examples` 1–2 mục, id không trùng; `quiz` 3–5 câu, mỗi câu ≥ 2 lựa chọn và `why` dài hơn 10 ký tự; `practice` **đúng 3** mục, mỗi mục có `title`/`idea`/`hint`; `leetcode` 8–12 bài, `slug` không trùng, `level` thuộc `Easy|Medium|Hard` và **xếp từ dễ tới khó**.
-- Bài nào bật `duAn: true` thì phải có `project` đủ 6 trường (`title`, `why`, `input`, `must`, `done`, `traps`), `must` ≥ 2 mục, `done` ≥ 1 mục, phần tử cuối của `must` dài hơn 20 ký tự và bắc cầu về kiến thức cũ, và phải có **tối thiểu 1 câu quiz `recall: true`**.
+- Bài nào bật `duAn: true` thì phải có `project` đủ **chín** trường (`title`, `why`, `needs`, `input`, `output`, `start`, `must`, `done`, `traps`), `needs` ≥ 3 mục, `start` ≥ 4 bước, `must` ≥ 2 mục, `done` ≥ **3 tiêu chí nghiệm thu, mỗi tiêu chí là object `{ dat, kiem }`** (MVP cuối chương cần ≥ 4), phần tử cuối của `must` dài hơn 20 ký tự và bắc cầu về kiến thức cũ, và phải có **tối thiểu 1 câu quiz `recall: true`**. Trường `outputSample` không bắt buộc nhưng nên có.
 - Lệnh test: `npm run test -- --run`. Lệnh build: `npm run build`. Cả hai phải xanh trước khi commit.
 - Mỗi task một commit. Thông báo commit không dấu, theo mẫu đã dùng: `content: bai <ten bai>`.
 
@@ -181,122 +305,144 @@ export default {
     title: '...',
     why: '...',   // Bối cảnh thật: ai dùng, giải quyết vấn đề gì, và module này
                   // sẽ được dùng lại ở MVP chương nào.
-    input: '...', // Dữ liệu vào cụ thể, kèm link nguồn công khai nếu có.
+    needs: [ /* ≥ 3 mục: khái niệm nào trong CHÍNH bài này, công cụ C++ nào,
+                dự án nào của bài trước phải làm xong trước. Nói rõ cái gì CHƯA
+                cần biết — người mới sợ nhất là tưởng mình thiếu nền. */ ],
+    input: '...', // Dữ liệu vào cụ thể. Nếu không đọc file thì ghi rõ dòng lệnh
+                  // chạy thật, ví dụ './bench tong-doi 1000,10000 7'.
+    output: '...',      // Đầu ra là cái gì, ở dạng nào, xem ở đâu.
+    outputSample: `...`,// Dán ĐÚNG những gì terminal in ra khi làm xong. Đây là
+                        // thứ trả lời "làm xong thì trông như thế nào" nhanh hơn
+                        // mọi đoạn văn mô tả.
+    start: [ /* 4–6 bước THEO THỨ TỰ. Bước 1 phải là việc nhỏ nhất mà chạy được
+                ngay và cho thấy kết quả — không phải bước "thiết kế kiến trúc".
+                Mỗi bước sau thêm đúng một thứ. Phần đo đạc luôn để cuối cùng. */ ],
     must: [ /* ≥ 2 mục; mục CUỐI bắc cầu về bài cũ */ ],
-    done: [ /* ≥ 1 mục, là điều kiểm được: test nào xanh, con số nào đạt */ ],
+    done: [ /* TIÊU CHÍ NGHIỆM THU. ≥ 3 mục, mỗi mục là một object hai trường.
+               Giao diện tự đánh số AC1, AC2... nên đừng tự đánh số trong chữ. */
+      {
+        dat: '...',  // Điều phải đúng, nói ở thể quan sát được. Trả lời được bằng
+                     // đúng một chữ: đạt hoặc chưa đạt. Không dùng chữ mơ hồ như
+                     // "hoạt động tốt", "code sạch", "hiểu được".
+        kiem: '...', // CÁCH kiểm: một lệnh chạy được, hoặc một quan sát cụ thể
+                     // kèm ngưỡng bằng số. Thiếu trường này thì đó chỉ là một
+                     // lời chúc, không phải tiêu chí nghiệm thu.
+      },
+    ],
     traps: [ /* 3–5 cái bẫy cụ thể */ ],
   },
 }
 ```
 
-### B. File section `src/sections/<Pascal>.vue`
+**Luật viết tiêu chí nghiệm thu** — đây là chỗ dễ viết dối nhất:
 
-Khung dưới đây là khung đầy đủ. Thay `<sid>` bằng sid thật ở cả 8 chỗ.
+- Mỗi `must` quan trọng phải có ít nhất một AC chấm được nó. AC không phải bản tóm tắt của `must`, nó là **cách chứng minh** `must` đã xong.
+- `kiem` phải chạy được hoặc nhìn được. "Chạy nhanh" là sai; "time ./demtu sach.txt, cột real dưới 1s" là đúng.
+- Có ngưỡng thì ghi bằng số. "Nhanh hơn ít nhất 100 lần", "lệch dưới 20%", "0 byte rò rỉ".
+- Ưu tiên AC bắt đúng cái bẫy trong `traps`. Ví dụ bảng băm có bẫy "quên băm lại khi nở" thì phải có một AC thêm 1000 khoá rồi tra lại đủ 1000 khoá.
+- AC đầu tiên nên là thứ dễ nhất, thường là "biên dịch sạch" hoặc "chạy ra đúng mẫu đầu ra ở trên". Người học cần một mốc đạt được sớm.
 
-```vue
-<template>
-<section id="<sid>" class="day-section" data-sid="<sid>" v-show="active">
+### B. File nội dung `src/content/<sid>.md`
 
-<h2><Tiêu đề bài></h2>
+Khung đầy đủ của một bài. Không có thẻ Vue nào, không `<section>`, không `import` —
+`LessonRenderer.vue` dựng hết. Bốn chỉ thị `@part` / `@vidu` / `@slot` / `@ngoai` phải
+nằm ở **đầu dòng**; mọi thứ còn lại là Markdown thường.
 
-<LessonGoal :sid="'<sid>'">
-  <ul><li v-for="(g, i) in data.goal" :key="i">{{ g }}</li></ul>
-</LessonGoal>
+~~~markdown
+@part ly-thuyet
 
-<LessonPart :sid="'<sid>'" part="ly-thuyet">
+### <Tiêu đề khái niệm 1: ẩn dụ đời thường>
 
-<h3 id="auto-<tien-to>-<khai-niem-1>"><Tiêu đề khái niệm 1: ẩn dụ đời thường></h3>
 <p class="idea-label">🧩 Ý tưởng cốt lõi</p>
-<p><Đoạn kể ẩn dụ đời thường, 3–5 câu, chưa dùng thuật ngữ nào.></p>
 
-<p><strong>Đây là gì?</strong> ...</p>
+<Đoạn kể ẩn dụ đời thường, 3–5 câu, chưa dùng thuật ngữ nào.>
 
-<p><strong>Vì sao quan trọng?</strong> ...</p>
+**Đây là gì?** ...
 
-<h3 id="auto-<tien-to>-<khai-niem-2>">...</h3>
-...
+**Vì sao quan trọng?** ...
 
-</LessonPart>
+### <Tiêu đề khái niệm 2>
 
-<LessonPart :sid="'<sid>'" part="vi-sao">
+| Cột A | Cột B |
+|---|---|
+| ... | ... |
 
-<h3 id="auto-<tien-to>-vi-sao">Vì sao <kiến thức này> đáng học</h3>
-
-<p><strong><Luận điểm 1 in đậm.></strong> ...</p>
-<p><strong><Luận điểm 2 in đậm.></strong> ...</p>
-<p><strong><Luận điểm 3 in đậm.></strong> ...</p>
-
-</LessonPart>
-
-<LessonPart :sid="'<sid>'" part="quiz">
-  <QuizBlock :questions="data.quiz" />
-</LessonPart>
-
-<LessonPart :sid="'<sid>'" part="vi-du">
-
-<WorkedExample id="<id-vi-du-1>" title="<tiêu đề ví dụ 1, khớp từng chữ với examples[0].title>">
-...
-</WorkedExample>
-
-<WorkedExample id="<id-vi-du-2>" title="<tiêu đề ví dụ 2, khớp từng chữ với examples[1].title>">
-...
-</WorkedExample>
-
-</LessonPart>
-
-<LessonPart :sid="'<sid>'" part="bai-tap">
-  <PracticeSet :items="data.practice" />
-</LessonPart>
-
-<LessonPart :sid="'<sid>'" part="leetcode">
-  <LeetCodeList :items="data.leetcode" />
-</LessonPart>
-
-<LessonPart :sid="'<sid>'" part="du-an">
-  <ProjectBrief :brief="data.project" />
-</LessonPart>
-
-</section>
-</template>
-
-<script setup>
-import LessonGoal from '../components/LessonGoal.vue'
-import LessonPart from '../components/LessonPart.vue'
-import QuizBlock from '../components/QuizBlock.vue'
-import WorkedExample from '../components/WorkedExample.vue'
-import PracticeSet from '../components/PracticeSet.vue'
-import LeetCodeList from '../components/LeetCodeList.vue'
-import ProjectBrief from '../components/ProjectBrief.vue'
-import data from '../data/lessons/<sid>.js'
-
-defineProps({ active: Boolean })
-</script>
+```cpp
+// Code C++ viết thẳng, KHÔNG escape < và & nữa.
+vector<pair<int,int>> a;
 ```
+
+@part vi-sao
+
+### Vì sao <kiến thức này> đáng học
+
+**<Luận điểm 1 in đậm.>** ...
+
+**<Luận điểm 2 in đậm.>** ...
+
+**<Luận điểm 3 in đậm.>** ...
+
+@part vi-du
+
+@vidu <id-vi-du-1> | <tiêu đề ví dụ 1, khớp từng chữ với examples[0].title>
+
+@slot de-bai
+<Đề bài.>
+
+@slot y-tuong
+<Ý tưởng cốt lõi.>
+
+@slot thuat-toan
+<Các bước, thường là danh sách đánh số.>
+
+@slot chay-tay
+<Bảng Markdown chạy tay từng bước bằng số.>
+
+@slot code
+```cpp
+...
+```
+
+@slot toi-uu
+<Chỗ then chốt, chi phí, cách tối ưu hơn.>
+
+@vidu <id-vi-du-2> | <tiêu đề ví dụ 2>
+<sáu @slot y hệt như trên>
+~~~
+
+Bốn điều dễ sai nhất với định dạng này:
+
+- **Đủ cả 6 `@slot` cho mỗi `@vidu`.** Thiếu một cái là **build đỏ**, không phải lỗi âm thầm như thời viết bằng `.vue`.
+- **Bảng viết bằng Markdown**, không viết `<table>`. Class `formula-table` được gắn tự động. Hàng đầu là hàng tiêu đề.
+- **Tiêu đề trong thân bài dùng `###`.** Id neo `auto-...` sinh tự động từ chữ trong tiêu đề, **không tự viết id nữa**.
+- **HTML thô vẫn dùng được** khi cần, ví dụ `<p class="idea-label">`. Nhưng một khối HTML kết thúc ở dòng trống đầu tiên — đừng chèn dòng trống vào giữa một khối `<div>`.
+
+Nếu cần chèn văn xuôi hoặc widget **xen giữa** các ví dụ, đóng ví dụ đang mở bằng `@ngoai`
+rồi viết tiếp. 18 bài mới không có widget nên hầu như không cần tới.
 
 Yêu cầu về nội dung phần Lý thuyết và Ví dụ:
 
-- Phần `ly-thuyet` có 3–5 tiêu đề `h3`, mỗi tiêu đề một khái niệm. Tiêu đề đầu tiên bao giờ cũng là ẩn dụ đời thường kèm `<p class="idea-label">🧩 Ý tưởng cốt lõi</p>`. Chỉ đúng một `idea-label` trong cả bài.
-- Mọi `h3` trong section có `id` dạng `auto-<tiền-tố-bài>-<khoá-ngắn>`, chữ thường không dấu. Tiền tố bài do task chỉ định.
-- Dùng `<table class="formula-table">` cho mọi bảng so sánh và mọi bảng chạy tay. Hàng đầu dùng `<th>`.
+- Phần `ly-thuyet` có 3–5 tiêu đề `###`, mỗi tiêu đề một khái niệm. Tiêu đề đầu tiên bao giờ cũng là ẩn dụ đời thường kèm `<p class="idea-label">🧩 Ý tưởng cốt lõi</p>`. Chỉ đúng một `idea-label` trong cả bài.
 - Phần `vi-sao` là văn xuôi thuyết phục, 3–4 đoạn, mỗi đoạn mở bằng một câu luận điểm in đậm. Không bảng, không code.
-- Mỗi `WorkedExample` phải **chạy tay bằng số**: một bảng `formula-table` từng bước, rồi một đoạn `<strong>Chỗ then chốt:</strong>` chỉ ra điều dễ bỏ sót, rồi một đoạn `<strong>Chi phí:</strong>` nói độ phức tạp. Không được chỉ mô tả suông.
-- `title` của `WorkedExample` phải khớp **từng chữ** với `examples[i].title` trong file dữ liệu, vì menu bên phải sinh từ dữ liệu còn neo nằm ở section.
+- Mỗi `@vidu` phải **chạy tay bằng số**: một bảng từng bước, rồi một đoạn `**Chỗ then chốt:**` chỉ ra điều dễ bỏ sót, rồi một đoạn `**Chi phí:**` nói độ phức tạp. Không được chỉ mô tả suông.
+- Tiêu đề sau dấu `|` của `@vidu` phải khớp **từng chữ** với `examples[i].title` mà task chỉ định — test đối chiếu hai chỗ này với nhau.
 
 ### C. Khai báo dữ liệu
 
-Thêm đúng hai dòng vào `src/data/lessons/index.js` — một dòng `import`, một dòng trong object `lessons`. Giữ thứ tự import khớp thứ tự học nếu chèn được, không thì thêm vào cuối.
+**Không cần làm gì.** `src/data/lessons/index.js` gom mọi file trong thư mục bằng
+`import.meta.glob` (Task 2.5.1). Đặt file đúng tên `<sid>.js` là xong.
 
 ### D. Khai báo section trong `src/App.vue`
 
-Thêm một dòng `import` trong khối import section (khoảng dòng 141–153) và một dòng thẻ trong `.content-main` (khoảng dòng 72–86), đặt đúng vị trí theo thứ tự chương:
-
-```html
-          <TenBai :active="activeSection === '<sid>'" />
-```
+**Không cần làm gì, và không được sửa `src/App.vue`.** Bài Markdown được nhận ra từ sự
+tồn tại của `src/content/<sid>.md`.
 
 ### E. Bật cờ trong `src/lesson/parts.js`
 
-Trong `CHAPTERS`, đổi `ready: false, duAn: false` của bài vừa viết thành `ready: true, duAn: true`. Đừng sửa bài khác.
+Trong `CHAPTERS`, đổi `ready: false, duAn: false` của bài vừa viết thành
+`ready: true, duAn: true`. Đừng sửa bài khác, và đừng đọc cả file — dùng Edit đúng dòng đó.
+
+Đây là **thao tác thủ công duy nhất còn lại** ngoài hai file nội dung.
 
 ### F. Chạy test
 
@@ -313,7 +459,7 @@ Trong `CHAPTERS`, đổi `ready: false, duAn: false` của bài vừa viết th�
 ### I. Commit
 
 ```bash
-git add src/data/lessons src/sections src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai <ten bai khong dau>"
 ```
 
@@ -362,9 +508,7 @@ Hai điểm dừng giao được: sau task 4 (Chương 1 học được trọn v
 |---|---|---|
 | `tests/capstone.spec.js` | Thêm luật: bài cuối chương phải render MVP | 1 |
 | `src/data/lessons/<sid>.js` × 18 | Dữ liệu 18 bài mới | 2–7, 9, 10, 12, 14–16, 18, 20–23, 25 |
-| `src/sections/<Pascal>.vue` × 18 | Trình bày 18 bài mới | như trên |
-| `src/data/lessons/index.js` | Khai báo dữ liệu bài mới | như trên |
-| `src/App.vue` | Khai báo section mới | như trên |
+| `src/content/<sid>.md` × 18 | Văn xuôi 18 bài mới | như trên |
 | `src/lesson/parts.js` | Bật cờ `ready`, `duAn`, `capstoneReady` | mọi task nội dung |
 | `src/data/capstones/xu-ly-day.js` | MVP Chương 2 | 8 |
 | `src/data/capstones/tra-cuu.js` | MVP Chương 3 | 11 |
@@ -506,8 +650,8 @@ git commit -m "test(capstone): ep bai cuoi chuong phai hien MVP cua chuong"
 
 **Files:**
 - Create: `src/data/lessons/mang-chuoi.js`
-- Create: `src/sections/MangChuoi.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/mang-chuoi.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; bài `do-phuc-tap` đã có, được nhắc lại ở câu quiz `recall`.
@@ -563,19 +707,19 @@ Tiền tố id cho `h3` và ví dụ: `mc`.
 - `done`: `make test` xanh với tối thiểu ba ca; đường thời gian trung bình mỗi `push_back` của bản nhân đôi nằm ngang khi `n` tăng, còn bản cộng thêm 10 thì dốc lên.
 - `traps`: quên giải phóng mảng cũ sau khi copy; nở theo cấp cộng; `operator[]` không kiểm biên rồi đọc ngoài vùng; nối chuỗi trong vòng lặp thành `O(n²)`; copy `Vec` bằng copy con trỏ nên hai đối tượng cùng trỏ một vùng rồi giải phóng hai lần.
 
-- [ ] **Step 1: Đọc bài mẫu**
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 
-Đọc `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn. Đây là mốc về độ dài, giọng văn và cách trình bày. Đừng viết ngắn hơn đáng kể.
+Đọc `src/data/lessons/bang-bam.js` và `src/content/bang-bam.md` trọn vẹn. Đây là mốc về độ dài, giọng văn và cách trình bày. Đừng viết ngắn hơn đáng kể.
 
 - [ ] **Step 2: Viết `src/data/lessons/mang-chuoi.js`**
 
 Theo mục A của khuôn chuẩn, dùng nội dung đã chỉ định ở trên.
 
-- [ ] **Step 3: Viết `src/sections/MangChuoi.vue`**
+- [ ] **Step 3: Viết `src/content/mang-chuoi.md`**
 
 Theo mục B của khuôn chuẩn. Sáu khái niệm ở trên gom thành 4 tiêu đề `h3` trong phần `ly-thuyet`: ẩn dụ và truy cập `O(1)`; bảng chi phí thao tác; mảng động và phân tích khấu trừ; chuỗi, locality và cache.
 
-- [ ] **Step 4: Khai báo và bật cờ**
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 
 Theo mục C, D, E của khuôn chuẩn. Tên component là `MangChuoi`, đặt ngay sau `DoPhucTap` trong cả hai chỗ của `App.vue`.
 
@@ -596,7 +740,7 @@ Theo mục H của khuôn chuẩn.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/MangChuoi.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Mang, chuoi va mang dong"
 ```
 
@@ -605,8 +749,8 @@ git commit -m "content: bai Mang, chuoi va mang dong"
 
 **Files:**
 - Create: `src/data/lessons/de-quy.js`
-- Create: `src/sections/DeQuy.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/de-quy.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `do-phuc-tap` để nhắc lại ở câu `recall`; `mang-chuoi` vừa xong, được nhắc khi nói về ngăn xếp lời gọi tốn bộ nhớ.
@@ -662,17 +806,17 @@ Tiền tố id cho `h3` và ví dụ: `dq`.
 - `done`: bảng số lời gọi của `fib` đệ quy trần khớp công thức `2·fib(n+1) − 1`; bản ghi nhớ có số lời gọi tuyến tính theo `n`; có tối thiểu ba ca kiểm thử tự động.
 - `traps`: đếm lời gọi bằng biến toàn cục rồi quên đặt lại giữa hai phép đo; để `n` quá lớn ở bản đệ quy trần rồi tưởng chương trình treo; đo `fib` bản vòng lặp bằng `int` rồi tràn số từ `n = 47`; ghi nhớ bằng mảng nhưng không phân biệt "chưa tính" với "kết quả bằng 0"; quên rằng độ sâu đệ quy cũng là bộ nhớ, không chỉ thời gian.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn, lấy làm mốc độ dài và giọng văn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/de-quy.js`** theo mục A của khuôn chuẩn, dùng nội dung đã chỉ định ở trên.
-- [ ] **Step 3: Viết `src/sections/DeQuy.vue`** theo mục B. Sáu khái niệm gom thành 4 tiêu đề `h3`: ẩn dụ hàng người và ba thành phần; ngăn xếp lời gọi; cây đệ quy và hệ thức truy hồi; chia để trị và ghi nhớ.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `DeQuy`, đặt sau `MangChuoi`.
+- [ ] **Step 3: Viết `src/content/de-quy.md`** theo mục B. Sáu khái niệm gom thành 4 tiêu đề `h3`: ẩn dụ hàng người và ba thành phần; ngăn xếp lời gọi; cây đệ quy và hệ thức truy hồi; chia để trị và ghi nhớ.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/DeQuy.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai De quy va he thuc truy hoi"
 ```
 
@@ -683,8 +827,8 @@ git commit -m "content: bai De quy va he thuc truy hoi"
 
 **Files:**
 - Create: `src/data/lessons/danh-sach-lien-ket.js`
-- Create: `src/sections/DanhSachLienKet.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/danh-sach-lien-ket.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `capstoneCuaChuong` từ `src/data/capstones/index.js`; `mang-chuoi` để so sánh và để nhắc ở câu `recall`.
@@ -766,17 +910,17 @@ import { capstoneCuaChuong } from '../data/capstones/index.js'
 const capstone = capstoneCuaChuong('nen-mong')
 ```
 
-- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/sections/BangBam.vue`, `src/data/lessons/bang-bam.js`, `src/data/capstones/nen-mong.js`, và `src/components/ProjectBrief.vue` để biết chế độ `capstone` cần những trường nào.
+- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/content/bang-bam.md`, `src/data/lessons/bang-bam.js`, `src/data/capstones/nen-mong.js`, và `src/components/ProjectBrief.vue` để biết chế độ `capstone` cần những trường nào.
 - [ ] **Step 2: Viết `src/data/lessons/danh-sach-lien-ket.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/DanhSachLienKet.vue`** theo mục B, với Phần 7 dạng hai khối như trên. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ và cấu tạo nút; bảng đánh đổi với mảng; vì sao mảng thường thắng trong thực tế; đơn đôi vòng và nút giả; hai con trỏ nhanh chậm và chuyện bộ nhớ.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `DanhSachLienKet`, đặt sau `DeQuy`.
+- [ ] **Step 3: Viết `src/content/danh-sach-lien-ket.md`** theo mục B, với Phần 7 dạng hai khối như trên. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ và cấu tạo nút; bảng đánh đổi với mảng; vì sao mảng thường thắng trong thực tế; đơn đôi vòng và nút giả; hai con trỏ nhanh chậm và chuyện bộ nhớ.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`. Ba luật mới ở `tests/capstone.spec.js` (Task 1) lần đầu tiên chạy thật ở đây, vì Chương 1 đã có `capstoneReady: true` và giờ bài cuối đã `ready`. Nếu chúng đỏ, section chưa render MVP đúng cách.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H, cộng thêm: Phần 7 hiện đúng hai hộp, hộp MVP có viền dày và nhãn "Dự án MVP cuối chương", khối dữ liệu mẫu không tràn ngang, link tải bấm được. Chương 1 giờ đủ 4 bài không còn nhãn "sắp có".
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/DanhSachLienKet.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Danh sach lien ket, hien MVP Chuong 1"
 ```
 
@@ -787,8 +931,8 @@ git commit -m "content: bai Danh sach lien ket, hien MVP Chuong 1"
 
 **Files:**
 - Create: `src/data/lessons/sap-xep.js`
-- Create: `src/sections/SapXep.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/sap-xep.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; hệ thức truy hồi `T(n) = 2T(n/2) + O(n)` đã dạy ở `de-quy`, bài này dùng lại chứ không giải thích lại từ đầu; `core::Vec` của `mang-chuoi`.
@@ -846,17 +990,17 @@ Tiền tố id cho `h3` và ví dụ: `sx`.
 - `done`: `make test` xanh với tối thiểu bốn ca — sắp đúng trên sáu dạng dữ liệu đã liệt kê ở bài tập 1, và merge sort giữ được thứ tự tương đối; đường merge sort và quicksort cùng hình `n log n` còn counting sort thẳng như `n`; quicksort chốt ngẫu nhiên không tụt xuống `O(n²)` khi gặp mảng đã sắp.
 - `traps`: quicksort chốt cố định gặp dữ liệu đã sắp; cấp mảng phụ mới ở mỗi lần trộn thay vì cấp một lần rồi dùng lại; điều kiện so sánh dùng `<=` ở chỗ cần `<` làm mất tính ổn định; counting sort với miền giá trị lớn rồi cấp một mảng khổng lồ; đo mà quên `-O2` nên mọi đường cong đều méo; sinh số ngẫu nhiên bằng `rand()` gọi lại trong vòng lặp đo, khiến thời gian sinh số lẫn vào thời gian sắp.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn, lấy làm mốc độ dài và giọng văn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/sap-xep.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/SapXep.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ cọc bài và merge sort; quicksort và chốt ngẫu nhiên; tính ổn định; cận dưới `n log n` và cách phá nó; bảng chọn thuật toán.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `SapXep`, đặt sau `DanhSachLienKet`.
+- [ ] **Step 3: Viết `src/content/sap-xep.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ cọc bài và merge sort; quicksort và chốt ngẫu nhiên; tính ổn định; cận dưới `n log n` và cách phá nó; bảng chọn thuật toán.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/SapXep.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Sap xep merge quick counting"
 ```
 
@@ -866,8 +1010,8 @@ git commit -m "content: bai Sap xep merge quick counting"
 
 **Files:**
 - Create: `src/data/lessons/tim-kiem-nhi-phan.js`
-- Create: `src/sections/TimKiemNhiPhan.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/tim-kiem-nhi-phan.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; module `sorting` của `sap-xep` — mảng phải sắp trước mới tìm nhị phân được.
@@ -924,17 +1068,17 @@ Tiền tố id cho `h3` và ví dụ: `tknp`.
 - `done`: `make test` xanh với tối thiểu bốn ca — tìm đúng, không tìm thấy, phần tử trùng lặp, mảng rỗng; đường đo tìm nhị phân gần như nằm ngang khi `n` tăng gấp mười, còn đường quét tuyến tính dốc thẳng; con số điểm hoà vốn giữa hai cách được in ra và giải thích được.
 - `traps`: `mid = (lo + hi) / 2` tràn số; nhầm khoảng đóng với nửa mở làm sót phần tử cuối hoặc lặp vô hạn; `lo = mid` thay vì `lo = mid + 1`; dùng tìm nhị phân trên dữ liệu chưa sắp mà không hề báo lỗi, chỉ trả về sai; hàm kiểm trong tìm nhị phân trên đáp án không đơn điệu nhưng vẫn cho ra một kết quả trông hợp lý.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/tim-kiem-nhi-phan.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/TimKiemNhiPhan.vue`** theo mục B. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ từ điển và điều kiện đơn điệu; bất biến vòng lặp và chứng minh quy nạp; ba cái bẫy cài đặt; `lower_bound` và `upper_bound`; tìm nhị phân trên đáp án.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `TimKiemNhiPhan`, đặt sau `SapXep`.
+- [ ] **Step 3: Viết `src/content/tim-kiem-nhi-phan.md`** theo mục B. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ từ điển và điều kiện đơn điệu; bất biến vòng lặp và chứng minh quy nạp; ba cái bẫy cài đặt; `lower_bound` và `upper_bound`; tìm nhị phân trên đáp án.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/TimKiemNhiPhan.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Tim kiem nhi phan va tim tren dap an"
 ```
 
@@ -943,8 +1087,8 @@ git commit -m "content: bai Tim kiem nhi phan va tim tren dap an"
 
 **Files:**
 - Create: `src/data/lessons/hai-con-tro-cua-so-truot.js`
-- Create: `src/sections/HaiConTroCuaSoTruot.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/hai-con-tro-cua-so-truot.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `bang-bam` cho phần đếm trong cửa sổ và cho câu `recall`; `core::Str::split` của `mang-chuoi`.
@@ -1002,17 +1146,17 @@ Tiền tố id cho `h3` và ví dụ: `hct`.
 - `done`: `make test` xanh với tối thiểu ba ca — khung tải cao nhất trên một file nhỏ tự dựng mà bạn tính được bằng tay, cửa sổ co giãn với dữ liệu không có đáp án, và log có dòng sai định dạng bị bỏ qua chứ không làm chương trình chết; chạy trên file log thật vài trăm nghìn dòng dưới một giây; tổng số bước hai con trỏ không vượt hai lần số dòng.
 - `traps`: cộng lại toàn bộ cửa sổ ở mỗi bước trượt, biến `O(n)` thành `O(n·k)`; con trỏ trái quay lui, làm mất tính khấu trừ; quên rằng log không sắp theo thời gian tuyệt đối nếu ghép từ nhiều máy chủ; dùng cửa sổ trượt cho đại lượng có thể âm; đọc cả file vào bộ nhớ rồi hết bộ nhớ với log vài GB, trong khi cửa sổ trượt vốn chỉ cần đọc theo dòng.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/hai-con-tro-cua-so-truot.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/HaiConTroCuaSoTruot.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ khung ngắm và hai con trỏ ngược chiều; nhanh chậm; cửa sổ cố định và co giãn; vì sao tổng chi phí là `O(n)`; bảng nhận dạng khuôn mẫu.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `HaiConTroCuaSoTruot`, đặt sau `TimKiemNhiPhan`.
+- [ ] **Step 3: Viết `src/content/hai-con-tro-cua-so-truot.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ khung ngắm và hai con trỏ ngược chiều; nhanh chậm; cửa sổ cố định và co giãn; vì sao tổng chi phí là `O(n)`; bảng nhận dạng khuôn mẫu.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/HaiConTroCuaSoTruot.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Hai con tro va cua so truot"
 ```
 
@@ -1058,8 +1202,8 @@ Bài cuối Chương 2, nên Phần 7 có hai khối như Task 4.
 
 **Files:**
 - Create: `src/data/lessons/tong-tien-to.js`
-- Create: `src/sections/TongTienTo.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/tong-tien-to.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `capstoneCuaChuong('xu-ly-day')` từ Task 8; `hai-con-tro-cua-so-truot` cho câu `recall`; `bang-bam` cho phần đếm đoạn con có tổng bằng `k`.
@@ -1130,17 +1274,17 @@ import { capstoneCuaChuong } from '../data/capstones/index.js'
 const capstone = capstoneCuaChuong('xu-ly-day')
 ```
 
-- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/sections/DanhSachLienKet.vue` (bài cuối chương đã viết ở Task 4, làm mốc cho Phần 7 hai khối), `src/data/lessons/bang-bam.js`, `src/data/capstones/xu-ly-day.js`.
+- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/content/danh-sach-lien-ket.md` (bài cuối chương đã viết ở Task 4, làm mốc cho Phần 7 hai khối), `src/data/lessons/bang-bam.js`, `src/data/capstones/xu-ly-day.js`.
 - [ ] **Step 2: Viết `src/data/lessons/tong-tien-to.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/TongTienTo.vue`** theo mục B, Phần 7 dạng hai khối. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ cột mốc và đánh đổi tiền xử lý; tổng tiền tố một chiều; mảng hiệu; tổng tiền tố hai chiều; ghép bảng băm và giới hạn khi dữ liệu bị sửa.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `TongTienTo`, đặt sau `HaiConTroCuaSoTruot`.
+- [ ] **Step 3: Viết `src/content/tong-tien-to.md`** theo mục B, Phần 7 dạng hai khối. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ cột mốc và đánh đổi tiền xử lý; tổng tiền tố một chiều; mảng hiệu; tổng tiền tố hai chiều; ghép bảng băm và giới hạn khi dữ liệu bị sửa.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`. Luật "bài cuối chương hiển thị MVP" giờ ép cả Chương 1 và Chương 2.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H, cộng thêm: Phần 7 hiện đúng hai hộp; Chương 2 đủ 4 bài không còn nhãn "sắp có".
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/TongTienTo.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Tong tien to va mang hieu, hien MVP Chuong 2"
 ```
 
@@ -1151,8 +1295,8 @@ git commit -m "content: bai Tong tien to va mang hieu, hien MVP Chuong 2"
 
 **Files:**
 - Create: `src/data/lessons/heap-hang-doi-uu-tien.js`
-- Create: `src/sections/HeapHangDoiUuTien.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/heap-hang-doi-uu-tien.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `ngan-xep-hang-doi` để đối chiếu ba kiểu hàng đợi; `bang-bam` cho câu `recall` và cho bài top-K; `sap-xep` để so heapsort.
@@ -1209,17 +1353,17 @@ Tiền tố id cho `h3` và ví dụ: `heap`.
 - `done`: `make test` xanh với tối thiểu bốn ca — thêm và lấy giữ đúng tính chất heap trên 10000 phép ngẫu nhiên, `build` cho ra heap hợp lệ, top K khớp với kết quả sắp toàn bộ, heap rỗng bị hỏi `top` thì báo lỗi rõ ràng chứ không đọc ngoài vùng; ba đường đo top K tách nhau đúng như dự đoán.
 - `traps`: sai công thức chỉ số cha `(i-1)/2` với `i = 0`; kéo xuống mà chỉ so với một con thay vì chọn con nhỏ hơn trong hai; lấy `pop` bằng cách xoá phần tử đầu mảng rồi dịch cả mảng, biến `O(log n)` thành `O(n)`; dùng heap lớn nhất `n` phần tử để tìm top K thay vì heap nhỏ nhất `K` phần tử, tốn bộ nhớ `O(n)` không cần thiết; đổi độ ưu tiên của một phần tử đang ở giữa heap mà không có bảng tra vị trí.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/heap-hang-doi-uu-tien.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/HeapHangDoiUuTien.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ phòng cấp cứu, hợp đồng và bảng các cách cài; tính chất heap và cây hoàn chỉnh; nhét cây vào mảng; đẩy lên, kéo xuống và dựng heap `O(n)`; ba ứng dụng và giới hạn.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `HeapHangDoiUuTien`, đặt sau `BangBam`.
+- [ ] **Step 3: Viết `src/content/heap-hang-doi-uu-tien.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ phòng cấp cứu, hợp đồng và bảng các cách cài; tính chất heap và cây hoàn chỉnh; nhét cây vào mảng; đẩy lên, kéo xuống và dựng heap `O(n)`; ba ứng dụng và giới hạn.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/HeapHangDoiUuTien.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Heap va hang doi uu tien"
 ```
 
@@ -1265,8 +1409,8 @@ Bài cuối Chương 3, nên Phần 7 có hai khối như Task 4.
 
 **Files:**
 - Create: `src/data/lessons/trie.js`
-- Create: `src/sections/Trie.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/trie.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `capstoneCuaChuong('tra-cuu')` từ Task 11; `bang-bam` để so sánh và cho câu `recall`.
@@ -1336,17 +1480,17 @@ import { capstoneCuaChuong } from '../data/capstones/index.js'
 const capstone = capstoneCuaChuong('tra-cuu')
 ```
 
-- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/sections/TongTienTo.vue` (bài cuối chương gần nhất), `src/data/lessons/bang-bam.js`, `src/data/capstones/tra-cuu.js`.
+- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/content/tong-tien-to.md` (bài cuối chương gần nhất), `src/data/lessons/bang-bam.js`, `src/data/capstones/tra-cuu.js`.
 - [ ] **Step 2: Viết `src/data/lessons/trie.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/Trie.vue`** theo mục B, Phần 7 dạng hai khối. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ hộc tủ và cấu tạo; chi phí tra cứu và sự thật về "trie nhanh hơn hash"; bảng so trie với bảng băm; tự động hoàn thành và xếp hạng; cái giá bộ nhớ và món quà thứ tự từ điển.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `Trie`, đặt sau `HeapHangDoiUuTien`.
+- [ ] **Step 3: Viết `src/content/trie.md`** theo mục B, Phần 7 dạng hai khối. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ hộc tủ và cấu tạo; chi phí tra cứu và sự thật về "trie nhanh hơn hash"; bảng so trie với bảng băm; tự động hoàn thành và xếp hạng; cái giá bộ nhớ và món quà thứ tự từ điển.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`. Luật "bài cuối chương hiển thị MVP" giờ ép cả ba chương 1, 2, 3.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H, cộng thêm: Chương 3 đủ 4 bài không còn nhãn "sắp có".
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/Trie.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Trie cay tien to, hien MVP Chuong 3"
 ```
 
@@ -1395,8 +1539,8 @@ Bài cuối Chương 4, nên Phần 7 có hai khối như Task 4.
 
 **Files:**
 - Create: `src/data/lessons/fenwick-segment-tree.js`
-- Create: `src/sections/FenwickSegmentTree.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/fenwick-segment-tree.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `capstoneCuaChuong('cay')` từ Task 13; `tong-tien-to` cho câu `recall` và cho toàn bộ phần đặt vấn đề; `cay-nhi-phan-bst` cho khái niệm cây và chiều cao.
@@ -1466,17 +1610,17 @@ import { capstoneCuaChuong } from '../data/capstones/index.js'
 const capstone = capstoneCuaChuong('cay')
 ```
 
-- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/sections/Trie.vue` (bài cuối chương gần nhất), `src/data/lessons/bang-bam.js`, `src/data/capstones/cay.js`, và `src/data/lessons/cay-nhi-phan-bst.js` để giữ thống nhất thuật ngữ về cây với hai bài cũ cùng chương.
+- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/content/trie.md` (bài cuối chương gần nhất), `src/data/lessons/bang-bam.js`, `src/data/capstones/cay.js`, và `src/data/lessons/cay-nhi-phan-bst.js` để giữ thống nhất thuật ngữ về cây với hai bài cũ cùng chương.
 - [ ] **Step 2: Viết `src/data/lessons/fenwick-segment-tree.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/FenwickSegmentTree.vue`** theo mục B, Phần 7 dạng hai khối. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ báo cáo theo tầng và bảng đặt vấn đề; segment tree; phép gộp tổng quát; Fenwick tree và `i & -i`; bảng chọn cấu trúc, kèm một câu về lazy propagation.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `FenwickSegmentTree`, đặt sau `BstNangCao`.
+- [ ] **Step 3: Viết `src/content/fenwick-segment-tree.md`** theo mục B, Phần 7 dạng hai khối. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ báo cáo theo tầng và bảng đặt vấn đề; segment tree; phép gộp tổng quát; Fenwick tree và `i & -i`; bảng chọn cấu trúc, kèm một câu về lazy propagation.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`. Luật "bài cuối chương hiển thị MVP" giờ ép bốn chương.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H, cộng thêm: Chương 4 đủ 3 bài không còn nhãn "sắp có".
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/FenwickSegmentTree.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Fenwick va Segment Tree, hien MVP Chuong 4"
 ```
 
@@ -1487,8 +1631,8 @@ git commit -m "content: bai Fenwick va Segment Tree, hien MVP Chuong 4"
 
 **Files:**
 - Create: `src/data/lessons/sap-xep-to-po.js`
-- Create: `src/sections/SapXepToPo.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/sap-xep-to-po.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `dfs-bfs` cho câu `recall` và cho cả hai thuật toán; `ngan-xep-hang-doi` cho hàng đợi của Kahn.
@@ -1543,17 +1687,17 @@ Tiền tố id cho `h3` và ví dụ: `topo`.
 - `done`: `make test` xanh với tối thiểu bốn ca — DAG thường, đồ thị có chu trình, đồ thị rỗng, đồ thị không có cạnh nào; kết quả luôn qua được hàm kiểm tính hợp lệ trên 100 DAG ngẫu nhiên; báo lỗi chu trình có kèm danh sách đỉnh chứ không chỉ một dòng chữ.
 - `traps`: quên đếm số đỉnh lấy ra nên chu trình đi qua lặng lẽ; đếm bậc vào sai khi đồ thị có cạnh lặp; test so kết quả với một thứ tự cố định rồi báo đỏ oan; dùng đệ quy DFS trên đồ thị 100000 đỉnh rồi tràn ngăn xếp; dựng danh sách kề bằng cách tìm tuyến tính mỗi lần thêm cạnh, biến bước dựng thành `O(V·E)`.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js`, `src/sections/BangBam.vue`, và `src/data/lessons/dfs-bfs.js` để giữ thống nhất thuật ngữ đồ thị với bài cũ cùng chương.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/sap-xep-to-po.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/SapXepToPo.vue`** theo mục B. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ mặc quần áo và DAG; Kahn bằng bậc vào; phát hiện chu trình; cách DFS ba màu và bảng so hai cách; thứ tự không duy nhất, và đường đi dài nhất trên DAG.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `SapXepToPo`, đặt sau `Dsu`.
+- [ ] **Step 3: Viết `src/content/sap-xep-to-po.md`** theo mục B. Sáu khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ mặc quần áo và DAG; Kahn bằng bậc vào; phát hiện chu trình; cách DFS ba màu và bảng so hai cách; thứ tự không duy nhất, và đường đi dài nhất trên DAG.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/SapXepToPo.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Sap xep to po"
 ```
 
@@ -1563,8 +1707,8 @@ git commit -m "content: bai Sap xep to po"
 
 **Files:**
 - Create: `src/data/lessons/duong-di-ngan-nhat.js`
-- Create: `src/sections/DuongDiNganNhat.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/duong-di-ngan-nhat.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `heap-hang-doi-uu-tien` cho câu `recall` và cho hàng đợi ưu tiên của Dijkstra; `dfs-bfs` để đối chiếu BFS với Dijkstra.
@@ -1620,17 +1764,17 @@ Tiền tố id cho `h3` và ví dụ: `ddnn`.
 - `done`: `make test` xanh với tối thiểu bốn ca — đường đi trên đồ thị nhỏ tính tay được, hai đỉnh không nối được nhau, đồ thị một đỉnh, và kết quả Dijkstra khớp Bellman-Ford trên 100 đồ thị ngẫu nhiên không có cạnh âm; tìm đường giữa hai điểm bất kỳ trên bản đồ một thành phố xong dưới một giây.
 - `traps`: dùng Dijkstra trên dữ liệu có trọng số âm mà không kiểm; quên bỏ qua bản ghi cũ khi cùng một đỉnh nằm nhiều lần trong hàng đợi; quên đường một chiều nên thêm cạnh cả hai hướng; dùng `int` cho tổng khoảng cách rồi tràn số trên bản đồ lớn; dựng danh sách kề bằng bảng băm tra cứu trong vòng lặp trong cùng, làm hằng số phình lên; đo mà tính cả thời gian đọc và dựng đồ thị vào thời gian tìm đường.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js`, `src/sections/BangBam.vue`, và `src/data/lessons/dfs-bfs.js`.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/duong-di-ngan-nhat.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/DuongDiNganNhat.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ chỉ đường và vì sao BFS không đủ; Dijkstra và lập luận đúng đắn; vai trò của heap; Bellman-Ford và chu trình âm; Floyd-Warshall và bảng chọn thuật toán.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `DuongDiNganNhat`, đặt sau `SapXepToPo`.
+- [ ] **Step 3: Viết `src/content/duong-di-ngan-nhat.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ chỉ đường và vì sao BFS không đủ; Dijkstra và lập luận đúng đắn; vai trò của heap; Bellman-Ford và chu trình âm; Floyd-Warshall và bảng chọn thuật toán.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/DuongDiNganNhat.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Duong di ngan nhat co trong so"
 ```
 
@@ -1675,8 +1819,8 @@ Bài cuối Chương 5, nên Phần 7 có hai khối như Task 4.
 
 **Files:**
 - Create: `src/data/lessons/cay-khung-nho-nhat.js`
-- Create: `src/sections/CayKhungNhoNhat.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/cay-khung-nho-nhat.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `capstoneCuaChuong('do-thi')` từ Task 17; `dsu` cho câu `recall` và cho Kruskal; `heap-hang-doi-uu-tien` cho Prim; `sap-xep` để sắp cạnh.
@@ -1745,17 +1889,17 @@ import { capstoneCuaChuong } from '../data/capstones/index.js'
 const capstone = capstoneCuaChuong('do-thi')
 ```
 
-- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/sections/FenwickSegmentTree.vue` (bài cuối chương gần nhất), `src/data/lessons/dsu.js` để giữ thống nhất thuật ngữ DSU, và `src/data/capstones/do-thi.js`.
+- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/content/fenwick-segment-tree.md` (bài cuối chương gần nhất), `src/data/lessons/dsu.js` để giữ thống nhất thuật ngữ DSU, và `src/data/capstones/do-thi.js`.
 - [ ] **Step 2: Viết `src/data/lessons/cay-khung-nho-nhat.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/CayKhungNhoNhat.vue`** theo mục B, Phần 7 dạng hai khối. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ kéo cáp và định nghĩa cây khung; khác biệt với đường đi ngắn nhất; tính chất cắt; Kruskal với DSU; Prim với heap, bảng chọn và ứng dụng thật.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `CayKhungNhoNhat`, đặt sau `DuongDiNganNhat`.
+- [ ] **Step 3: Viết `src/content/cay-khung-nho-nhat.md`** theo mục B, Phần 7 dạng hai khối. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ kéo cáp và định nghĩa cây khung; khác biệt với đường đi ngắn nhất; tính chất cắt; Kruskal với DSU; Prim với heap, bảng chọn và ứng dụng thật.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`. Luật "bài cuối chương hiển thị MVP" giờ ép năm chương.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H, cộng thêm: Chương 5 đủ 5 bài không còn nhãn "sắp có".
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/CayKhungNhoNhat.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Cay khung nho nhat, hien MVP Chuong 5"
 ```
 
@@ -1842,8 +1986,8 @@ git commit -m "content: MVP Chuong 6 xep lich va toi uu ngan sach"
 
 **Files:**
 - Create: `src/data/lessons/thao-tac-bit.js`
-- Create: `src/sections/ThaoTacBit.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/thao-tac-bit.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `fenwick-segment-tree` cho câu `recall` — mẹo `i & -i` đã xuất hiện ở đó và bài này mổ kỹ; `to-hop` cho phần liệt kê tập con.
@@ -1901,17 +2045,17 @@ Tiền tố id cho `h3` và ví dụ: `bit`.
 - `done`: `make test` xanh với tối thiểu bốn ca — đặt và đọc đúng ở bit đầu, bit cuối và bit ở biên giữa hai ô `uint64_t`; đếm bit 1 khớp giữa hai cách cài trên 10000 số ngẫu nhiên; phép AND đúng khi số bit không chia hết cho 64; `Bitset` chiếm đúng khoảng một phần tám bộ nhớ của mảng `bool` cùng kích thước.
 - `traps`: dịch `1 << k` với `k` từ 32 trở lên trên kiểu 32 bit, hành vi không xác định — phải viết `1ULL << k`; quên các bit thừa ở ô cuối khi số bit không chia hết cho 64, làm phép đếm sai; dịch phải số có dấu; nhầm thứ tự bit giữa lúc ghi và lúc đọc; dùng `x & (x - 1)` để đếm rồi làm hỏng chính biến `x` mà quên sao lưu; ưu tiên phép toán trong C++ khiến `x & 1 == 0` không có nghĩa như bạn tưởng, phải đóng ngoặc.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/thao-tac-bit.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/ThaoTacBit.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ bảng công tắc và sáu phép cơ bản; thao tác một bit cụ thể; mặt nạ bit cho tập con; hai mẹo và số âm bù hai; XOR và bitset trong thực tế.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `ThaoTacBit`, đặt sau `QhdLisLcsDoixung`.
+- [ ] **Step 3: Viết `src/content/thao-tac-bit.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ bảng công tắc và sáu phép cơ bản; thao tác một bit cụ thể; mặt nạ bit cho tập con; hai mẹo và số âm bù hai; XOR và bitset trong thực tế.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/ThaoTacBit.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Thao tac bit"
 ```
 
@@ -1921,8 +2065,8 @@ git commit -m "content: bai Thao tac bit"
 
 **Files:**
 - Create: `src/data/lessons/toan-so-hoc.js`
-- Create: `src/sections/ToanSoHoc.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/toan-so-hoc.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `de-quy` cho câu `recall` và cho luỹ thừa nhanh; `thao-tac-bit` cho phần dùng bitset trong sàng.
@@ -1979,17 +2123,17 @@ Tiền tố id cho `h3` và ví dụ: `sh`.
 - `done`: `make test` xanh với tối thiểu bốn ca — `gcd` đúng trên các ca biên, phép chia modulo thoả `(a / b) * b = a` trên 10000 cặp ngẫu nhiên, sàng cho ra đúng 5761455 số nguyên tố dưới `10⁸`, và mọi phép nhân modulo không tràn với `m` cỡ `10⁹`; sàng `n = 10⁸` chạy dưới vài giây và tốn khoảng 12 MB chứ không phải 100 MB.
 - `traps`: nhân hai số cỡ `10⁹` trên `int`, tràn ngay; phép trừ modulo ra số âm rồi dùng thẳng làm chỉ số mảng; tính nghịch đảo theo Fermat với `m` không nguyên tố, ra kết quả sai mà không báo gì; `lcm` nhân trước chia sau nên tràn; sàng bắt đầu đánh dấu từ `2p` thay vì `p*p`, chậm hơn mà không sai nên rất khó nhận ra; dùng `pow` của thư viện chuẩn cho số nguyên rồi mất chính xác vì nó tính trên số thực.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/toan-so-hoc.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/ToanSoHoc.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ mặt đồng hồ và số học modulo; Euclid và bội chung nhỏ nhất; nghịch đảo modulo; luỹ thừa nhanh; sàng, phân tích thừa số và cảnh báo tràn số.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `ToanSoHoc`, đặt sau `ThaoTacBit`.
+- [ ] **Step 3: Viết `src/content/toan-so-hoc.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ mặt đồng hồ và số học modulo; Euclid và bội chung nhỏ nhất; nghịch đảo modulo; luỹ thừa nhanh; sàng, phân tích thừa số và cảnh báo tràn số.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/ToanSoHoc.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Toan va so hoc"
 ```
 
@@ -1998,8 +2142,8 @@ git commit -m "content: bai Toan va so hoc"
 
 **Files:**
 - Create: `src/data/lessons/chuoi-nang-cao.js`
-- Create: `src/sections/ChuoiNangCao.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/chuoi-nang-cao.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `bang-bam` cho câu `recall` và cho phần va chạm hash; `toan-so-hoc` cho hash đa thức modulo; `hai-con-tro-cua-so-truot` cho rolling hash.
@@ -2056,17 +2200,17 @@ Tiền tố id cho `h3` và ví dụ: `chuoi`.
 - `done`: `make test` xanh với tối thiểu bốn ca — KMP và Rabin-Karp cho cùng tập vị trí trên 1000 cặp chuỗi ngẫu nhiên, mẫu rỗng và mẫu dài hơn văn bản được xử lý rõ ràng, truy vấn so hai đoạn khớp với so từng ký tự trên 10000 truy vấn ngẫu nhiên; số va chạm giả với hai modulo lớn bằng 0 trên toàn bộ dữ liệu thử; so khớp trên văn bản một triệu ký tự xong dưới một giây.
 - `traps`: tràn số khi nhân trong hash mà không dùng `long long`; chọn modulo nhỏ rồi va chạm liên tục; dùng cơ số cố định công khai, khiến dữ liệu cố ý gây va chạm dựng được dễ dàng; quên so lại chuỗi thật khi hash trùng rồi báo khớp nhầm; dựng mảng tiền tố KMP sai ở vị trí 0 làm lệch toàn bộ; so hai đoạn bằng hash tiền tố mà quên nhân bù luỹ thừa cho chênh lệch vị trí.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/data/lessons/bang-bam.js` và `src/sections/BangBam.vue` trọn vẹn.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/chuoi-nang-cao.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/ChuoiNangCao.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ tìm câu trong sách và so khớp ngây thơ; KMP với mảng tiền tố; vì sao KMP tuyến tính; hash chuỗi và rolling hash; va chạm, xác suất sai, và bảng chọn thuật toán.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `ChuoiNangCao`, đặt sau `ToanSoHoc`.
+- [ ] **Step 3: Viết `src/content/chuoi-nang-cao.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ tìm câu trong sách và so khớp ngây thơ; KMP với mảng tiền tố; vì sao KMP tuyến tính; hash chuỗi và rolling hash; va chạm, xác suất sai, và bảng chọn thuật toán.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/ChuoiNangCao.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Chuoi nang cao KMP va hash chuoi"
 ```
 
@@ -2074,12 +2218,12 @@ git commit -m "content: bai Chuoi nang cao KMP va hash chuoi"
 
 ## Task 23: Bài `work-span` — Work/Span và tư duy song song
 
-Đây là bài dị biệt: toàn khái niệm, không có cấu trúc dữ liệu nào để cài. Bài mẫu gần nhất là `do-phuc-tap`, không phải `bang-bam` — đọc `src/sections/DoPhucTap.vue` trước.
+Đây là bài dị biệt: toàn khái niệm, không có cấu trúc dữ liệu nào để cài. Bài mẫu gần nhất là `do-phuc-tap`, không phải `bang-bam` — đọc `src/content/do-phuc-tap.md` trước.
 
 **Files:**
 - Create: `src/data/lessons/work-span.js`
-- Create: `src/sections/WorkSpan.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/work-span.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `sap-xep` cho câu `recall` và cho ví dụ merge sort song song; `de-quy` cho chia để trị; `tong-tien-to` cho phép quét song song.
@@ -2136,17 +2280,17 @@ Tiền tố id cho `h3` và ví dụ: `ws`.
 - `done`: `make test` xanh với tối thiểu ba ca — quét song song cho cùng kết quả với quét tuần tự trên 1000 lần chạy, reduce song song đúng với phép cộng và phép `max`, và không có tranh chấp dữ liệu khi chạy dưới công cụ phát hiện tranh chấp nếu máy có; đường tăng tốc theo `p` được vẽ ra và có điểm bão hoà nhìn thấy được; con số phần tuần tự ước lượng được từ đo đạc nằm cùng cỡ với con số bạn tính bằng tay.
 - `traps`: nhiều luồng cùng ghi vào một biến tích luỹ mà không tách bản riêng cho từng luồng; tạo một luồng cho mỗi phần tử, chi phí tạo luồng nuốt hết lợi ích; không có ngưỡng cắt về tuần tự nên đệ quy song song sinh ra hàng nghìn luồng; đo tăng tốc trên máy đang chạy việc khác nên số liệu vô nghĩa; kết luận "song song không có tác dụng" trong khi thật ra span của thuật toán đang là nút thắt; quên rằng thứ tự thực thi không xác định nên kết quả phép cộng số thực có thể khác nhau giữa các lần chạy.
 
-- [ ] **Step 1: Đọc bài mẫu** — `src/sections/DoPhucTap.vue` và `src/data/lessons/do-phuc-tap.js` trọn vẹn. Đây là bài dị biệt toàn khái niệm giống bài này; lấy nó làm mốc cách trình bày, và lấy `bang-bam` làm mốc độ dài.
+- [ ] **Step 1: Đọc bài mẫu** — `src/content/bang-bam.md` trọn vẹn, lấy làm mốc độ dài, giọng văn và cách dùng bốn chỉ thị. KHÔNG đọc file nào khác.
 - [ ] **Step 2: Viết `src/data/lessons/work-span.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/WorkSpan.vue`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ bếp nhiều đầu bếp và hai đại lượng; luật Brent; luật Amdahl; chia để trị, reduce và scan; cái giá của song song.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `WorkSpan`, đặt sau `ChuoiNangCao`.
+- [ ] **Step 3: Viết `src/content/work-span.md`** theo mục B. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ bếp nhiều đầu bếp và hai đại lượng; luật Brent; luật Amdahl; chia để trị, reduce và scan; cái giá của song song.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`, PASS toàn bộ.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/WorkSpan.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Work Span va tu duy song song"
 ```
 
@@ -2191,8 +2335,8 @@ Bài cuối Chương 7 và cũng là bài cuối cùng của cả chương trìn
 
 **Files:**
 - Create: `src/data/lessons/do-kho-bai-toan.js`
-- Create: `src/sections/DoKhoBaiToan.vue`
-- Modify: `src/data/lessons/index.js`, `src/App.vue`, `src/lesson/parts.js`
+- Create: `src/content/do-kho-bai-toan.md`
+- Modify: `src/lesson/parts.js` (chỉ dòng cờ của bài này)
 
 **Interfaces:**
 - Consumes: khung ở mục "Khuôn chuẩn viết một bài"; `capstoneCuaChuong('chuyen-de')` từ Task 24; `qhd-lis-lcs-doixung` cho câu `recall` — knapsack; `quay-lui-xau-nhi-phan` cho phần quay lui có cắt tỉa; `tham-lam` cho phần thuật toán xấp xỉ.
@@ -2263,17 +2407,17 @@ import { capstoneCuaChuong } from '../data/capstones/index.js'
 const capstone = capstoneCuaChuong('chuyen-de')
 ```
 
-- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/sections/DoPhucTap.vue` (bài dị biệt cùng dạng), `src/sections/CayKhungNhoNhat.vue` (bài cuối chương gần nhất), `src/data/capstones/chuyen-de.js`.
+- [ ] **Step 1: Đọc bài mẫu và dữ liệu MVP** — `src/content/do-phuc-tap.md` (bài dị biệt cùng dạng), `src/content/cay-khung-nho-nhat.md` (bài cuối chương gần nhất), `src/data/capstones/chuyen-de.js`.
 - [ ] **Step 2: Viết `src/data/lessons/do-kho-bai-toan.js`** theo mục A của khuôn chuẩn.
-- [ ] **Step 3: Viết `src/sections/DoKhoBaiToan.vue`** theo mục B, Phần 7 dạng hai khối. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ hai loại khó, P và NP; quy dẫn; NP-đầy đủ và câu hỏi P–NP; nghịch lý knapsack và giả đa thức; bốn cách sống chung, và tỉ số xấp xỉ.
-- [ ] **Step 4: Khai báo và bật cờ** theo mục C, D, E. Component `DoKhoBaiToan`, đặt sau `WorkSpan`, là thẻ section cuối cùng trong `.content-main`.
+- [ ] **Step 3: Viết `src/content/do-kho-bai-toan.md`** theo mục B, Phần 7 dạng hai khối. Bảy khái niệm gom thành 5 tiêu đề `h3`: ẩn dụ hai loại khó, P và NP; quy dẫn; NP-đầy đủ và câu hỏi P–NP; nghịch lý knapsack và giả đa thức; bốn cách sống chung, và tỉ số xấp xỉ.
+- [ ] **Step 4: Bật cờ `ready` và `duAn`** theo mục E. Không sửa `src/App.vue`.
 - [ ] **Step 5: Chạy test** — `npm run test -- --run`. Luật "bài cuối chương hiển thị MVP" giờ ép sáu chương; Chương 6 vẫn nằm ngoài, đúng như Task 19 đã ghi.
 - [ ] **Step 6: Chạy build** — `npm run build`, không cảnh báo mới.
 - [ ] **Step 7: Kiểm chứng bằng mắt** theo mục H, cộng thêm: **toàn bộ sidebar không còn một nhãn "sắp có" nào** — 30 bài đều bấm được. Cuộn hết Chương 7 để chắc chắn không bài nào lỗi hiển thị.
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/data/lessons src/sections/DoKhoBaiToan.vue src/App.vue src/lesson/parts.js
+git add src/data/lessons src/content src/lesson/parts.js
 git commit -m "content: bai Do kho bai toan, hien MVP Chuong 7"
 ```
 
@@ -2298,12 +2442,13 @@ npm run build
 grep -c " ready: true" src/lesson/parts.js
 grep -c "duAn: true" src/lesson/parts.js
 grep -c "capstoneReady: true" src/lesson/parts.js
+ls src/content/*.md | wc -l
 ls src/sections/*.vue | wc -l
 ls src/data/lessons/*.js | wc -l
 ls src/data/capstones/*.js | wc -l
 ```
 
-Expected: test và build xanh; `ready: true` đếm được 30; `duAn: true` đếm được 20 (18 bài mới cộng `do-phuc-tap` và `bang-bam`); `capstoneReady: true` đếm được 6 (Chương 6 chưa bật, đúng như Task 19); `src/sections` có 31 file (30 bài cộng `TrangChu.vue`); `src/data/lessons` có 31 file (30 bài cộng `index.js`); `src/data/capstones` có 8 file (7 MVP cộng `index.js`).
+Expected: test và build xanh; `ready: true` đếm được 30; `duAn: true` đếm được 20 (18 bài mới cộng `do-phuc-tap` và `bang-bam`); `capstoneReady: true` đếm được 6 (Chương 6 chưa bật, đúng như Task 19); `src/content` có 30 file `.md`; `src/sections` chỉ còn **1** file là `TrangChu.vue` (trang giới thiệu, không phải bài học); `src/data/lessons` có 31 file (30 bài cộng `index.js`); `src/data/capstones` có 8 file (7 MVP cộng `index.js`).
 
 Con số nào lệch thì tìm ra bài bị bỏ sót và làm nốt trước khi đi tiếp. Đừng sửa con số kỳ vọng cho khớp thực tế.
 
@@ -2360,14 +2505,20 @@ những thứ đó. Số liệu đo ngày 2026-08-11 bằng cách render thật 
 | Tổng độ dài `note` LeetCode | 737–938 ký tự | 289–390 ký tự | Bài cũ ghi chú ngắn hơn ~2,5 lần |
 | Phần 4 Ví dụ điển hình | 5.100–12.300 ký tự | 5.100–12.300 ký tự | **Đã đồng đều, không bài nào rỗng** |
 
+**Điều kiện tiên quyết: Giai đoạn 2.5 đã xong.** Sau khi 13 bài này chuyển sang Markdown,
+`LessonRenderer.vue` **tự dựng Phần 7** cho mọi bài có `data.project`. Nghĩa là giai đoạn
+này trở thành **việc thuần dữ liệu**: không đụng vào file trình bày của bài nào. Đây là lý
+do phải chạy 2.5 trước 4 chứ không phải ngược lại — làm ngược thì mỗi bài phải sửa `.vue`
+một lần rồi bị script chuyển đổi ghi đè lên ngay sau đó.
+
 Việc phải làm, mỗi bài một task, mỗi task một commit:
 
 - [ ] Viết `project` đủ 6 trường cho từng bài, theo đúng khuôn ở mục "Khuôn chuẩn viết
       một bài" phía trên và đặc tả MVP nếu bài đó là bài cuối chương.
 - [ ] Thêm tối thiểu 1 câu quiz `recall: true` hỏi về **bài đã học trước đó**, không
       phải hỏi lại chính bài đang đọc (trừ bài đầu khoá).
-- [ ] Thêm `<LessonPart part="du-an">` + `<ProjectBrief>` vào section.
-- [ ] Bật `duAn: true` trong `CHAPTERS`.
+- [ ] Bật `duAn: true` trong `CHAPTERS`. Không phải sửa file trình bày — Phần 7 hiện ra
+      ngay khi `project` có mặt.
 - [ ] Riêng `qhd-lis-lcs-doixung`: bật `capstoneReady: true` cho Chương 6 và gắn MVP
       Chương 6 vào Phần 7 của bài này.
 - [ ] Nâng `quay-lui-xau-nhi-phan` từ 3 lên 5 câu quiz, và dày thêm `note` LeetCode
@@ -2384,8 +2535,12 @@ Việc phải làm, mỗi bài một task, mỗi task một commit:
       quán ("O lớn (Big O)" là mẫu đã chốt ngày 2026-08-11).
 - [ ] **Kiểm chứng giao diện bằng mắt qua `npm run dev`** — món nợ tồn từ nhiều phiên,
       test và build xanh không chứng minh được layout.
-- [ ] Dọn cảnh báo `<tr> cannot be child of <table>` còn sót ở các section (bọc `<tbody>`),
-      hiện chỉ là cảnh báo build chứ chưa gây lỗi hiển thị.
+- [ ] Kiểm lại cảnh báo `<tr> cannot be child of <table>`: bảng Markdown sinh ra
+      `<thead>`/`<tbody>` đúng chuẩn, nên Giai đoạn 2.5 lẽ ra đã dọn sạch cảnh báo này.
+      Nếu còn thì tìm chỗ còn viết `<table>` thô trong file `.md`.
+- [ ] Sửa lỗi có sẵn ở `src/style.css`: một comment mở bằng `\*` thay vì `/*` làm luật
+      `.widget { overflow-x: auto; }` ngay dưới nó bị nuốt, nên widget không cuộn ngang
+      được ở màn hẹp. Sửa một ký tự, nhưng đổi hành vi layout nên phải nhìn bằng mắt.
 - [ ] Viết lại README.
 
 ---

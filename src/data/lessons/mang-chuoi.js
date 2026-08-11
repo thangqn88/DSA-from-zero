@@ -95,6 +95,30 @@ export default {
     title: 'Thư viện mảng động và chuỗi tự cài, phần đầu của core',
     why: 'Đây chính là hai module đầu tiên của thư viện core mà MVP Chương 1 lắp ráp, và cả sáu chương sau đều liên kết vào nó — bảng băm cần Vec để làm mảng các ngăn, cây và đồ thị cần Vec để làm mảng kề. Vì vậy phải viết thành header dùng lại được, khai báo trong .h và định nghĩa trong .cpp riêng, chứ không được nhét thẳng vào hàm main của một bài tập.',
     input: 'Một file .txt bất kỳ để thử Str::split, ví dụ một quyển sách tải từ Project Gutenberg tại https://www.gutenberg.org.',
+    needs: [
+      'Ba thứ ở phần Lý thuyết bài này: cách mảng động cấp phát, vì sao phải nhân đôi sức chứa, và vì sao push_back là O(1) khấu trừ.',
+      'C++ con trỏ mức cơ bản: new[], delete[], và chuyện copy con trỏ khác hẳn copy nội dung.',
+      'Template mức vỡ lòng: một dòng template<typename T> là đủ, chưa cần gì sâu hơn.',
+      'Tách khai báo ra .h và định nghĩa ra .cpp — vì đây là thư viện dùng lại, không phải một file bài tập.',
+      'Công cụ đo bạn đã viết ở bài Độ phức tạp thuật toán. Chưa làm bài đó thì làm trước, dự án này dùng lại nó ở yêu cầu cuối.',
+    ],
+    output: 'Một thư mục core/ có Vec.h, Str.h và một chương trình thử. Chương trình in bảng so sánh hai chiến lược nở mảng — nhân đôi và cộng thêm 10 — trên cùng một triệu lần push_back.',
+    outputSample: `$ ./demo_vec
+n = 1000000
+
+chien luoc      | tong ms | ms moi push_back
+nhan doi (x2)   |    8.42 |       0.0000084
+cong them 10    | 2140.51 |       0.0021405
+
+=> nhan doi nhanh hon 254 lan`,
+    start: [
+      'Viết Vec<int> trước, chưa dùng template. Đúng ba thứ: con trỏ mảng, size, capacity. push_back chưa cần biết nở, cứ cho capacity cố định 100 đã.',
+      'Thêm phần nở: khi size chạm capacity thì cấp mảng mới gấp đôi, copy sang, xoá mảng cũ. Chạy push_back 100 lần và in capacity sau mỗi lần — nhìn nó nhảy 1, 2, 4, 8, 16.',
+      'Đổi Vec<int> thành Vec<T>: thêm một dòng template<typename T>, thay int bằng T. Chỉ vậy thôi.',
+      'Viết ba ca kiểm bằng assert ngay trong main. Chưa cần framework test nào cả.',
+      'Viết Str trên nền Vec<char>. Làm to_lower trước vì nó dễ nhất, rồi trim, rồi split.',
+      'Cuối cùng mới đo: cài thêm một bản Vec nở kiểu cộng thêm 10, rồi đo cả hai bằng công cụ ở bài trước.',
+    ],
     must: [
       'Cài Vec<T> với push_back, operator[], size, capacity, tự nhân đôi sức chứa khi đầy.',
       'Cài Str trên nền Vec<char>, có split theo dấu phân cách, trim bỏ khoảng trắng hai đầu, to_lower chuyển chữ thường.',
@@ -102,8 +126,30 @@ export default {
       'Đo bằng công cụ đo bạn đã viết ở bài Độ phức tạp thuật toán: so thời gian bình quân mỗi push_back của chiến lược nhân đôi với chiến lược cộng thêm 10, rồi tự giải thích chênh lệch đó bằng đúng ngôn ngữ khấu trừ đã học trong bài này.',
     ],
     done: [
-      'make test xanh với tối thiểu ba ca kiểm thử.',
-      'Đường thời gian bình quân mỗi push_back của bản nhân đôi nằm ngang khi n tăng từ 1000 lên 1000000, còn bản cộng thêm 10 thì dốc lên rõ rệt.',
+      {
+        dat: 'Vec nở đúng cấp nhân, không phải cấp cộng.',
+        kiem: 'push_back 100 lần, in capacity sau mỗi lần: dãy phải là 1, 2, 4, 8, 16, 32, 64, 128 — không có giá trị nào khác xen vào.',
+      },
+      {
+        dat: 'Không rò rỉ bộ nhớ khi nở và khi huỷ.',
+        kiem: 'valgrind ./demo_vec hoặc biên dịch với -fsanitize=address — báo 0 byte rò rỉ sau một triệu lần push_back.',
+      },
+      {
+        dat: 'Copy một Vec ra Vec khác là copy nội dung, không phải copy con trỏ.',
+        kiem: 'Tạo a, push vài phần tử, gán Vec b = a, sửa b[0], in a[0] — a[0] phải không đổi. Rồi để cả hai bị huỷ mà chương trình không sập.',
+      },
+      {
+        dat: 'Str làm đúng ba việc trên dữ liệu thật.',
+        kiem: 'Chạy split trên một dòng có nhiều khoảng trắng liền nhau, trim trên chuỗi có tab hai đầu, to_lower trên chuỗi có sẵn chữ hoa lẫn chữ thường. In kết quả và đối chiếu bằng mắt.',
+      },
+      {
+        dat: 'Ba ca kiểm tự động đều xanh.',
+        kiem: 'make test — in 3/3 ca xanh, trong đó có ca kiểm capacity chỉ tăng khi size chạm capacity.',
+      },
+      {
+        dat: 'Đo được và nhìn thấy khác biệt giữa hai chiến lược nở.',
+        kiem: 'Chạy demo_vec với n = 1000000: cột ms mỗi push_back của bản nhân đôi gần như không đổi khi n tăng, còn bản cộng thêm 10 chậm hơn ít nhất 100 lần ở n lớn nhất.',
+      },
     ],
     traps: [
       'Quên giải phóng mảng cũ sau khi copy sang mảng mới, gây rò rỉ bộ nhớ mỗi lần nở.',

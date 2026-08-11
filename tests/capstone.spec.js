@@ -36,9 +36,29 @@ describe('capstone', () => {
       if (cap.data.url !== undefined) expect(cap.data.url).toMatch(/^https:\/\//)
     })
 
-    it('có tối thiểu 3 yêu cầu bắt buộc và 2 tiêu chí xong', () => {
+    it('có tối thiểu 3 yêu cầu bắt buộc và 4 tiêu chí nghiệm thu', () => {
       expect(cap.must.length).toBeGreaterThanOrEqual(3)
-      expect(cap.done.length).toBeGreaterThanOrEqual(2)
+      // MVP cuối chương lắp nhiều module lại, nên cần nhiều tiêu chí hơn một dự
+      // án của bài lẻ — mỗi module phải có ít nhất một chỗ để chấm.
+      expect(cap.done.length).toBeGreaterThanOrEqual(4)
+    })
+
+    it('mỗi tiêu chí nghiệm thu đều kèm cách kiểm cụ thể', () => {
+      for (const [i, d] of cap.done.entries()) {
+        expect(d, `AC${i + 1} còn là chuỗi, chưa tách thành { dat, kiem }`).toBeTypeOf('object')
+        expect(typeof d.dat).toBe('string')
+        expect(typeof d.kiem, `AC${i + 1} thiếu cách kiểm`).toBe('string')
+        expect(d.kiem.length).toBeGreaterThan(25)
+      }
+    })
+
+    it('trả lời được "cần biết trước", "đầu ra là gì", "bắt đầu từ đâu"', () => {
+      expect(Array.isArray(cap.needs)).toBe(true)
+      expect(cap.needs.length).toBeGreaterThanOrEqual(3)
+      expect(typeof cap.output).toBe('string')
+      expect(cap.output.length).toBeGreaterThan(40)
+      expect(Array.isArray(cap.start)).toBe(true)
+      expect(cap.start.length).toBeGreaterThanOrEqual(4)
     })
 
     it('uses chỉ trỏ tới sid có thật', () => {

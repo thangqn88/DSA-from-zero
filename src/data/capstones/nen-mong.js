@@ -3,6 +3,32 @@ export default {
   title: 'core + bench — thư viện nền và công cụ đo hiệu năng',
   why: 'Mọi nhóm kỹ thuật nghiêm túc đều có một bộ đo hiệu năng riêng trước khi tối ưu bất cứ thứ gì — Google Benchmark, hyperfine, perf đều làm việc này. Không có nó, mọi câu "tôi nghĩ cách này nhanh hơn" chỉ là cảm giác. Đây cũng là công cụ bạn dùng lại suốt sáu chương còn lại, nên nó phải đúng ngay từ đầu.',
   input: 'Không đọc dữ liệu ngoài. bench nhận tham số dòng lệnh: tên phép đo, dãy kích thước n, số lần lặp mỗi kích thước. Kết quả xuất ra CSV hai cột n,ms.',
+  needs: [
+    'Trọn Chương 1: O lớn (Big O) và mô hình chi phí, mảng động, đệ quy và hệ thức truy hồi, danh sách liên kết.',
+    'Bốn dự án nhỏ của bốn bài trong chương. MVP này không viết lại từ đầu — nó lắp bốn mảnh đó thành một thư viện có Makefile.',
+    'C++: template, con trỏ, new/delete, std::chrono, đọc ghi file bằng fstream.',
+    'Makefile mức tối thiểu, hai đích: all và test.',
+  ],
+  output: 'Một thư viện core/ và một công cụ bench/ chạy được bằng một lệnh, cộng chương trình demo_growth vẽ ba đường O(n), O(n log n), O(n²) lên cùng một biểu đồ.',
+  outputSample: `$ make test
+7/7 ca xanh
+
+$ ./demo_growth 1000,10000,100000,1000000
+
+       n | O(n) ms | O(n log n) ms | O(n^2) ms
+    1000 |   0.004 |         0.021 |     0.812
+   10000 |   0.041 |         0.258 |    81.400
+  100000 |   0.402 |         3.115 |  8140.20
+ 1000000 |   4.015 |        38.902 |  (bo qua)
+
+O(n^2) tach han khoi hai duong kia tu n = 10000`,
+  start: [
+    'Gom bốn dự án nhỏ đã làm vào một thư mục core/. Chưa sửa gì cả, chỉ xếp file cho đúng chỗ và viết Makefile để chúng biên dịch được cùng nhau.',
+    'Chạy make test với đúng những ca kiểm bạn đã viết ở bốn bài trước. Xanh hết rồi mới đi tiếp.',
+    'Tách bench ra thành module riêng: bench::run trước, bench::plot sau, bench::ghi_csv cuối.',
+    'Viết demo_growth với ba hàm cố ý khác bậc. Hàm O(n) là cộng tổng, O(n log n) là sort, O(n²) là hai vòng lồng nhau.',
+    'Chạy demo_growth với n tăng dần cho tới khi đường O(n²) tách hẳn ra. Đó là lúc MVP này coi như xong phần chính.',
+  ],
   must: [
     'core::Vec<T> — mảng động tự cài, có push_back, operator[], size, capacity, nhân đôi sức chứa khi đầy. Không dùng std::vector bên trong.',
     'core::Str — chuỗi tự cài trên nền core::Vec<char>, có split, trim, to_lower.',
@@ -13,9 +39,34 @@ export default {
     'Chương trình mẫu demo_growth đo ba hàm cố ý có độ phức tạp khác nhau — O(n), O(n log n), O(n²) — rồi vẽ cả ba lên cùng một biểu đồ để nhìn thấy hình dạng khác nhau của chúng.',
   ],
   done: [
-    'make test xanh, tối thiểu ba ca: Vec nhân đôi sức chứa đúng lúc; List xoá phần tử giữa không rò rỉ; bench::run trả đúng số điểm đo.',
-    'Chạy demo_growth và nhìn thấy đường O(n²) tách hẳn khỏi hai đường kia từ n khoảng vài chục nghìn.',
-    'Đo core::Vec::push_back một triệu lần, thời gian trung bình mỗi lần gần như không đổi khi n tăng — chính là phân tích khấu trừ nhìn bằng mắt.',
+    {
+      dat: 'Cả thư viện biên dịch và kiểm được bằng một lệnh duy nhất.',
+      kiem: 'make test từ thư mục gốc — biên dịch core lẫn bench rồi in số ca xanh, tối thiểu 7/7.',
+    },
+    {
+      dat: 'Ba module của core đều có ca kiểm riêng và đều xanh.',
+      kiem: 'Trong kết quả make test có đủ ba dòng: Vec nhân đôi sức chứa đúng lúc, List xoá nút giữa không rò rỉ, Str split đúng trên chuỗi nhiều khoảng trắng liền nhau.',
+    },
+    {
+      dat: 'bench::run trả về đúng số điểm đo và lấy trung vị, không lấy trung bình.',
+      kiem: 'Gọi bench::run với 4 giá trị n và 5 lần lặp: trả về đúng 4 điểm. Truyền vào một dãy có một giá trị dị thường rất lớn, kết quả gần như không đổi.',
+    },
+    {
+      dat: 'demo_growth cho thấy ba bậc tách nhau.',
+      kiem: './demo_growth 1000,10000,100000 — tại n = 100000, thời gian O(n²) lớn hơn O(n) ít nhất 100 lần, và biểu đồ ASCII cho thấy điều đó bằng mắt.',
+    },
+    {
+      dat: 'push_back là O(1) khấu trừ, nhìn thấy được chứ không phải tin lời sách.',
+      kiem: 'Đo push_back một triệu lần: cột thời gian bình quân mỗi lần gần như nằm ngang khi n tăng. Đó chính là phân tích khấu trừ hiện thành một đường thẳng.',
+    },
+    {
+      dat: 'Không rò rỉ bộ nhớ ở bất kỳ module nào.',
+      kiem: 'Chạy toàn bộ test dưới -fsanitize=address — báo 0 byte rò rỉ.',
+    },
+    {
+      dat: 'Kết quả lưu lại và so lại được giữa hai lần chạy.',
+      kiem: 'Chạy bench hai lần, ghi ra hai file CSV, đọc lại cả hai bằng bench::doc_csv và in bảng so sánh. Số dòng và cột n phải khớp nhau.',
+    },
   ],
   traps: [
     'Lấy trung bình thay vì trung vị: một lần hệ điều hành chen ngang là hỏng cả phép đo.',

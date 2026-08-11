@@ -78,11 +78,18 @@
             :active="activeSection === 'quay-lui-xau-nhi-phan'"
           />
           <ToHop :active="activeSection === 'to-hop'" />
-          <ThamLam :active="activeSection === 'tham-lam'" />
           <QhdNenTang :active="activeSection === 'qhd-nen-tang'" />
           <QhdLisLcsDoixung :active="activeSection === 'qhd-lis-lcs-doixung'" />
           <NganXepHangDoi :active="activeSection === 'ngan-xep-hang-doi'" />
-          <BangBam :active="activeSection === 'bang-bam'" />
+          <!-- Bài viết bằng Markdown: một component chung dựng khung cho tất cả,
+               không còn mỗi bài một file .vue. Danh sách suy ra từ src/content/,
+               nên thêm bài mới chỉ cần thêm đúng một file .md. -->
+          <LessonRenderer
+            v-for="sid in mdSids"
+            :key="sid"
+            :sid="sid"
+            :active="activeSection === sid"
+          />
           <DfsBfs :active="activeSection === 'dfs-bfs'" />
           <Dsu :active="activeSection === 'dsu'" />
           <CayNhiPhanBst :active="activeSection === 'cay-nhi-phan-bst'" />
@@ -140,16 +147,16 @@ import {
   DEFAULT_ID,
 } from "./lesson/parts.js";
 import { buildMenu } from "./data/menu.js";
+import { mdSids } from "./lesson/mdLessons.js";
+import LessonRenderer from "./components/LessonRenderer.vue";
 
 import TrangChu from "./sections/TrangChu.vue";
 import DoPhucTap from "./sections/DoPhucTap.vue";
 import MangChuoi from "./sections/MangChuoi.vue";
 import DeQuy from "./sections/DeQuy.vue";
 import DanhSachLienKet from "./sections/DanhSachLienKet.vue";
-import BangBam from "./sections/BangBam.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
 import ToHop from "./sections/ToHop.vue";
-import ThamLam from "./sections/ThamLam.vue";
 import QhdNenTang from "./sections/QhdNenTang.vue";
 import QhdLisLcsDoixung from "./sections/QhdLisLcsDoixung.vue";
 import NganXepHangDoi from "./sections/NganXepHangDoi.vue";

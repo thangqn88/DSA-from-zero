@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { lessons } from '../src/data/lessons/index.js'
-import { LESSON_SECTIONS, sidToFile } from '../src/lesson/parts.js'
+import { LESSON_SECTIONS, sidToFile, sidToMd } from '../src/lesson/parts.js'
 
 const root = resolve(__dirname, '..')
 const LEVELS = ['Easy', 'Medium', 'Hard']
@@ -87,9 +87,38 @@ describe('schema Dự án thực hành', () => {
       }
     })
 
-    it('có tối thiểu 2 yêu cầu bắt buộc và 1 tiêu chí xong', () => {
+    // Người dùng báo ngày 2026-08-11: đọc Phần 7 xong vẫn không biết bắt đầu từ
+    // đâu, cần kiến thức gì, đầu ra là gì. Ba trường dưới đây trả lời đúng ba câu
+    // đó, và luật này giữ cho không bài nào bỏ sót chúng.
+    it('project trả lời được "cần biết gì", "đầu ra là gì", "bắt đầu từ đâu"', () => {
+      expect(Array.isArray(p.needs), 'thiếu trường needs').toBe(true)
+      expect(p.needs.length).toBeGreaterThanOrEqual(3)
+
+      expect(typeof p.output, 'thiếu trường output').toBe('string')
+      expect(p.output.length).toBeGreaterThan(40)
+
+      expect(Array.isArray(p.start), 'thiếu trường start').toBe(true)
+      expect(p.start.length).toBeGreaterThanOrEqual(4)
+      // Bước đầu tiên phải là một việc nhỏ chạy được ngay, không phải một yêu cầu
+      // tóm tắt lại cả dự án — đó chính là chỗ người mới bị chặn.
+      expect(p.start[0].length).toBeGreaterThan(40)
+    })
+
+    it('có tối thiểu 2 yêu cầu bắt buộc và 3 tiêu chí nghiệm thu', () => {
       expect(p.must.length).toBeGreaterThanOrEqual(2)
-      expect(p.done.length).toBeGreaterThanOrEqual(1)
+      expect(p.done.length).toBeGreaterThanOrEqual(3)
+    })
+
+    // Một tiêu chí không nói CÁCH kiểm thì người học không tự chấm được, và nó
+    // quay về đúng thứ văn xuôi mà phản hồi ngày 2026-08-11 phàn nàn.
+    it('mỗi tiêu chí nghiệm thu đều kèm cách kiểm cụ thể', () => {
+      for (const [i, d] of p.done.entries()) {
+        expect(d, `AC${i + 1} còn là chuỗi, chưa tách thành { dat, kiem }`).toBeTypeOf('object')
+        expect(typeof d.dat).toBe('string')
+        expect(d.dat.length).toBeGreaterThan(15)
+        expect(typeof d.kiem, `AC${i + 1} thiếu cách kiểm`).toBe('string')
+        expect(d.kiem.length, `AC${i + 1} có cách kiểm quá sơ sài`).toBeGreaterThan(25)
+      }
     })
 
     it('yêu cầu cuối cùng bắc cầu về kiến thức cũ', () => {
@@ -102,7 +131,12 @@ describe('schema Dự án thực hành', () => {
     })
 
     it('section render Phần 7 bằng ProjectBrief', () => {
-      const src = readFileSync(resolve(root, sidToFile(sid)), 'utf8')
+      // Bài Markdown không có file section riêng: LessonRenderer.vue dựng Phần 7
+      // cho mọi bài có data.project, nên chỗ cần kiểm là component chung.
+      const file = existsSync(resolve(root, sidToMd(sid)))
+        ? 'src/components/LessonRenderer.vue'
+        : sidToFile(sid)
+      const src = readFileSync(resolve(root, file), 'utf8')
       expect(src).toContain('part="du-an"')
       expect(src).toContain('<ProjectBrief')
     })

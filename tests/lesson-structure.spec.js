@@ -1,11 +1,17 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { LESSON_SECTIONS, LESSON_PARTS, partId } from '../src/lesson/parts.js'
+import { LESSON_SECTIONS, LESSON_PARTS, partId, sidToMd } from '../src/lesson/parts.js'
 import { lessons } from '../src/data/lessons/index.js'
 
 const root = resolve(__dirname, '..')
-const done = LESSON_SECTIONS.filter(s => lessons[s.sid])
+
+// Chỉ những bài còn viết bằng .vue mới chịu các luật dưới đây. Bài đã chuyển sang
+// Markdown không có file section riêng — khung của chúng do LessonRenderer.vue
+// dựng, và tests/lesson-md.spec.js kiểm phần tương ứng.
+const done = LESSON_SECTIONS.filter(
+  s => lessons[s.sid] && !existsSync(resolve(root, sidToMd(s.sid))),
+)
 
 describe.each(done)('cấu trúc section: $sid', ({ sid, file }) => {
   const src = readFileSync(resolve(root, file), 'utf8')

@@ -538,7 +538,12 @@
   .content-main > ol > li,
   .lesson-part > p,
   .lesson-part > ul > li,
-  .lesson-part > ol > li {
+  .lesson-part > ol > li,
+  /* Bài viết bằng Markdown có thêm một lớp bọc .md-body giữa .lesson-part và văn
+     xuôi, nên phải kể tên ở đây — nếu không, riêng các bài đó mất giới hạn dòng. */
+  .lesson-part > .md-body > p,
+  .lesson-part > .md-body > ul > li,
+  .lesson-part > .md-body > ol > li {
     max-width: var(--measure);
   }
   .exercise-menu {
@@ -624,7 +629,8 @@
   }
   .lesson-goal ul { margin: 0.3rem 0 0; padding-left: 1.2rem; }
   .lesson-part { margin-bottom: 1rem; }
-  .lesson-part > h3 {
+  .lesson-part > h3,
+  .lesson-part > .md-body > h3 {
     border-bottom: 1px dashed var(--border);
     padding-bottom: 0.4rem;
   }
@@ -706,7 +712,35 @@
   .pb-title { margin: 0 0 0.5rem; font-size: 1.05rem; }
   .pb-why { margin: 0 0 0.8rem; }
   .pb-block { margin-top: 0.9rem; }
-  .pb-block ul { margin: 0.35rem 0 0; padding-left: 1.2rem; }
+  .pb-block ul,
+  .pb-block ol { margin: 0.35rem 0 0; padding-left: 1.2rem; }
+  /* "Bắt đầu từ đâu" là danh sách CÓ THỨ TỰ — người mới đọc nó theo đúng thứ tự
+     từ trên xuống, nên số thứ tự phải nhìn thấy được, không thay bằng dấu chấm. */
+  .pb-start ol { padding-left: 1.4rem; }
+  .pb-start li { margin: 0.4rem 0; }
+
+  /* Tiêu chí nghiệm thu: nhãn AC và cách kiểm phải tách khỏi nhau bằng mắt, vì
+     người học dò từng dòng để tự chấm. Bỏ số thứ tự mặc định của ol — nhãn ACn
+     đã làm đúng việc đó rồi, để cả hai là đọc thành "1. AC1". */
+  .pb-ac ol { list-style: none; padding-left: 0; }
+  .pb-ac li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.2rem 0.6rem;
+    margin: 0.7rem 0;
+  }
+  .pb-ac .ac-id {
+    grid-row: span 2;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: #17694B;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.1rem 0.45rem;
+    height: fit-content;
+  }
+  .pb-ac .ac-kiem { color: var(--muted); font-size: 0.94rem; }
   .pb-block li { margin: 0.25rem 0; }
   .pb-block summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; }
   .pb-reuse { border-left: 3px solid var(--amber); padding-left: 0.75rem; }

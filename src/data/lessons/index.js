@@ -15,8 +15,9 @@ import dfsBfs from './dfs-bfs.js'
 import dsu from './dsu.js'
 import cayNhiPhanBst from './cay-nhi-phan-bst.js'
 import bstNangCao from './bst-nang-cao.js'
+import { mdLessons } from '../../lesson/mdLessons.js'
 
-export const lessons = {
+const coCauTruc = {
   'do-phuc-tap': doPhucTap,
   'mang-chuoi': mangChuoi,
   'de-quy': deQuy,
@@ -32,4 +33,16 @@ export const lessons = {
   'dsu': dsu,
   'cay-nhi-phan-bst': cayNhiPhanBst,
   'bst-nang-cao': bstNangCao,
+}
+
+// Bài viết bằng Markdown khai báo ví dụ điển hình ngay tại chỗ, bằng chỉ thị
+// @vidu trong file .md. Danh sách examples được rút ra từ đó chứ KHÔNG chép lại
+// vào file dữ liệu — chép lại là có hai nơi cùng nói về một danh sách, và menu
+// phải sẽ lệch với nội dung thật ngay lần đầu ai đó sửa một chỗ mà quên chỗ kia.
+export const lessons = { ...coCauTruc }
+for (const [sid, md] of Object.entries(mdLessons)) {
+  lessons[sid] = {
+    ...lessons[sid],
+    examples: md.examples.map(({ id, title, official }) => ({ id, title, official })),
+  }
 }
