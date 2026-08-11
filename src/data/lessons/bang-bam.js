@@ -103,7 +103,7 @@ export default {
       'Tự nở bảng khi hệ số tải vượt 0,75, băm lại toàn bộ khoá cũ.',
       'In ra 20 từ xuất hiện nhiều nhất kèm số lần.',
       'In ra phân bố số phần tử theo ngăn để tự kiểm tra hàm băm của mình có rải đều không.',
-      'Đo bằng công cụ bạn đã viết ở bài Độ phức tạp: so thời gian tra cứu của bảng băm với cách duyệt tuyến tính một mảng cặp khoá-giá trị, trên cùng bộ từ, rồi tự giải thích chênh lệch bằng đúng ngôn ngữ O lớn.',
+      'Đo bằng công cụ bạn đã viết ở bài Độ phức tạp: so thời gian tra cứu của bảng băm với cách duyệt tuyến tính một mảng cặp khoá-giá trị, trên cùng bộ từ, rồi tự giải thích chênh lệch bằng đúng ngôn ngữ O lớn (Big O).',
     ],
     done: [
       'Chạy đúng trên file khoảng 1MB trong dưới một giây.',

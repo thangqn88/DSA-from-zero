@@ -74,9 +74,9 @@ export default {
       hint: 'Kiểm con trỏ nhanh có thể nhảy hai bước, nên phải kiểm nullptr ở cả bước một và bước hai của mỗi lần nhảy, không thì đọc vào vùng nhớ không hợp lệ khi danh sách có số nút lẻ.',
     },
     {
-      title: 'Nạp một triệu số vào cả Vec bài trước và List bài này, rồi đo hai việc: cộng tổng toàn bộ phần tử, và chèn vào đầu một trăm nghìn lần. Giải thích vì sao mỗi cấu trúc thắng ở một việc, và vì sao khoảng cách ở việc cộng tổng lớn hơn con số Big-O gợi ý.',
-      idea: 'Cả hai việc đều O(n) về mặt Big-O đối với mỗi cấu trúc riêng, nhưng đo thời gian thật bằng công cụ bench đã viết ở Chương 1 sẽ cho hai con số khác xa nhau. Giải thích bằng locality: Vec đọc liên tục theo khối bộ nhớ, còn List nhảy tới các nút rải rác, mỗi bước là một lần trượt cache — chi phí trượt cache không nằm trong mô hình đếm phép toán của Big-O.',
-      hint: 'Chèn vào đầu một trăm nghìn lần trên Vec là O(n) mỗi lần nên tổng O(n²), trong khi trên List là O(1) mỗi lần nên tổng O(n) — đây là việc List thắng rõ. Đừng ngạc nhiên nếu khoảng cách ở việc cộng tổng lớn hơn nhiều so với "cùng là O(n)" gợi ý, vì Big-O không đếm chi phí trượt cache.',
+      title: 'Nạp một triệu số vào cả Vec bài trước và List bài này, rồi đo hai việc: cộng tổng toàn bộ phần tử, và chèn vào đầu một trăm nghìn lần. Giải thích vì sao mỗi cấu trúc thắng ở một việc, và vì sao khoảng cách ở việc cộng tổng lớn hơn con số Big O gợi ý.',
+      idea: 'Cả hai việc đều O(n) về mặt Big O đối với mỗi cấu trúc riêng, nhưng đo thời gian thật bằng công cụ bench đã viết ở Chương 1 sẽ cho hai con số khác xa nhau. Giải thích bằng locality: Vec đọc liên tục theo khối bộ nhớ, còn List nhảy tới các nút rải rác, mỗi bước là một lần trượt cache — chi phí trượt cache không nằm trong mô hình đếm phép toán của Big O.',
+      hint: 'Chèn vào đầu một trăm nghìn lần trên Vec là O(n) mỗi lần nên tổng O(n²), trong khi trên List là O(1) mỗi lần nên tổng O(n) — đây là việc List thắng rõ. Đừng ngạc nhiên nếu khoảng cách ở việc cộng tổng lớn hơn nhiều so với "cùng là O(n)" gợi ý, vì Big O không đếm chi phí trượt cache.',
     },
   ],
   leetcode: [

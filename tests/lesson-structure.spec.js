@@ -38,6 +38,19 @@ describe.each(done)('cấu trúc section: $sid', ({ sid, file }) => {
     }
   })
 
+  // WorkedExample chỉ render 6 slot CÓ TÊN. Nội dung đổ vào slot mặc định bị Vue
+  // vứt đi lặng lẽ, không lỗi build, không lỗi test — Phần 4 vẫn hiện đủ 6 cái
+  // nhãn nhưng trống trơn bên dưới. Đúng lỗi đó đã sống sót qua 5 bài. Luật này
+  // đếm slot, nên nó bắt được ngay lần sau.
+  it('mọi ví dụ điển hình đổ nội dung vào đủ 6 slot có tên', () => {
+    const soVd = (src.match(/<WorkedExample/g) || []).length
+    expect(soVd).toBe(lessons[sid].examples.length)
+    for (const slot of ['de-bai', 'y-tuong', 'thuat-toan', 'chay-tay', 'code', 'toi-uu']) {
+      const dem = (src.match(new RegExp(`<template #${slot}>`, 'g')) || []).length
+      expect(dem, `thiếu slot #${slot}`).toBe(soVd)
+    }
+  })
+
   it('không còn chữ nghiêng viết tay bằng thẻ <em> rỗng nghĩa', () => {
     expect(src).not.toMatch(/<i>/)
   })

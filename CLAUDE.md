@@ -11,15 +11,15 @@ Lệnh: `npm run dev` | `npm run build` | `npm run test -- --run`
 Mở rộng chương trình từ 10 lên **30 nhóm kiến thức, chia 7 chương**, và thêm **Phần 7
 Dự án thực hành** vào khung bài học.
 
+- **Kế hoạch — file duy nhất:** `docs/superpowers/plans/KE-HOACH.md`
 - Thiết kế: `docs/superpowers/specs/2026-08-09-mo-rong-30-nhom-design.md`
 - Đặc tả 7 MVP: `docs/superpowers/specs/2026-08-09-dac-ta-7-mvp.md`
-- Kế hoạch Giai đoạn 0–2: `docs/superpowers/plans/2026-08-09-mo-rong-30-nhom-gd0-2.md`
-- Kế hoạch Giai đoạn 3: `docs/superpowers/plans/2026-08-09-gd3-18-bai-moi.md`
 
 **Đọc spec và kế hoạch trước khi làm bất kỳ task nào.**
 
-Đợt viết lại 10 nhóm theo khung 6 phần đã xong, lưu ở
-`docs/superpowers/plans/2026-08-09-content-rewrite.md`.
+Ba file kế hoạch cũ (`content-rewrite`, `mo-rong-30-nhom-gd0-2`, `gd3-18-bai-moi`) đã
+gộp hết vào `KE-HOACH.md` ngày 2026-08-11 và xoá khỏi cây thư mục — bản đầy đủ còn
+trong lịch sử git. **Đừng dựng lại chúng.** Mọi cập nhật kế hoạch sửa vào `KE-HOACH.md`.
 
 ### Trạng thái
 
@@ -62,7 +62,7 @@ Giai đoạn 3 và 4 là công việc lặp khuôn: đã có hai bài mẫu, đ�
    của họ.
 
 Sau mỗi phiên, ghi một dòng vào bảng "Nhật ký phiên làm việc" ở cuối mục "Chiến lược
-chi phí" trong file kế hoạch.
+chi phí" trong `docs/superpowers/plans/KE-HOACH.md`.
 
 ## Quy ước nội dung
 

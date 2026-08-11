@@ -71,9 +71,34 @@
 
 <WorkedExample id="vd-mc-nhan-doi-suc-chua" title="Xem mảng động nở ra và đếm tổng số lần copy">
 
-<p>Bắt đầu với mảng động sức chứa 1, thêm lần lượt 9 phần tử bằng push_back. Mỗi lần đầy, sức chứa nhân đôi và toàn bộ phần tử hiện có phải copy sang vùng mới.</p>
+  <template #de-bai>
+    <p>Bắt đầu với mảng động sức chứa 1, thêm lần lượt 9 phần tử bằng <code>push_back</code>. Mỗi lần đầy, sức chứa nhân đôi và toàn bộ phần tử hiện có phải copy sang vùng mới.</p>
 
-<table class="formula-table">
+    <p>Câu hỏi cần trả lời: <strong>sau 9 lần thêm, tổng cộng đã có bao nhiêu phép copy?</strong> Và quan trọng hơn: con số đó tăng theo kiểu nào khi số lần thêm lớn dần?</p>
+  </template>
+
+  <template #y-tuong>
+    <p>Nhìn thoáng qua thì đáng lo: có những lần <code>push_back</code> phải copy cả mảng, tức tốn <code>O(n)</code>. Nếu mỗi lần thêm đều như thế thì thêm <code>n</code> phần tử sẽ tốn <code>O(n²)</code> — mảng động sẽ là một cấu trúc tồi.</p>
+
+    <p>Nhưng những lần đắt đỏ đó <strong>rất hiếm</strong>, và càng ngày càng hiếm hơn. Ý tưởng cốt lõi là đừng nhìn từng lần thêm riêng lẻ; hãy cộng chi phí của cả dãy thao tác rồi chia đều cho số thao tác. Cách tính đó gọi là <strong>chi phí khấu trừ</strong>, tiếng Anh là amortized cost — giống như tiền mua máy giặt: trả một cục rất to đúng một lần, nhưng chia cho vài nghìn lần giặt thì mỗi lần rẻ bèo.</p>
+
+    <p>Chìa khoá nằm ở việc sức chứa <strong>nhân đôi</strong> chứ không phải cộng thêm một hằng số. Nhân đôi làm khoảng cách giữa hai lần nở giãn ra theo cấp số nhân, nên số lần nở chỉ là <code>log₂n</code> chứ không phải <code>n</code>.</p>
+  </template>
+
+  <template #thuat-toan>
+    <p><code>push_back</code> làm đúng ba việc, theo thứ tự:</p>
+
+    <ol>
+      <li>Nếu số phần tử vẫn nhỏ hơn sức chứa, ghi giá trị mới vào ô trống kế tiếp rồi tăng số phần tử. Xong, tốn <code>O(1)</code>.</li>
+      <li>Nếu đã đầy, xin cấp một vùng nhớ mới có sức chứa gấp đôi, copy toàn bộ phần tử cũ sang, trả lại vùng cũ.</li>
+      <li>Rồi mới ghi giá trị mới vào.</li>
+    </ol>
+
+    <p>Vậy chi phí copy của một lần nở đúng bằng sức chứa cũ. Tổng chi phí copy sau <code>n</code> lần thêm là tổng các sức chứa cũ tại mỗi lần nở: <code>1 + 2 + 4 + 8 + ... </code> — một cấp số nhân bội 2, và tổng của nó luôn nhỏ hơn hai lần số hạng cuối, tức nhỏ hơn <code>2n</code>.</p>
+  </template>
+
+  <template #chay-tay>
+    <table class="formula-table">
   <tr><th>Lần thêm</th><th>Số phần tử sau khi thêm</th><th>Sức chứa</th><th>Có nở không</th><th>Số phép copy lần này</th><th>Tổng copy tích luỹ</th></tr>
   <tr><td>1</td><td>1</td><td>1</td><td>Không (bắt đầu tại đây)</td><td>0</td><td>0</td></tr>
   <tr><td>2</td><td>2</td><td>2</td><td>Có, 1 → 2</td><td>1</td><td>1</td></tr>
@@ -84,27 +109,141 @@
   <tr><td>7</td><td>7</td><td>8</td><td>Không</td><td>0</td><td>7</td></tr>
   <tr><td>8</td><td>8</td><td>8</td><td>Không</td><td>0</td><td>7</td></tr>
   <tr><td>9</td><td>9</td><td>16</td><td>Có, 8 → 16</td><td>8</td><td>15</td></tr>
-</table>
+    </table>
 
-<p><strong>Chỗ then chốt:</strong> tổng số phép copy sau đúng 9 lần push_back là <code>1 + 2 + 4 + 8 = 15</code>, nhỏ hơn <code>2 × 9 = 18</code>. Đây không phải trùng hợp: mỗi lần nở copy đúng bằng sức chứa cũ, và các sức chứa cũ cộng lại luôn nhỏ hơn hai lần số phần tử hiện tại, vì đây là một cấp số nhân bội 2. Dù bạn thêm 9 phần tử hay 9 triệu phần tử, tỉ lệ tổng copy trên tổng số lần thêm luôn bị chặn dưới 2 — không tăng theo n.</p>
+    <p>Chỉ có 4 trong 9 lần thêm phải copy, và khoảng cách giữa các lần copy giãn ra dần: nở ở lần 2, lần 3, lần 5, lần 9 — lần tiếp theo sẽ là lần 17, rồi lần 33.</p>
+  </template>
 
-<p><strong>Chi phí:</strong> mỗi push_back riêng lẻ có thể tốn từ <code>O(1)</code> (không nở) tới <code>O(n)</code> (đúng lúc nở), nhưng tính bình quân trên toàn bộ dãy thao tác, chi phí khấu trừ của mỗi push_back là <code>O(1)</code>.</p>
+  <template #code>
+    <p>Bạn không cần tin bảng trên. <code>std::vector</code> cho phép hỏi thẳng sức chứa hiện tại, nên hãy để chương trình tự in ra bảng đó:</p>
+
+    <pre v-pre><code>#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+    vector&lt;int&gt; v;
+    v.reserve(1);                       // ép sức chứa ban đầu bằng 1
+    size_t chuaCu = v.capacity(), tongCopy = 0;
+
+    for (int i = 1; i &lt;= 9; i++) {
+        v.push_back(i);
+        if (v.capacity() != chuaCu) {   // vừa nở: đã copy chuaCu phần tử
+            tongCopy += chuaCu;
+            printf("lan %d: no %zu -> %zu, copy %zu, tong copy %zu\n",
+                   i, chuaCu, v.capacity(), chuaCu, tongCopy);
+            chuaCu = v.capacity();
+        }
+    }
+    printf("tong copy = %zu cho %d lan them\n", tongCopy, 9);
+}</code></pre>
+
+    <p>Lưu ý: chiến lược nở là quyền của thư viện, không phải quy định của chuẩn C++. Phần lớn thư viện nhân đôi, nhưng có thư viện nhân 1,5 lần. Bậc <code>O(1)</code> khấu trừ vẫn đúng với mọi hệ số nhân lớn hơn 1 — chỉ hằng số đổi.</p>
+  </template>
+
+  <template #toi-uu>
+    <p><strong>Chỗ then chốt:</strong> tổng số phép copy sau đúng 9 lần push_back là <code>1 + 2 + 4 + 8 = 15</code>, nhỏ hơn <code>2 × 9 = 18</code>. Đây không phải trùng hợp: mỗi lần nở copy đúng bằng sức chứa cũ, và các sức chứa cũ cộng lại luôn nhỏ hơn hai lần số phần tử hiện tại, vì đây là một cấp số nhân bội 2. Dù bạn thêm 9 phần tử hay 9 triệu phần tử, tỉ lệ tổng copy trên tổng số lần thêm luôn bị chặn dưới 2 — không tăng theo n.</p>
+
+    <p><strong>Chi phí:</strong> mỗi push_back riêng lẻ có thể tốn từ <code>O(1)</code> (không nở) tới <code>O(n)</code> (đúng lúc nở), nhưng tính bình quân trên toàn bộ dãy thao tác, chi phí khấu trừ của mỗi push_back là <code>O(1)</code>.</p>
+
+    <p><strong>Tối ưu thật sự, và nó chỉ tốn một dòng:</strong> nếu bạn biết trước sẽ thêm bao nhiêu phần tử, gọi <code>v.reserve(n)</code> một lần trước vòng lặp. Sức chứa được cấp đủ ngay từ đầu nên không lần nở nào xảy ra, tổng số phép copy về 0. Bậc vẫn là <code>O(n)</code> cho cả dãy như trước, nhưng hằng số giảm hẳn và — quan trọng hơn với code thật — mọi con trỏ hay iterator đang trỏ vào mảng không còn bị hỏng giữa chừng vì mảng dời chỗ.</p>
+
+    <p><strong>Điều KHÔNG nên làm:</strong> nở thêm một hằng số, kiểu sức chứa cộng 10 mỗi lần đầy. Nghe có vẻ tiết kiệm bộ nhớ, nhưng lúc đó số lần nở tỉ lệ thuận với <code>n</code> chứ không còn là <code>log₂n</code>, và tổng chi phí copy nhảy lên <code>O(n²)</code>. Nhân đôi tốn thêm bộ nhớ nhưng đổi lại được cả một bậc — đây là một trong những đánh đổi bộ nhớ lấy thời gian sạch sẽ nhất mà bạn sẽ gặp.</p>
+  </template>
 
 </WorkedExample>
 
 <WorkedExample id="vd-mc-chen-giua-vs-cuoi" title="So chèn vào giữa với chèn vào cuối trên mảng một triệu phần tử">
 
-<p>Giả sử mảng đã có sẵn sức chứa đủ dùng, để tách riêng chi phí dịch phần tử khỏi chi phí nở mảng. So hai cách thêm một triệu phần tử: luôn thêm vào cuối, và luôn chèn vào đầu.</p>
+  <template #de-bai>
+    <p>Cần đưa một triệu phần tử vào một mảng. Có hai cách viết, và chúng chỉ khác nhau ở chỗ đặt phần tử mới vào đâu: luôn thêm vào <strong>cuối</strong>, hay luôn chèn vào <strong>đầu</strong>.</p>
 
-<table class="formula-table">
-  <tr><th>Cách thêm</th><th>Số phần tử phải dịch mỗi lần</th><th>Tổng số phép dịch cho 10⁶ lần thêm</th><th>Thời gian ước lượng (mốc 10⁸ phép/giây)</th></tr>
-  <tr><td>Luôn thêm vào cuối</td><td>0</td><td>0</td><td>Không đáng kể</td></tr>
-  <tr><td>Luôn chèn vào đầu</td><td>Bằng số phần tử đang có, tăng dần từ 0 tới 10⁶ − 1</td><td>≈ 10⁶ × 10⁶ / 2 = 5×10¹¹</td><td>5×10¹¹ / 10⁸ ≈ 5000 giây, khoảng 1,4 giờ</td></tr>
-</table>
+    <p>Giả sử mảng đã có sẵn sức chứa đủ dùng — gọi <code>reserve</code> trước — để tách riêng chi phí dịch phần tử khỏi chi phí nở mảng đã bàn ở ví dụ trước. Câu hỏi: hai cách chênh nhau bao nhiêu?</p>
+  </template>
 
-<p><strong>Chỗ then chốt:</strong> chèn vào đầu mảng một triệu lần không phải chậm gấp đôi hay gấp mười so với thêm vào cuối — nó chậm hơn theo bậc, vì mỗi lần chèn đầu phải dịch toàn bộ phần tử đang có, và số phần tử đang có tăng dần theo đúng số lần bạn đã chèn. Đây chính xác là lý do người ta cần một cấu trúc cho phép thêm vào đầu với chi phí O(1) — danh sách liên kết, bài học kế tiếp của chương này.</p>
+  <template #y-tuong>
+    <p>Mảng nằm liên tục trong bộ nhớ, và đó vừa là sức mạnh vừa là điểm yếu của nó. Sức mạnh: biết chỉ số là tới thẳng được. Điểm yếu: <strong>các chỉ số phải luôn liền mạch, không được thủng lỗ</strong>.</p>
 
-<p><strong>Chi phí:</strong> thêm vào cuối là O(1) mỗi lần, O(n) cho cả n lần. Chèn vào đầu là O(n) mỗi lần, O(n²) cho cả n lần — với n = 10⁶, khoảng cách giữa hai cách là khoảng cách giữa "không đáng kể" và "gần một tiếng rưỡi".</p>
+    <p>Vậy nên chèn một phần tử vào vị trí <code>k</code> không đơn giản là ghi vào ô <code>k</code>. Mọi phần tử từ <code>k</code> trở về sau phải dịch sang phải một ô để nhường chỗ — đúng như hàng ghế trong rạp ở đầu bài. Số phép dịch bằng số phần tử nằm sau vị trí chèn.</p>
+
+    <p>Từ đó suy ra ngay: chèn vào cuối là trường hợp tốt nhất, dịch 0 phần tử. Chèn vào đầu là trường hợp tệ nhất, dịch toàn bộ. Và cái tệ nhất đó không cố định — nó lớn dần theo đúng số lần bạn đã chèn.</p>
+  </template>
+
+  <template #thuat-toan>
+    <p>Đếm tổng số phép dịch cho <code>n = 10⁶</code> lần thêm:</p>
+
+    <ul>
+      <li><strong>Thêm vào cuối:</strong> mỗi lần dịch 0 phần tử. Tổng là 0.</li>
+      <li><strong>Chèn vào đầu:</strong> lần thứ nhất mảng rỗng nên dịch 0, lần thứ hai dịch 1, lần thứ ba dịch 2, ... lần thứ <code>n</code> dịch <code>n − 1</code>. Tổng là <code>0 + 1 + 2 + ... + (n−1) = n(n−1)/2 ≈ n²/2</code>.</li>
+    </ul>
+
+    <p>Đây lại đúng cái tổng cấp số cộng đã gặp ở bài Độ phức tạp — và một lần nữa nó cho ra bậc <code>n²</code>, không phải <code>n</code>.</p>
+  </template>
+
+  <template #chay-tay>
+    <table class="formula-table">
+      <tr><th>Cách thêm</th><th>Số phần tử phải dịch mỗi lần</th><th>Tổng số phép dịch cho 10⁶ lần thêm</th><th>Thời gian ước lượng (mốc 10⁸ phép/giây)</th></tr>
+      <tr><td>Luôn thêm vào cuối</td><td>0</td><td>0</td><td>Không đáng kể</td></tr>
+      <tr><td>Luôn chèn vào đầu</td><td>Bằng số phần tử đang có, tăng dần từ 0 tới 10⁶ − 1</td><td>≈ 10⁶ × 10⁶ / 2 = 5×10¹¹</td><td>5×10¹¹ / 10⁸ ≈ 5000 giây, khoảng 1,4 giờ</td></tr>
+    </table>
+
+    <p>Thu nhỏ về <code>n = 5</code> với các giá trị 1, 2, 3, 4, 5 để nhìn thấy từng phép dịch bằng mắt:</p>
+
+    <table class="formula-table">
+      <tr><th>Lần chèn đầu</th><th>Mảng trước khi chèn</th><th>Số phép dịch</th><th>Mảng sau khi chèn</th><th>Tích luỹ</th></tr>
+      <tr><td>1</td><td>[]</td><td>0</td><td>[1]</td><td>0</td></tr>
+      <tr><td>2</td><td>[1]</td><td>1</td><td>[2, 1]</td><td>1</td></tr>
+      <tr><td>3</td><td>[2, 1]</td><td>2</td><td>[3, 2, 1]</td><td>3</td></tr>
+      <tr><td>4</td><td>[3, 2, 1]</td><td>3</td><td>[4, 3, 2, 1]</td><td>6</td></tr>
+      <tr><td>5</td><td>[4, 3, 2, 1]</td><td>4</td><td>[5, 4, 3, 2, 1]</td><td>10</td></tr>
+    </table>
+
+    <p>Tổng 10 phép dịch cho 5 lần chèn, khớp <code>n(n−1)/2 = 5×4/2 = 10</code>. Cùng công việc đó, thêm vào cuối tốn 0 phép dịch.</p>
+  </template>
+
+  <template #code>
+    <pre v-pre><code>#include &lt;chrono&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+using namespace std;
+using namespace std::chrono;
+
+double doMs(void (*f)(vector&lt;int&gt;&amp;, int), int n) {
+    vector&lt;int&gt; v;
+    v.reserve(n);                        // loại bỏ chi phí nở mảng khỏi phép đo
+    auto t0 = steady_clock::now();
+    f(v, n);
+    return duration&lt;double, milli&gt;(steady_clock::now() - t0).count();
+}
+
+void themCuoi(vector&lt;int&gt;&amp; v, int n) {
+    for (int i = 0; i &lt; n; i++) v.push_back(i);
+}
+
+void chenDau(vector&lt;int&gt;&amp; v, int n) {
+    for (int i = 0; i &lt; n; i++) v.insert(v.begin(), i);   // dịch toàn bộ mỗi lần
+}
+
+int main() {
+    for (int n : {10000, 20000, 40000, 80000})
+        printf("n=%-6d cuoi=%7.2f ms   dau=%9.2f ms\n",
+               n, doMs(themCuoi, n), doMs(chenDau, n));
+}</code></pre>
+
+    <p>Hãy chạy với đúng dãy <code>n</code> gấp đôi dần đó và nhìn cột bên phải: mỗi lần <code>n</code> gấp đôi, thời gian chèn đầu tăng khoảng <strong>bốn</strong> lần chứ không phải hai. Nhân bốn khi đầu vào nhân hai chính là chữ ký của <code>O(n²)</code> — bạn nhận ra được bậc chỉ bằng cách nhìn tỉ lệ giữa các dòng, không cần đọc code.</p>
+
+    <p>Đừng thử <code>n = 10⁶</code> ở nhà trừ khi bạn rảnh một tiếng rưỡi.</p>
+  </template>
+
+  <template #toi-uu>
+    <p><strong>Chỗ then chốt:</strong> chèn vào đầu mảng một triệu lần không phải chậm gấp đôi hay gấp mười so với thêm vào cuối — nó chậm hơn theo bậc, vì mỗi lần chèn đầu phải dịch toàn bộ phần tử đang có, và số phần tử đang có tăng dần theo đúng số lần bạn đã chèn.</p>
+
+    <p><strong>Chi phí:</strong> thêm vào cuối là O(1) mỗi lần, O(n) cho cả n lần. Chèn vào đầu là O(n) mỗi lần, O(n²) cho cả n lần — với n = 10⁶, khoảng cách giữa hai cách là khoảng cách giữa "không đáng kể" và "gần một tiếng rưỡi".</p>
+
+    <p><strong>Cách tối ưu rẻ nhất, làm được ngay:</strong> nếu thứ tự cuối cùng mới quan trọng chứ không phải thứ tự lúc chèn, hãy cứ <code>push_back</code> vào cuối rồi <code>reverse</code> một lần ở cuối cùng. Đảo mảng là <code>O(n)</code>, nên tổng vẫn là <code>O(n)</code> — bạn vừa đổi một tiếng rưỡi lấy vài mili giây bằng cách viết lại hai dòng.</p>
+
+    <p><strong>Khi mẹo đó không dùng được</strong> — chẳng hạn bạn phải xen kẽ chèn đầu với đọc dữ liệu ra — thì vấn đề không nằm ở code nữa mà nằm ở cấu trúc dữ liệu. Lúc đó bạn cần một cấu trúc thêm vào đầu tốn <code>O(1)</code>: <code>std::deque</code> nếu chỉ cần hai đầu, hoặc danh sách liên kết nếu cần chèn ở giữa. Danh sách liên kết chính là bài học kế tiếp của chương này, và nó sinh ra để giải quyết đúng cái bảng bạn vừa nhìn.</p>
+  </template>
 
 </WorkedExample>
 

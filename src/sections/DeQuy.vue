@@ -109,41 +109,219 @@ long long fib(int n) {
 
 <WorkedExample id="vd-dq-cay-fibonacci" title="Đếm số lời gọi của fib đệ quy trần rồi so với bản có ghi nhớ">
 
-<p>Với cây lời gọi <code>fib(5)</code> đã vẽ ở phần lý thuyết, đếm số lần mỗi giá trị <code>n</code> xuất hiện lại (tức số lần nó bị tính lại từ đầu):</p>
+  <template #de-bai>
+    <p>Hàm Fibonacci viết theo đúng định nghĩa toán học là đoạn code đệ quy đẹp nhất mà ai cũng gặp đầu tiên:</p>
 
-<table class="formula-table">
-  <tr><th>n</th><th>Số lần fib(n) được gọi trong fib(5)</th></tr>
-  <tr><td>4</td><td>1</td></tr>
-  <tr><td>3</td><td>2</td></tr>
-  <tr><td>2</td><td>3</td></tr>
-  <tr><td>1</td><td>5</td></tr>
-  <tr><td>0</td><td>3</td></tr>
-</table>
+    <pre v-pre><code>long long fib(int n) {
+    if (n &lt;= 1) return n;              // trường hợp cơ sở
+    return fib(n - 1) + fib(n - 2);    // bước đệ quy
+}</code></pre>
 
-<p>Tổng cộng 15 lời gọi cho <code>fib(5)</code> — với đệ quy trần. Với <code>n</code> lớn hơn, số lần tính lại tăng theo cấp luỹ: bảng số lời gọi theo công thức <code>2·fib(n+1) − 1</code> cho thấy <code>fib(10)</code> đã cần 177 lời gọi, còn <code>fib(30)</code> cần hơn 2,6 triệu lời gọi dù kết quả chỉ là một số nguyên duy nhất.</p>
+    <p>Nó ngắn, nó đúng, và nó chậm tới mức không dùng được. Nhiệm vụ của ví dụ này là chỉ ra <strong>chính xác chỗ nào lãng phí</strong> bằng cách đếm số lời gọi, chứ không chỉ nói suông "đệ quy trần thì chậm".</p>
+  </template>
 
-<p><strong>Chỗ then chốt:</strong> <code>fib(2)</code> bị tính lại 3 lần trong <code>fib(5)</code>, và tỉ lệ này không giảm mà còn tăng khi <code>n</code> lớn hơn — đó là toàn bộ vấn đề của đệ quy trần. Bản có ghi nhớ chặn đứng sự lãng phí này: mỗi giá trị <code>n</code> từ 0 tới 5 chỉ được tính đúng một lần, tổng cộng chỉ 6 lần tính thay vì 15 lần gọi (và con số này không tăng theo cấp luỹ khi <code>n</code> lớn lên).</p>
+  <template #y-tuong>
+    <p>Đoạn code trên không sai. Cái sai nằm ở chỗ nó <strong>quên</strong>: mỗi lần cần <code>fib(3)</code>, nó tính lại từ đầu như thể chưa từng gặp bao giờ, dù có thể đã tính đúng giá trị đó vài giây trước.</p>
 
-<p><strong>Chi phí:</strong> đệ quy trần là <code>O(2ⁿ)</code> thời gian. Bản ghi nhớ là <code>O(n)</code> thời gian và <code>O(n)</code> bộ nhớ cho bảng lưu. Với <code>n = 50</code>, khác biệt này là khác biệt giữa việc chờ nhiều ngày và việc có kết quả tức thì.</p>
+    <p>Hãy tưởng tượng bạn tra một từ trong từ điển, gấp sách lại, rồi năm phút sau cần đúng từ đó và lại mở từ đầu tra lại — làm vậy hai mươi lần. Không ai làm thế trong đời thật, nhưng đoạn code trên làm đúng thế.</p>
+
+    <p>Cách chữa gọi là <strong>ghi nhớ</strong>, tiếng Anh là memoization: giữ một quyển sổ, trước khi tính thì tra sổ, tính xong thì ghi vào sổ. Chỉ thêm hai dòng, và bậc rơi từ luỹ thừa xuống tuyến tính.</p>
+  </template>
+
+  <template #thuat-toan>
+    <p>Bản ghi nhớ chỉ khác bản trần đúng ba chi tiết:</p>
+
+    <ol>
+      <li>Một mảng <code>nho</code> kích thước <code>n + 1</code>, khởi tạo toàn <code>-1</code> để đánh dấu "chưa tính".</li>
+      <li>Ngay đầu hàm, sau khi kiểm tra trường hợp cơ sở: nếu <code>nho[n] != -1</code> thì trả về luôn, không đệ quy nữa.</li>
+      <li>Trước khi trả về kết quả vừa tính, ghi nó vào <code>nho[n]</code>.</li>
+    </ol>
+
+    <p>Vì sao điều này đủ để đổi bậc? Vì mỗi giá trị <code>n</code> chỉ có thể đi qua nhánh "tính thật" đúng một lần trong suốt cả chương trình — lần thứ hai trở đi nó bị chặn ngay ở bước 2. Có <code>n + 1</code> giá trị, mỗi giá trị tính một lần với chi phí cố định, nên tổng là <code>O(n)</code>.</p>
+  </template>
+
+  <template #chay-tay>
+    <p>Với cây lời gọi <code>fib(5)</code> đã vẽ ở phần lý thuyết, đếm số lần mỗi giá trị <code>n</code> xuất hiện lại (tức số lần nó bị tính lại từ đầu):</p>
+
+    <table class="formula-table">
+      <tr><th>n</th><th>Số lần fib(n) được gọi — đệ quy trần</th><th>Số lần thật sự tính — bản ghi nhớ</th></tr>
+      <tr><td>4</td><td>1</td><td>1</td></tr>
+      <tr><td>3</td><td>2</td><td>1</td></tr>
+      <tr><td>2</td><td>3</td><td>1</td></tr>
+      <tr><td>1</td><td>5</td><td>1</td></tr>
+      <tr><td>0</td><td>3</td><td>1</td></tr>
+    </table>
+
+    <p>Tổng cộng 15 lời gọi cho <code>fib(5)</code> — với đệ quy trần. Với <code>n</code> lớn hơn, số lần tính lại tăng theo cấp luỹ: bảng số lời gọi theo công thức <code>2·fib(n+1) − 1</code> cho thấy <code>fib(10)</code> đã cần 177 lời gọi, còn <code>fib(30)</code> cần hơn 2,6 triệu lời gọi dù kết quả chỉ là một số nguyên duy nhất.</p>
+
+    <table class="formula-table">
+      <tr><th>n</th><th>Số lời gọi — đệ quy trần</th><th>Số lần tính — bản ghi nhớ</th></tr>
+      <tr><td>5</td><td>15</td><td>6</td></tr>
+      <tr><td>10</td><td>177</td><td>11</td></tr>
+      <tr><td>20</td><td>21891</td><td>21</td></tr>
+      <tr><td>30</td><td>2692537</td><td>31</td></tr>
+      <tr><td>50</td><td>≈ 4×10¹⁰</td><td>51</td></tr>
+    </table>
+
+    <p>Cột giữa nhân lên khoảng 1,6 lần mỗi khi <code>n</code> tăng 1. Cột phải cộng thêm đúng 1. Đó là hai thế giới khác nhau, và chúng chỉ cách nhau hai dòng code.</p>
+  </template>
+
+  <template #code>
+    <pre v-pre><code>#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+long long soLoiGoi = 0;
+
+long long fibTran(int n) {
+    soLoiGoi++;
+    if (n &lt;= 1) return n;
+    return fibTran(n - 1) + fibTran(n - 2);
+}
+
+vector&lt;long long&gt; nho;
+
+long long fibNho(int n) {
+    soLoiGoi++;
+    if (n &lt;= 1) return n;
+    if (nho[n] != -1) return nho[n];              // đã tính rồi, trả về ngay
+    return nho[n] = fibNho(n - 1) + fibNho(n - 2); // tính xong thì ghi vào sổ
+}
+
+int main() {
+    for (int n : {5, 10, 20, 30}) {
+        soLoiGoi = 0; fibTran(n);
+        long long a = soLoiGoi;
+
+        nho.assign(n + 1, -1);
+        soLoiGoi = 0; fibNho(n);
+
+        printf("n=%-3d tran=%-10lld nho=%-4lld  ti le=%.0f lan\n",
+               n, a, soLoiGoi, (double)a / soLoiGoi);
+    }
+}</code></pre>
+
+    <p>Đừng bỏ qua bước tự chạy đoạn này. Nhìn cột <code>ti le</code> phình ra theo <code>n</code> có sức thuyết phục hơn mọi lời giải thích về <code>O(2ⁿ)</code>.</p>
+  </template>
+
+  <template #toi-uu>
+    <p><strong>Chỗ then chốt:</strong> <code>fib(2)</code> bị tính lại 3 lần trong <code>fib(5)</code>, và tỉ lệ này không giảm mà còn tăng khi <code>n</code> lớn hơn — đó là toàn bộ vấn đề của đệ quy trần. Bản có ghi nhớ chặn đứng sự lãng phí này: mỗi giá trị <code>n</code> từ 0 tới 5 chỉ được tính đúng một lần, tổng cộng chỉ 6 lần tính thay vì 15 lần gọi.</p>
+
+    <p><strong>Chi phí:</strong> đệ quy trần là <code>O(2ⁿ)</code> thời gian. Bản ghi nhớ là <code>O(n)</code> thời gian và <code>O(n)</code> bộ nhớ cho bảng lưu. Với <code>n = 50</code>, khác biệt này là khác biệt giữa việc chờ nhiều ngày và việc có kết quả tức thì.</p>
+
+    <p><strong>Còn tối ưu được nữa.</strong> Bản ghi nhớ vẫn tốn <code>O(n)</code> bộ nhớ cho mảng và <code>O(n)</code> khung ngăn xếp lời gọi. Nhưng để tính <code>fib(n)</code> bạn chỉ cần nhớ đúng hai số gần nhất, nên viết lặp từ dưới lên là xong — <code>O(n)</code> thời gian, <code>O(1)</code> bộ nhớ, không đệ quy nên không sợ tràn ngăn xếp:</p>
+
+    <pre v-pre><code>long long fibLap(int n) {
+    if (n &lt;= 1) return n;
+    long long a = 0, b = 1;
+    for (int i = 2; i &lt;= n; i++) {
+        long long c = a + b;
+        a = b; b = c;
+    }
+    return b;
+}</code></pre>
+
+    <p>Con đường trần → ghi nhớ → lặp từ dưới lên mà bạn vừa đi chính là con đường dẫn tới <strong>quy hoạch động</strong> ở Chương 6. Ở đó bạn sẽ làm lại đúng ba bước này, chỉ khác là trên những bài toán mà bước cuối không còn hiển nhiên như ở đây.</p>
+
+    <p>Một chú thích để khỏi hiểu nhầm: riêng Fibonacci còn có công thức ma trận cho ra <code>O(log n)</code>, nhưng đó là mẹo dành riêng cho dãy này, không phải bài học tổng quát. Cái đáng mang theo là ba bước ở trên.</p>
+  </template>
 
 </WorkedExample>
 
 <WorkedExample id="vd-dq-giai-truy-hoi-merge" title="Giải T(n) = 2T(n/2) + O(n) bằng cách đếm theo tầng">
 
-<p>Cách đếm theo tầng: coi cây đệ quy như một cây, mỗi tầng ghi lại số bài toán con ở tầng đó, kích thước mỗi bài toán con, và tổng chi phí <strong>ghép</strong> của riêng tầng đó (không tính phần đệ quy sâu hơn).</p>
+  <template #de-bai>
+    <p>Một hàm đệ quy chia bài toán kích thước <code>n</code> thành <strong>hai</strong> bài con mỗi bài kích thước <code>n/2</code>, giải xong hai bài con thì tốn thêm <code>c·n</code> để ghép kết quả lại. Viết thành hệ thức truy hồi:</p>
 
-<table class="formula-table">
-  <tr><th>Tầng</th><th>Số bài toán con</th><th>Kích thước mỗi bài</th><th>Chi phí ghép của tầng</th></tr>
-  <tr><td>0 (gốc)</td><td>1</td><td>n</td><td>c·n</td></tr>
-  <tr><td>1</td><td>2</td><td>n/2</td><td>2 · c·(n/2) = c·n</td></tr>
-  <tr><td>2</td><td>4</td><td>n/4</td><td>4 · c·(n/4) = c·n</td></tr>
-  <tr><td>...</td><td>...</td><td>...</td><td>c·n</td></tr>
-  <tr><td>log₂n (lá)</td><td>n</td><td>1</td><td>c·n</td></tr>
-</table>
+    <p><code>T(n) = 2·T(n/2) + c·n</code>, với <code>T(1) = c</code>.</p>
 
-<p><strong>Chỗ then chốt:</strong> mỗi tầng đều tốn đúng <code>c·n</code>, bất kể tầng đó có bao nhiêu bài toán con — vì số bài toán con tăng gấp đôi mỗi tầng trong khi kích thước mỗi bài giảm đi một nửa, hai hiệu ứng triệt tiêu nhau. Cây có <code>log₂n</code> tầng vì mỗi tầng kích thước giảm một nửa, và <code>n</code> chỉ chia đôi được <code>log₂n</code> lần trước khi chạm kích thước 1. Tổng chi phí là số tầng nhân chi phí mỗi tầng: <code>log₂n × c·n = O(n log n)</code>.</p>
+    <p>Hãy tìm <code>T(n)</code> theo O lớn (Big O). Đây không phải bài tập trên giấy cho vui: đó chính xác là hệ thức của merge sort, và bạn sẽ dùng lại kết quả này ở Chương 2.</p>
+  </template>
 
-<p><strong>Chi phí:</strong> đây chính là độ phức tạp của merge sort — bài học kế tiếp ở Chương 2 dùng đúng phép đếm này, không giải thích lại. Cách đếm theo tầng dùng lại được cho mọi hệ thức truy hồi dạng chia để trị, kể cả những hệ thức không rơi đúng vào ba mốc đã nhớ ở bảng phần lý thuyết — cứ vẽ tầng, cộng chi phí mỗi tầng, rồi nhân với số tầng.</p>
+  <template #y-tuong>
+    <p>Thay <code>T(n/2)</code> bằng định nghĩa của chính nó rồi lại thay tiếp là cách làm đúng nhưng rối, vì công thức phình ra rất nhanh và bạn dễ lạc.</p>
+
+    <p>Cách nhìn dễ hơn nhiều: <strong>vẽ cây đệ quy ra rồi cộng chi phí theo từng tầng ngang</strong>, thay vì lần theo từng nhánh dọc. Mỗi nút của cây là một lời gọi; chi phí ghi ở nút chỉ là phần <strong>ghép</strong> của riêng nó, không tính phần các nút con làm.</p>
+
+    <p>Lý do cách này hiệu quả: trong rất nhiều hệ thức, tổng chi phí của mỗi tầng ngang hoá ra là một con số dễ chịu — bằng nhau ở mọi tầng, hoặc tăng/giảm theo cấp số nhân. Lúc đó bài toán rút gọn thành "chi phí một tầng × số tầng", hai đại lượng đều tính nhẩm được.</p>
+  </template>
+
+  <template #thuat-toan>
+    <p>Quy trình đếm theo tầng, dùng được cho mọi hệ thức chia để trị:</p>
+
+    <ol>
+      <li><strong>Đếm số nút ở tầng k.</strong> Mỗi lời gọi đẻ ra 2 lời gọi con, nên tầng <code>k</code> có <code>2ᵏ</code> nút.</li>
+      <li><strong>Tính kích thước mỗi bài ở tầng k.</strong> Mỗi tầng chia đôi, nên kích thước là <code>n/2ᵏ</code>.</li>
+      <li><strong>Nhân hai số đó với chi phí ghép</strong> để ra tổng chi phí của tầng: <code>2ᵏ × c·(n/2ᵏ) = c·n</code>.</li>
+      <li><strong>Đếm số tầng.</strong> Cây dừng khi kích thước còn 1, tức <code>n/2ᵏ = 1</code>, tức <code>k = log₂n</code>.</li>
+      <li><strong>Nhân chi phí mỗi tầng với số tầng.</strong></li>
+    </ol>
+  </template>
+
+  <template #chay-tay>
+    <table class="formula-table">
+      <tr><th>Tầng</th><th>Số bài toán con</th><th>Kích thước mỗi bài</th><th>Chi phí ghép của tầng</th></tr>
+      <tr><td>0 (gốc)</td><td>1</td><td>n</td><td>c·n</td></tr>
+      <tr><td>1</td><td>2</td><td>n/2</td><td>2 · c·(n/2) = c·n</td></tr>
+      <tr><td>2</td><td>4</td><td>n/4</td><td>4 · c·(n/4) = c·n</td></tr>
+      <tr><td>...</td><td>...</td><td>...</td><td>c·n</td></tr>
+      <tr><td>log₂n (lá)</td><td>n</td><td>1</td><td>c·n</td></tr>
+    </table>
+
+    <p>Thay <code>n = 8</code> và <code>c = 1</code> để ra con số thật:</p>
+
+    <table class="formula-table">
+      <tr><th>Tầng</th><th>Số nút</th><th>Kích thước</th><th>Chi phí tầng</th><th>Cộng dồn</th></tr>
+      <tr><td>0</td><td>1</td><td>8</td><td>8</td><td>8</td></tr>
+      <tr><td>1</td><td>2</td><td>4</td><td>2 × 4 = 8</td><td>16</td></tr>
+      <tr><td>2</td><td>4</td><td>2</td><td>4 × 2 = 8</td><td>24</td></tr>
+      <tr><td>3</td><td>8</td><td>1</td><td>8 × 1 = 8</td><td>32</td></tr>
+    </table>
+
+    <p>Bốn tầng, mỗi tầng đúng 8, tổng 32. Đối chiếu công thức: <code>n·log₂n = 8 × 3 = 24</code>, cộng tầng lá <code>n = 8</code> nữa là 32. Khớp.</p>
+  </template>
+
+  <template #code>
+    <p>Đoạn dưới đây tính <code>T(n)</code> bằng đúng định nghĩa truy hồi rồi so với <code>n·log₂n</code>, để bạn tự thấy tỉ lệ giữa hai bên hội tụ về một hằng số — dấu hiệu chắc chắn của "cùng bậc":</p>
+
+    <pre v-pre><code>#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+
+double T(long long n) {                 // c = 1
+    if (n &lt;= 1) return 1;
+    return 2 * T(n / 2) + n;
+}
+
+int main() {
+    for (long long n = 8; n &lt;= 8192; n *= 4) {
+        double nlogn = n * log2((double)n);
+        printf("n=%-6lld T(n)=%-10.0f n·log2(n)=%-10.0f  ti le=%.2f\n",
+               n, T(n), nlogn, T(n) / nlogn);
+    }
+}</code></pre>
+
+    <p>Cột <code>ti le</code> lởn vởn quanh 1,1–1,3 và không hề tăng theo <code>n</code>. Nếu <code>T(n)</code> thật sự thuộc bậc cao hơn, tỉ lệ đó đã phải phình ra không giới hạn.</p>
+  </template>
+
+  <template #toi-uu>
+    <p><strong>Chỗ then chốt:</strong> mỗi tầng đều tốn đúng <code>c·n</code>, bất kể tầng đó có bao nhiêu bài toán con — vì số bài toán con tăng gấp đôi mỗi tầng trong khi kích thước mỗi bài giảm đi một nửa, hai hiệu ứng triệt tiêu nhau. Cây có <code>log₂n</code> tầng vì mỗi tầng kích thước giảm một nửa, và <code>n</code> chỉ chia đôi được <code>log₂n</code> lần trước khi chạm kích thước 1. Tổng chi phí là số tầng nhân chi phí mỗi tầng: <code>log₂n × c·n = O(n log n)</code>.</p>
+
+    <p><strong>Chi phí:</strong> đây chính là độ phức tạp của merge sort — bài học kế tiếp ở Chương 2 dùng đúng phép đếm này, không giải thích lại.</p>
+
+    <p><strong>Đổi một con số, đổi cả kết luận.</strong> Sức mạnh thật của cách đếm theo tầng là nó cho bạn thấy hệ thức nhạy cảm tới mức nào:</p>
+
+    <table class="formula-table">
+      <tr><th>Hệ thức</th><th>Chi phí mỗi tầng</th><th>Kết quả</th><th>Thuật toán quen thuộc</th></tr>
+      <tr><td><code>T(n) = 2T(n/2) + c·n</code></td><td>Bằng nhau mọi tầng</td><td><code>O(n log n)</code></td><td>Merge sort</td></tr>
+      <tr><td><code>T(n) = T(n/2) + c</code></td><td>Chỉ một nhánh</td><td><code>O(log n)</code></td><td>Tìm kiếm nhị phân</td></tr>
+      <tr><td><code>T(n) = 2T(n/2) + c</code></td><td>Tăng gấp đôi mỗi tầng, tầng lá nuốt hết</td><td><code>O(n)</code></td><td>Duyệt cây nhị phân</td></tr>
+      <tr><td><code>T(n) = 4T(n/2) + c·n</code></td><td>Tăng gấp đôi mỗi tầng</td><td><code>O(n²)</code></td><td>Nhân ma trận ngây thơ</td></tr>
+    </table>
+
+    <p>Hai dòng đầu và dòng thứ ba chỉ khác nhau ở một chi tiết nhỏ trong công thức, nhưng ra ba bậc khác nhau. Đây là lý do đừng đoán mà hãy vẽ tầng ra.</p>
+
+    <p>Cách đếm theo tầng dùng lại được cho mọi hệ thức truy hồi dạng chia để trị, kể cả những hệ thức không rơi đúng vào ba mốc đã nhớ ở bảng phần lý thuyết — cứ vẽ tầng, cộng chi phí mỗi tầng, rồi nhân với số tầng.</p>
+  </template>
 
 </WorkedExample>
 

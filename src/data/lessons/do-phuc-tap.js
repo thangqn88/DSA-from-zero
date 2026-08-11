@@ -1,6 +1,6 @@
 export default {
   goal: [
-    'Đọc được ký hiệu O lớn và nói ra bằng lời nó đang hứa hẹn điều gì.',
+    'Đọc được ký hiệu O lớn (Big O) và nói ra bằng lời nó đang hứa hẹn điều gì.',
     'Đếm được số phép toán của một đoạn code và suy ra độ phức tạp của nó.',
     'Nhìn giới hạn đề bài mà đoán được thuật toán nào đủ nhanh, thuật toán nào chắc chắn quá chậm.',
     'Giải thích được vì sao hai đoạn code cùng O(n) mà chạy lệch nhau nhiều lần.',
@@ -18,7 +18,7 @@ export default {
         'Chương trình thực hiện đúng n phép toán, không hơn không kém',
       ],
       answer: 0,
-      why: 'O lớn nói về xu hướng tăng, không nói về con số tuyệt đối. O(n) nghĩa là khi đầu vào tăng gấp đôi thì thời gian tăng khoảng gấp đôi. Nó cố tình bỏ qua hằng số và các số hạng nhỏ hơn, vì hai thứ đó phụ thuộc vào máy và trình biên dịch, còn xu hướng tăng thì không. Một đoạn O(n) chạy 5n phép toán vẫn là O(n), y hệt đoạn chạy 100n phép toán.',
+      why: 'O lớn (Big O) nói về xu hướng tăng, không nói về con số tuyệt đối. O(n) nghĩa là khi đầu vào tăng gấp đôi thì thời gian tăng khoảng gấp đôi. Nó cố tình bỏ qua hằng số và các số hạng nhỏ hơn, vì hai thứ đó phụ thuộc vào máy và trình biên dịch, còn xu hướng tăng thì không. Một đoạn O(n) chạy 5n phép toán vẫn là O(n), y hệt đoạn chạy 100n phép toán.',
     },
     {
       q: 'Đoạn code có hai vòng lặp lồng nhau, mỗi vòng chạy từ 0 tới n-1, độ phức tạp là bao nhiêu?',
@@ -48,10 +48,10 @@ export default {
         'Vì danh sách liên kết phải sắp xếp lại sau mỗi bước duyệt',
       ],
       answer: 0,
-      why: 'O lớn đếm số phép toán chứ không đếm chi phí của từng phép toán. Bộ xử lý đọc bộ nhớ theo từng khối liên tiếp và nạp sẵn khối kế tiếp, nên duyệt mảng gần như luôn "trúng cache". Các nút danh sách liên kết được cấp phát rời rạc, mỗi lần nhảy sang nút sau có thể là một lần trượt cache tốn hàng chục lần lâu hơn. Đây là lý do trong thực tế người ta thường chọn mảng dù lý thuyết nói hai bên như nhau — và cũng là lý do bạn phải tự đo chứ không chỉ tính trên giấy.',
+      why: 'O lớn (Big O) đếm số phép toán chứ không đếm chi phí của từng phép toán. Bộ xử lý đọc bộ nhớ theo từng khối liên tiếp và nạp sẵn khối kế tiếp, nên duyệt mảng gần như luôn "trúng cache". Các nút danh sách liên kết được cấp phát rời rạc, mỗi lần nhảy sang nút sau có thể là một lần trượt cache tốn hàng chục lần lâu hơn. Đây là lý do trong thực tế người ta thường chọn mảng dù lý thuyết nói hai bên như nhau — và cũng là lý do bạn phải tự đo chứ không chỉ tính trên giấy.',
     },
     {
-      q: 'Ôn lại chính bài này: O lớn bỏ qua hằng số. Vậy giữa 100n và n², cái nào lớn hơn?',
+      q: 'Ôn lại chính bài này: O lớn (Big O) bỏ qua hằng số. Vậy giữa 100n và n², cái nào lớn hơn?',
       options: [
         'Tuỳ n: với n nhỏ thì 100n lớn hơn, nhưng từ n = 100 trở đi thì n² vượt lên và bỏ xa',
         'n² luôn lớn hơn với mọi n',
@@ -59,14 +59,14 @@ export default {
       ],
       answer: 0,
       recall: true,
-      why: 'Giải phương trình 100n = n² được n = 100. Dưới mốc đó thì đoạn O(n) có hằng số lớn lại chậm hơn đoạn O(n²), và đó chính là lý do với dữ liệu bé người ta vẫn dùng thuật toán "tệ" mà đơn giản. Nhưng O lớn quan tâm tới lúc n lớn, và từ mốc đó trở đi thì n² thắng tuyệt đối: ở n = 10⁶, 100n là 10⁸ còn n² là 10¹² — chênh nhau mười nghìn lần. Đây là bài đầu tiên nên câu ôn tập hỏi lại chính bài này; từ bài sau, câu mang nhãn ôn tập sẽ hỏi về những bài bạn đã học trước đó.',
+      why: 'Giải phương trình 100n = n² được n = 100. Dưới mốc đó thì đoạn O(n) có hằng số lớn lại chậm hơn đoạn O(n²), và đó chính là lý do với dữ liệu bé người ta vẫn dùng thuật toán "tệ" mà đơn giản. Nhưng O lớn (Big O) quan tâm tới lúc n lớn, và từ mốc đó trở đi thì n² thắng tuyệt đối: ở n = 10⁶, 100n là 10⁸ còn n² là 10¹² — chênh nhau mười nghìn lần. Đây là bài đầu tiên nên câu ôn tập hỏi lại chính bài này; từ bài sau, câu mang nhãn ôn tập sẽ hỏi về những bài bạn đã học trước đó.',
     },
   ],
   practice: [
     {
       title: 'Cho một đoạn code có ba vòng lặp lồng nhau nhưng vòng trong cùng chạy từ i tới n thay vì từ 0 tới n. Tính độ phức tạp và giải thích vì sao nó vẫn là O(n³) chứ không nhỏ hơn.',
-      idea: 'Đếm tổng số lần thân vòng trong cùng chạy: với mỗi cặp (i, j) thì vòng trong chạy khoảng n - i lần. Cộng dồn lại được một tổng dạng n³/6. Hằng số 1/6 bị O lớn bỏ đi, nên kết quả vẫn là O(n³) — chỉ nhanh hơn khoảng sáu lần so với ba vòng chạy đủ n, mà sáu lần thì không đổi được bậc.',
-      hint: 'Đừng nhìn vào chữ "chạy ít hơn" mà kết luận bậc thấp hơn. Cứ đếm thành công thức rồi giữ lại số hạng lớn nhất, bỏ mọi hằng số nhân — đó là toàn bộ quy trình rút gọn về O lớn.',
+      idea: 'Đếm tổng số lần thân vòng trong cùng chạy: với mỗi cặp (i, j) thì vòng trong chạy khoảng n - i lần. Cộng dồn lại được một tổng dạng n³/6. Hằng số 1/6 bị O lớn (Big O) bỏ đi, nên kết quả vẫn là O(n³) — chỉ nhanh hơn khoảng sáu lần so với ba vòng chạy đủ n, mà sáu lần thì không đổi được bậc.',
+      hint: 'Đừng nhìn vào chữ "chạy ít hơn" mà kết luận bậc thấp hơn. Cứ đếm thành công thức rồi giữ lại số hạng lớn nhất, bỏ mọi hằng số nhân — đó là toàn bộ quy trình rút gọn về O lớn (Big O).',
     },
     {
       title: 'Cho bảng giới hạn n = 10, n = 1000, n = 10⁶, n = 10⁹. Với mỗi giá trị, liệt kê những độ phức tạp còn dùng được trong một giây và những độ phức tạp chắc chắn không.',
