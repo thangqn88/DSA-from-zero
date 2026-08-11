@@ -1,6 +1,11 @@
 // MVP Chương 1. Đặc tả đầy đủ: docs/superpowers/specs/2026-08-09-dac-ta-7-mvp.md
 export default {
   title: 'core + bench — thư viện nền và công cụ đo hiệu năng',
+  // Câu dẫn đứng ngay trước khối MVP ở cuối bài cuối chương. Nó thuộc về chương
+  // chứ không thuộc bài, nên nằm ở đây — trước kia nó là một thẻ <p> viết tay
+  // trong file .vue của bài cuối, tức mỗi chương lại phải nhớ tự viết một lần.
+  ketChuong:
+    'Chương 1 kết thúc ở đây. Bạn đã có đủ ba mảnh của thư viện nền và một công cụ đo, giờ là lúc ghép chúng thành sản phẩm chạy được đầu tiên.',
   why: 'Mọi nhóm kỹ thuật nghiêm túc đều có một bộ đo hiệu năng riêng trước khi tối ưu bất cứ thứ gì — Google Benchmark, hyperfine, perf đều làm việc này. Không có nó, mọi câu "tôi nghĩ cách này nhanh hơn" chỉ là cảm giác. Đây cũng là công cụ bạn dùng lại suốt sáu chương còn lại, nên nó phải đúng ngay từ đầu.',
   input: 'Không đọc dữ liệu ngoài. bench nhận tham số dòng lệnh: tên phép đo, dãy kích thước n, số lần lặp mỗi kích thước. Kết quả xuất ra CSV hai cột n,ms.',
   needs: [

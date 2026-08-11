@@ -5,10 +5,8 @@ export default {
     'Đọc được hệ thức truy hồi dạng T(n) = a·T(n/b) + f(n) và nhận ra ba mốc quen thuộc: O(log n), O(n log n), O(2ⁿ).',
     'Tự cài được bản ghi nhớ cho fib, hạ độ phức tạp từ O(2ⁿ) xuống O(n).',
   ],
-  examples: [
-    { id: 'vd-dq-cay-fibonacci', title: 'Đếm số lời gọi của fib đệ quy trần rồi so với bản có ghi nhớ', official: false },
-    { id: 'vd-dq-giai-truy-hoi-merge', title: 'Giải T(n) = 2T(n/2) + O(n) bằng cách đếm theo tầng', official: false },
-  ],
+  // Không có trường examples ở đây: bài này viết bằng Markdown, danh sách ví dụ
+  // rút ra từ các chỉ thị @vidu trong src/content/de-quy.md.
   quiz: [
     {
       q: 'Một hàm đệ quy chạy mãi không dừng, dù có viết trường hợp dừng. Nguyên nhân nhiều khả năng nhất là gì?',

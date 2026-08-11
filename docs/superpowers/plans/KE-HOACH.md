@@ -33,14 +33,14 @@ C++ cho code mẫu trong bài. Không backend, không DB.
 | Viết lại 10 nhóm cũ | Khung 6 phần, component dùng chung, schema, menu tự sinh | Opus + Sonnet | ✅ Xong 2026-08-09 |
 | 0–2 | Hạ tầng 7 chương, Phần 7, `ProjectBrief`, MVP Chương 1, 2 bài mẫu | Opus | ✅ Xong 2026-08-10 |
 | 2.4 | Kiến trúc bài học Markdown — bỏ file `.vue` mỗi bài | Opus | ✅ Xong 2026-08-11 |
-| **2.5** | **Chuyển 13 bài `.vue` còn lại sang Markdown bằng script** | **Opus** | ⬜ **Làm trước Giai đoạn 3** |
-| 3 | 18 bài mới còn lại và 6 MVP cuối chương — 26 task | Sonnet | ⬜ Chưa chạy task nào |
+| **2.5** | **Chuyển 13 bài `.vue` còn lại sang Markdown bằng script** | **Opus** | 🟨 **Xong 4 bài Chương 1, còn 9 bài** |
+| 3 | 18 bài mới còn lại và 6 MVP cuối chương — 26 task | Sonnet | 🟨 Task 1–4 xong (Chương 1 trọn vẹn), còn Task 5–26 |
 | 4 | Bổ sung Phần 7 + quiz `recall` cho 10 bài cũ | Sonnet | ⬜ Chưa viết kế hoạch chi tiết |
 | 5 | Rà soát 30 bài, giọng văn, giao diện, README | Opus | ⬜ Chưa bắt đầu |
 
 **Đang có 15/30 bài** đã viết (`ready: true`), trong đó **5 bài có Phần 7** (`duAn: true`)
-và **1/7 chương có MVP** (`capstoneReady: true`). Hai bài đã dùng kiến trúc Markdown:
-`bang-bam` và `tham-lam`.
+và **1/7 chương có MVP** (`capstoneReady: true`). Sáu bài đã dùng kiến trúc Markdown:
+`bang-bam`, `tham-lam`, và trọn 4 bài Chương 1.
 
 ### Kiến trúc bài học: Markdown, không còn file `.vue` mỗi bài
 
@@ -146,6 +146,7 @@ vào cùng một cửa sổ 5 giờ và chạm trần sớm. Tuần tự giữ n
 | 2026-08-11 | Cập nhật kế hoạch theo kiến trúc Markdown | Opus | Inline | Không đụng mã nguồn. Viết lại mục "Khuôn chuẩn viết một bài" (B/C/D/E) sang định dạng `.md`; thêm mục "Kỷ luật token cho subagent" — ba luật quyết định phần lớn chi phí Giai đoạn 3, quan trọng nhất là **cấm subagent mở file kế hoạch 2500 dòng này** và chỉ cho đọc đúng một bài mẫu `src/content/bang-bam.md` thay vì cặp `.vue` + `.js`. Sửa bằng script 81 dòng tham chiếu `src/sections/*.vue` trong 26 task (giữ nguyên các dòng nhật ký vì chúng ghi lịch sử). Thêm **Giai đoạn 2.5**: chuyển 13 bài `.vue` còn lại bằng script, chạy **trước** Giai đoạn 3 — vì nó biến Giai đoạn 4 thành việc thuần dữ liệu, để mã nguồn chỉ còn một kiến trúc, và để lộ thiếu sót định dạng trên bài thật trước khi viết 18 bài mới. Số chỗ khai báo thủ công khi thêm một bài: **4 → 1**. |
 | 2026-08-11 | Sửa Phần 7: người mới không biết bắt đầu từ đâu | Opus | Inline | Người dùng báo Phần 7 bài `do-phuc-tap` đọc xong vẫn không biết làm kiểu gì, bắt đầu từ đâu, cần kiến thức gì, đầu ra là gì. Kiểm lại thì đây là **lỗ hổng của schema**, không phải của riêng bài đó: `project` có `input` mà **không có `output`**, và không có chỗ nào nói bước đầu tiên. Thêm bốn trường: `needs` (cần biết trước, ≥3 mục, nói rõ cả cái CHƯA cần biết), `output`, `outputSample` (dán đúng những gì terminal in ra), `start` (4–6 bước theo thứ tự, bước 1 phải nhỏ và chạy được ngay). Cập nhật `ProjectBrief.vue` và thứ tự đọc: vì sao → cần biết trước → đầu vào → đầu ra → bắt đầu từ đâu → yêu cầu → coi như xong → chỗ dễ sai. Điền đủ cho **cả 5 bài có Phần 7 và MVP Chương 1**, không vá riêng bài Big O. Thêm luật test ép ba trường mới. 320 test xanh, build sạch. |
 | 2026-08-11 | Chuẩn hoá Phần 7 và thêm tiêu chí nghiệm thu | Opus | Inline | Chốt **một format chuẩn chung cho Phần 7 của cả 30 bài**, gồm 9 trường theo đúng mạch người mới đọc. Đổi `done` từ mảng chuỗi thành mảng object `{ dat, kiem }` — mỗi tiêu chí phải kèm **cách kiểm chạy được hoặc quan sát được kèm ngưỡng bằng số**, vì một tiêu chí không nói cách kiểm thì chỉ là lời chúc. Giao diện tự đánh số AC1..ACn. Nâng số tiêu chí tối thiểu từ 1 lên 3 cho bài lẻ và 4 cho MVP. Viết lại toàn bộ tiêu chí cho 5 bài và MVP Chương 1 — tổng 39 AC, mỗi cái đều có lệnh hoặc ngưỡng cụ thể. Thêm luật test ở cả `lesson-data.spec.js` lẫn `capstone.spec.js` chặn kiểu viết `done` bằng chuỗi hoặc `kiem` sơ sài. Ghi luật viết AC vào khuôn chuẩn để 18 bài mới sinh ra là có sẵn. 330 test xanh, build sạch. |
+| 2026-08-11 | Giai đoạn 2.5 cho 4 bài Chương 1 | Opus | Inline, script | Người dùng yêu cầu "làm tiếp task còn lại của Chương 1"; đối chiếu mã nguồn thì **Task 1–4 của Giai đoạn 3 đã xong từ trước** (4 bài đều `ready` + `duAn`, chương có `capstoneReady`, luật test Task 1 đã có) — bảng trạng thái ghi "chưa chạy task nào" là đã cũ, nay sửa lại. Việc còn đụng tới Chương 1 là Giai đoạn 2.5, và người dùng chọn phạm vi hẹp: chỉ 4 bài của chương này. Viết `scripts/vue-sang-md.mjs` (≈250 dòng), chuyển 4 bài, xoá 4 file `.vue` — **1245 dòng `.vue` biến mất**, đổi lại 4 file `.md` tổng 1120 dòng và 0 dòng khung. Phát sinh ngoài kế hoạch: `LessonRenderer` chưa biết dựng MVP cuối chương, phải bổ sung trước khi chuyển `danh-sach-lien-ket` (xem Task 2.5.2b). 318 test xanh, build sạch, gzip 214.77 kB. **Chưa kiểm chứng bằng mắt qua trình duyệt.** Chưa làm Task 2.5.1 (`index.js` bằng `import.meta.glob`) vì nằm ngoài phạm vi người dùng chọn. |
 
 ---
 
@@ -175,7 +176,33 @@ phải sửa `index.js`** — đó là một trong ba chỗ khai báo thủ côn
 
 Expected: test xanh, không đổi hành vi.
 
-- [ ] **Task 2.5.2: Viết `scripts/vue-sang-md.mjs`**
+- [x] **Task 2.5.2: Viết `scripts/vue-sang-md.mjs`** — xong 2026-08-11
+
+Dùng: `node scripts/vue-sang-md.mjs <file.vue> [...] [--ghi]`. Không có `--ghi` thì chỉ in
+ra màn hình. Nó tự đếm ký tự hai bên và báo tên file khi lệch quá 2%.
+
+**Hai chỗ phép đếm đó từng báo sai, đừng sửa lại thành như cũ:** phải gỡ thẻ **trước** khi
+giải mã thực thể (nếu không, `i &lt; n ... p-&gt;tiep` trong khối code C++ thành một cặp
+`<...>` và bị coi là thẻ), và phải đếm code tách khỏi văn xuôi (trong `.vue` code escape
+thành `&lt;`, trong `.md` nó là `vector<int>` thật). Đếm gộp thì mọi bài đều báo lệch 40%
+ở chỗ chẳng mất gì.
+
+- [ ] **Task 2.5.2b: Cho `LessonRenderer` dựng luôn MVP cuối chương** — xong 2026-08-11
+
+Việc này không có trong kế hoạch ban đầu và **bắt buộc phải làm trước khi chuyển bài cuối
+của bất kỳ chương nào**: `LessonRenderer` cũ chỉ render `data.project`, trong khi bài cuối
+chương viết bằng `.vue` còn render thêm `<ProjectBrief :brief="capstone" mode="capstone" />`.
+Chuyển mà không làm chỗ này thì MVP của chương biến mất lặng lẽ.
+
+Chỗ hiển thị **suy ra từ `CHAPTERS`**, không thêm cờ: bài nào là phần tử cuối của một chương
+có `capstoneReady` thì hiện MVP chương đó. Câu dẫn trước khối MVP (trước kia là một thẻ `<p>`
+viết tay trong file `.vue` của bài cuối) chuyển thành trường `ketChuong` của file capstone —
+nó thuộc về chương, không thuộc về bài.
+
+`tests/capstone.spec.js` đổi theo: bài cuối viết bằng `.md` thì **mount thật rồi nhìn DOM**
+(đúng một khối `.pb-capstone`, tiêu đề khớp capstone của chương, và vẫn còn đúng một khối
+`.pb` của riêng bài) thay vì đọc chuỗi trong file section — bài Markdown không có file section
+để đọc.
 
 Đọc một file `src/sections/<Pascal>.vue`, xuất `src/content/<sid>.md`. Việc phải làm:
 
@@ -195,7 +222,16 @@ Script không cần hoàn hảo. Nó cần đúng ở phần chiếm 95% khối 
 lặng làm mất nội dung** — cho nó đối chiếu số ký tự văn bản trước và sau, lệch quá 2% thì
 báo tên file ra để người soát tay.
 
-- [ ] **Task 2.5.3: Chạy script cho 13 bài, soát từng bài**
+- [ ] **Task 2.5.3: Chạy script cho 13 bài, soát từng bài** — xong 4/13
+
+Đã chuyển: `do-phuc-tap`, `mang-chuoi`, `de-quy`, `danh-sach-lien-ket` (trọn Chương 1, không
+bài nào có widget). Còn 9 bài: `quay-lui-xau-nhi-phan`, `to-hop`, `qhd-nen-tang`,
+`qhd-lis-lcs-doixung`, `ngan-xep-hang-doi`, `dfs-bfs`, `dsu`, `cay-nhi-phan-bst`,
+`bst-nang-cao` — **cả 9 đều có widget**, nên chúng là phép thử thật cho hai luật widget của
+`tests/lesson-md.spec.js`.
+
+Bốn bài đầu chỉ cần soát tay đúng một chỗ: bảng có `colspan` ở ví dụ rùa-thỏ của
+`danh-sach-lien-ket` được giữ nguyên HTML thô, đúng như thiết kế.
 
 Với mỗi bài: chạy script, xoá `src/sections/<Pascal>.vue`, gỡ import và thẻ trong
 `src/App.vue`, gỡ `examples` khỏi `src/data/lessons/<sid>.js`, chạy test.

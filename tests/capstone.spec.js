@@ -1,8 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { CHAPTERS, sidToFile } from '../src/lesson/parts.js'
+import { mount } from '@vue/test-utils'
+import { CHAPTERS, sidToFile, sidToMd } from '../src/lesson/parts.js'
 import { capstones, capstoneCuaChuong } from '../src/data/capstones/index.js'
+import { lessons } from '../src/data/lessons/index.js'
+import LessonRenderer from '../src/components/LessonRenderer.vue'
 
 const san = CHAPTERS.filter(c => c.capstoneReady)
 
@@ -93,8 +96,32 @@ describe('bài cuối chương hiển thị MVP của chương', () => {
     expect(Array.isArray(canKiem)).toBe(true)
   })
 
-  describe.each(canKiem)('chương $key', ({ key, lessons }) => {
-    const cuoi = lessons.at(-1)
+  describe.each(canKiem)('chương $key', ({ key, lessons: baiTrongChuong }) => {
+    const cuoi = baiTrongChuong.at(-1)
+    const laMd = existsSync(resolve(root, sidToMd(cuoi.sid)))
+
+    // Bài Markdown không có file section riêng, nên đọc mã nguồn không kiểm được
+    // gì cả — LessonRenderer.vue suy chỗ hiển thị MVP ra từ CHAPTERS. Ở đây mount
+    // thật bài cuối chương rồi nhìn vào DOM, cách kiểm chặt hơn hẳn đọc chuỗi.
+    if (laMd) {
+      const wrapper = mount(LessonRenderer, { props: { sid: cuoi.sid, active: true } })
+
+      it('bài cuối render ProjectBrief ở chế độ capstone', () => {
+        expect(wrapper.findAll('.pb-capstone')).toHaveLength(1)
+      })
+
+      it('bài cuối lấy MVP đúng khoá chương của mình', () => {
+        expect(wrapper.get('.pb-capstone .pb-title').text()).toBe(capstoneCuaChuong(key).title)
+      })
+
+      it('bài cuối vẫn giữ cả bài luyện tay của riêng nó', () => {
+        const rieng = wrapper.findAll('.pb:not(.pb-capstone)')
+        expect(rieng).toHaveLength(1)
+        expect(rieng[0].get('.pb-title').text()).toBe(lessons[cuoi.sid].project.title)
+      })
+      return
+    }
+
     const src = readFileSync(resolve(root, sidToFile(cuoi.sid)), 'utf8')
 
     it('bài cuối render ProjectBrief ở chế độ capstone', () => {

@@ -5,10 +5,8 @@ export default {
     'Nhìn giới hạn đề bài mà đoán được thuật toán nào đủ nhanh, thuật toán nào chắc chắn quá chậm.',
     'Giải thích được vì sao hai đoạn code cùng O(n) mà chạy lệch nhau nhiều lần.',
   ],
-  examples: [
-    { id: 'vd-dpt-dem-phep-toan', title: 'Đếm phép toán của ba đoạn code lồng vòng lặp', official: false },
-    { id: 'vd-dpt-so-sanh-hai-cach', title: 'Cùng một bài, hai cách giải, chênh nhau bao nhiêu lần', official: false },
-  ],
+  // Không có trường examples ở đây: bài này viết bằng Markdown, danh sách ví dụ
+  // rút ra từ các chỉ thị @vidu trong src/content/do-phuc-tap.md.
   quiz: [
     {
       q: 'O(n) nghĩa là gì?',

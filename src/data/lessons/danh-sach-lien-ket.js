@@ -5,10 +5,8 @@ export default {
     'Tự cài được List<T> đơn có nút giả, cùng hai thao tác hai con trỏ: tìm nút giữa và phát hiện chu trình.',
     'Nói được vì sao mảng vẫn thắng trong nhiều tình huống thực tế dù bảng chi phí có vẻ ủng hộ danh sách liên kết.',
   ],
-  examples: [
-    { id: 'vd-dsll-dao-danh-sach', title: 'Đảo ngược danh sách liên kết bằng ba con trỏ, chạy tay từng bước', official: false },
-    { id: 'vd-dsll-rua-tho-phat-hien-chu-trinh', title: 'Rùa và thỏ: phát hiện danh sách có chu trình', official: false },
-  ],
+  // Không có trường examples ở đây: bài này viết bằng Markdown, danh sách ví dụ
+  // rút ra từ các chỉ thị @vidu trong src/content/danh-sach-lien-ket.md.
   quiz: [
     {
       q: 'Vì sao chèn hoặc xoá ở giữa danh sách liên kết chỉ tốn O(1) khi đã cầm con trỏ tới chỗ chèn, nhưng vẫn tốn O(n) nếu chưa có con trỏ đó?',

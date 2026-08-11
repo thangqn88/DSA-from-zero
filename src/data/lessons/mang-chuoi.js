@@ -5,10 +5,8 @@ export default {
     'Tự cài được Vec<T> và Str tối thiểu, không dựa vào std::vector.',
     'Dùng được phân tích khấu trừ để giải thích vì sao push_back trung bình là O(1).',
   ],
-  examples: [
-    { id: 'vd-mc-nhan-doi-suc-chua', title: 'Xem mảng động nở ra và đếm tổng số lần copy', official: false },
-    { id: 'vd-mc-chen-giua-vs-cuoi', title: 'So chèn vào giữa với chèn vào cuối trên mảng một triệu phần tử', official: false },
-  ],
+  // Không có trường examples ở đây: bài này viết bằng Markdown, danh sách ví dụ
+  // rút ra từ các chỉ thị @vidu trong src/content/mang-chuoi.md.
   quiz: [
     {
       q: 'Vì sao truy cập một phần tử mảng theo chỉ số là O(1)?',

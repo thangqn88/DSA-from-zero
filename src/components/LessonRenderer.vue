@@ -50,8 +50,17 @@
       <LeetCodeList :items="data.leetcode" />
     </LessonPart>
 
-    <LessonPart v-if="data.project" :sid="sid" part="du-an">
-      <ProjectBrief :brief="data.project" />
+    <LessonPart v-if="data.project || capstone" :sid="sid" part="du-an">
+      <ProjectBrief v-if="data.project" :brief="data.project" />
+
+      <!-- Bài cuối chương là chỗ MVP của cả chương xuất hiện. Dữ liệu nằm ở
+           src/data/capstones/, không nằm trong dữ liệu bài, vì nó thuộc về cả
+           chương — và chỗ hiển thị suy ra từ CHAPTERS chứ không khai báo tay,
+           nên không có bài nào quên hiện MVP của chương mình. -->
+      <template v-if="capstone">
+        <p v-if="capstone.ketChuong">{{ capstone.ketChuong }}</p>
+        <ProjectBrief :brief="capstone" mode="capstone" />
+      </template>
     </LessonPart>
   </section>
 </template>
@@ -73,10 +82,11 @@ import PracticeSet from './PracticeSet.vue'
 import LeetCodeList from './LeetCodeList.vue'
 import ProjectBrief from './ProjectBrief.vue'
 
-import { LESSON_SECTIONS } from '../lesson/parts.js'
+import { CHAPTERS, LESSON_SECTIONS } from '../lesson/parts.js'
 import { mdLessons } from '../lesson/mdLessons.js'
 import { initWidgets } from '../lesson/widgets.js'
 import { lessons } from '../data/lessons/index.js'
+import { capstoneCuaChuong } from '../data/capstones/index.js'
 
 const props = defineProps({
   sid: { type: String, required: true },
@@ -89,6 +99,14 @@ const data = computed(() => lessons[props.sid])
 // Tiêu đề bài lấy từ CHAPTERS chứ không chép lại vào file .md — sidebar và tiêu đề
 // trang phải nói cùng một tên, và CHAPTERS đã là nguồn sự thật cho tên bài.
 const title = computed(() => LESSON_SECTIONS.find((l) => l.sid === props.sid)?.title ?? props.sid)
+
+// Chỉ bài CUỐI của một chương đã có dữ liệu MVP mới hiện MVP đó. Suy ra từ
+// CHAPTERS chứ không thêm cờ: thứ tự bài trong chương đã là nguồn sự thật, và một
+// cờ nữa chỉ là thêm một chỗ để quên bật.
+const capstone = computed(() => {
+  const c = CHAPTERS.find((ch) => ch.capstoneReady && ch.lessons.at(-1).sid === props.sid)
+  return c ? capstoneCuaChuong(c.key) : null
+})
 
 // Section dựng sẵn cả 30 bài rồi ẩn bằng v-show, nên DOM của bài này đã có thật ở
 // thời điểm onMounted — giống hệt lúc widget còn được gọi từ file .vue của bài.
