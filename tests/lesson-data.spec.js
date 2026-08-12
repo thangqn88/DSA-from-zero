@@ -7,7 +7,15 @@ import { LESSON_SECTIONS, sidToFile, sidToMd } from '../src/lesson/parts.js'
 const root = resolve(__dirname, '..')
 const LEVELS = ['Easy', 'Medium', 'Hard']
 const present = LESSON_SECTIONS.filter(s => lessons[s.sid])
-const coDuAn = LESSON_SECTIONS.filter(s => s.duAn)
+
+// Mười bài viết trước khi luật quiz ôn tập ra đời. Giai đoạn 4 sẽ bổ sung câu
+// recall cho từng bài rồi xoá dần tên khỏi danh sách này — nó là danh sách việc
+// còn nợ, không phải một ngoại lệ vĩnh viễn, nên cố ý kể tên từng bài.
+const MIEN_TRU_RECALL = new Set([
+  'quay-lui-xau-nhi-phan', 'to-hop', 'tham-lam', 'qhd-nen-tang',
+  'qhd-lis-lcs-doixung', 'ngan-xep-hang-doi', 'dfs-bfs', 'dsu',
+  'cay-nhi-phan-bst', 'bst-nang-cao',
+])
 
 describe.each(present)('dữ liệu bài học: $sid', ({ sid }) => {
   const data = lessons[sid]
@@ -65,80 +73,36 @@ describe.each(present)('dữ liệu bài học: $sid', ({ sid }) => {
   })
 })
 
-// Luật này rỗng lúc đầu và phủ dần khi từng bài bật cờ duAn trong CHAPTERS.
-// Nhờ vậy nó không bao giờ đỏ oan trong nhiều tuần chờ nội dung.
-describe('schema Dự án thực hành', () => {
-  it('danh sách bài đã có Phần 7 là một mảng hợp lệ', () => {
-    expect(Array.isArray(coDuAn)).toBe(true)
+// Dự án thực hành thuộc về CẢ CHƯƠNG, không thuộc về bài. Trường project của bài
+// đã bị xoá ở Giai đoạn 2.6 và không được dựng lại — nếu cần một dự án, viết nó
+// ở src/data/capstones/<chapter-key>.js.
+describe('bài học không có dự án riêng', () => {
+  describe.each(present)('bài $sid', ({ sid }) => {
+    it('không còn trường project', () => {
+      expect(lessons[sid], `bài ${sid} còn trường project`).not.toHaveProperty('project')
+    })
   })
 
-  describe.each(coDuAn)('bài $sid', ({ sid }) => {
-    const p = lessons[sid].project
+  it('không component nào dựng Phần 7 cho bài học nữa', () => {
+    const src = readFileSync(resolve(root, 'src/components/LessonRenderer.vue'), 'utf8')
+    expect(src).not.toContain('part="du-an"')
+    expect(src).not.toContain('<ProjectBrief')
+    expect(src).not.toContain("from './ProjectBrief.vue'")
+  })
+})
 
-    it('có project đủ 6 trường', () => {
-      expect(p).toBeTypeOf('object')
-      for (const k of ['title', 'why', 'input']) {
-        expect(typeof p[k]).toBe('string')
-        expect(p[k].length).toBeGreaterThan(10)
-      }
-      for (const k of ['must', 'done', 'traps']) {
-        expect(Array.isArray(p[k])).toBe(true)
-        expect(p[k].length).toBeGreaterThan(0)
-      }
-    })
+// Mỗi bài phải có ít nhất một câu ôn lại bài trước, nếu không người học đi hết
+// khoá mà chưa lần nào phải ngoái lại. Luật này trước kia chỉ ép với bài có Phần
+// 7; giờ ép với MỌI bài đã viết, trừ danh sách còn nợ ở đầu file.
+describe('quiz ôn tập bắc cầu về bài cũ', () => {
+  const canKiem = LESSON_SECTIONS.filter(
+    s => s.ready && lessons[s.sid] && !MIEN_TRU_RECALL.has(s.sid),
+  )
 
-    // Người dùng báo ngày 2026-08-11: đọc Phần 7 xong vẫn không biết bắt đầu từ
-    // đâu, cần kiến thức gì, đầu ra là gì. Ba trường dưới đây trả lời đúng ba câu
-    // đó, và luật này giữ cho không bài nào bỏ sót chúng.
-    it('project trả lời được "cần biết gì", "đầu ra là gì", "bắt đầu từ đâu"', () => {
-      expect(Array.isArray(p.needs), 'thiếu trường needs').toBe(true)
-      expect(p.needs.length).toBeGreaterThanOrEqual(3)
-
-      expect(typeof p.output, 'thiếu trường output').toBe('string')
-      expect(p.output.length).toBeGreaterThan(40)
-
-      expect(Array.isArray(p.start), 'thiếu trường start').toBe(true)
-      expect(p.start.length).toBeGreaterThanOrEqual(4)
-      // Bước đầu tiên phải là một việc nhỏ chạy được ngay, không phải một yêu cầu
-      // tóm tắt lại cả dự án — đó chính là chỗ người mới bị chặn.
-      expect(p.start[0].length).toBeGreaterThan(40)
-    })
-
-    it('có tối thiểu 2 yêu cầu bắt buộc và 3 tiêu chí nghiệm thu', () => {
-      expect(p.must.length).toBeGreaterThanOrEqual(2)
-      expect(p.done.length).toBeGreaterThanOrEqual(3)
-    })
-
-    // Một tiêu chí không nói CÁCH kiểm thì người học không tự chấm được, và nó
-    // quay về đúng thứ văn xuôi mà phản hồi ngày 2026-08-11 phàn nàn.
-    it('mỗi tiêu chí nghiệm thu đều kèm cách kiểm cụ thể', () => {
-      for (const [i, d] of p.done.entries()) {
-        expect(d, `AC${i + 1} còn là chuỗi, chưa tách thành { dat, kiem }`).toBeTypeOf('object')
-        expect(typeof d.dat).toBe('string')
-        expect(d.dat.length).toBeGreaterThan(15)
-        expect(typeof d.kiem, `AC${i + 1} thiếu cách kiểm`).toBe('string')
-        expect(d.kiem.length, `AC${i + 1} có cách kiểm quá sơ sài`).toBeGreaterThan(25)
-      }
-    })
-
-    it('yêu cầu cuối cùng bắc cầu về kiến thức cũ', () => {
-      expect(p.must.at(-1).length).toBeGreaterThan(20)
-    })
-
-    it('có tối thiểu 1 câu quiz ôn lại kiến thức cũ', () => {
+  describe.each(canKiem)('bài $sid', ({ sid }) => {
+    it('có tối thiểu 1 câu quiz recall', () => {
       const recalls = lessons[sid].quiz.filter(q => q.recall === true)
       expect(recalls.length).toBeGreaterThanOrEqual(1)
-    })
-
-    it('section render Phần 7 bằng ProjectBrief', () => {
-      // Bài Markdown không có file section riêng: LessonRenderer.vue dựng Phần 7
-      // cho mọi bài có data.project, nên chỗ cần kiểm là component chung.
-      const file = existsSync(resolve(root, sidToMd(sid)))
-        ? 'src/components/LessonRenderer.vue'
-        : sidToFile(sid)
-      const src = readFileSync(resolve(root, file), 'utf8')
-      expect(src).toContain('part="du-an"')
-      expect(src).toContain('<ProjectBrief')
     })
   })
 })

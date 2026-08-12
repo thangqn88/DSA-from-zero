@@ -1,11 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { existsSync, readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
 import { mount } from '@vue/test-utils'
-import { CHAPTERS, sidToFile, sidToMd } from '../src/lesson/parts.js'
+import { CHAPTERS, allSectionIds, chapterProjectId } from '../src/lesson/parts.js'
 import { capstones, capstoneCuaChuong } from '../src/data/capstones/index.js'
-import { lessons } from '../src/data/lessons/index.js'
-import LessonRenderer from '../src/components/LessonRenderer.vue'
+import ChapterProject from '../src/components/ChapterProject.vue'
 
 const san = CHAPTERS.filter(c => c.capstoneReady)
 
@@ -24,12 +21,20 @@ describe('capstone', () => {
   describe.each(san)('chương $key', ({ key, num }) => {
     const cap = capstoneCuaChuong(key)
 
-    it('đủ trường của schema capstone', () => {
-      for (const k of ['title', 'why', 'input']) {
+    // Mười ba trường của một dự án chương. Thiếu một trường là người học đọc
+    // xong vẫn không biết bắt đầu từ đâu hoặc coi thế nào là xong.
+    it('đủ mười ba trường của schema capstone', () => {
+      for (const k of [
+        'title', 'ketChuong', 'why', 'needs', 'input', 'output', 'outputSample',
+        'start', 'must', 'done', 'traps', 'uses', 'data',
+      ]) {
+        expect(cap[k], `chương ${key} thiếu trường ${k}`).toBeDefined()
+      }
+      for (const k of ['title', 'ketChuong', 'why', 'input', 'output', 'outputSample']) {
         expect(typeof cap[k]).toBe('string')
         expect(cap[k].length).toBeGreaterThan(10)
       }
-      for (const k of ['must', 'done', 'traps', 'uses', 'reuses', 'stretch']) {
+      for (const k of ['needs', 'must', 'done', 'traps', 'uses', 'start']) {
         expect(Array.isArray(cap[k])).toBe(true)
       }
       expect(typeof cap.data.format).toBe('string')
@@ -70,70 +75,46 @@ describe('capstone', () => {
       for (const u of cap.uses) expect(moiSid).toContain(u)
     })
 
-    it('reuses chỉ trỏ tới chương có số nhỏ hơn', () => {
+    // Bảy dự án độc lập với nhau: người bỏ qua chương trước vẫn làm được. reuses
+    // chỉ là GỢI Ý dùng lại code cũ, nên nó được phép vắng mặt hoặc rỗng.
+    it('reuses không bắt buộc, nhưng có thì chỉ trỏ về chương trước', () => {
+      if (cap.reuses === undefined) return
+      expect(Array.isArray(cap.reuses)).toBe(true)
       for (const r of cap.reuses) {
         expect(r.chapter).toBeLessThan(num)
         expect(typeof r.module).toBe('string')
       }
     })
 
-    it('chương từ 2 trở đi bắt buộc kế thừa tối thiểu 2 module', () => {
-      // Chương 1 là gốc, không có chương trước để kế thừa.
-      if (num === 1) expect(cap.reuses).toHaveLength(0)
-      else expect(cap.reuses.length).toBeGreaterThanOrEqual(2)
+    // Dự án dùng kiến thức của CẢ chương, không phải của một bài.
+    it('uses kể tên mọi bài của chương', () => {
+      const trongChuong = CHAPTERS.find(c => c.key === key).lessons.map(l => l.sid)
+      expect([...cap.uses].sort()).toEqual([...trongChuong].sort())
     })
   })
 })
 
-// MVP của chương hiện trong Phần 7 của bài cuối chương. Luật này chỉ ép khi cả
-// hai đã sẵn sàng — chương đã có dữ liệu MVP và bài cuối đã được viết — nên nó
-// không đỏ oan trong lúc MVP viết trước bài cuối.
-describe('bài cuối chương hiển thị MVP của chương', () => {
-  const root = resolve(__dirname, '..')
-  const canKiem = CHAPTERS.filter(c => c.capstoneReady && c.lessons.at(-1).ready)
-
-  it('có ít nhất một chương đủ điều kiện kiểm, hoặc chưa tới lúc', () => {
-    expect(Array.isArray(canKiem)).toBe(true)
-  })
-
-  describe.each(canKiem)('chương $key', ({ key, lessons: baiTrongChuong }) => {
-    const cuoi = baiTrongChuong.at(-1)
-    const laMd = existsSync(resolve(root, sidToMd(cuoi.sid)))
-
-    // Bài Markdown không có file section riêng, nên đọc mã nguồn không kiểm được
-    // gì cả — LessonRenderer.vue suy chỗ hiển thị MVP ra từ CHAPTERS. Ở đây mount
-    // thật bài cuối chương rồi nhìn vào DOM, cách kiểm chặt hơn hẳn đọc chuỗi.
-    if (laMd) {
-      const wrapper = mount(LessonRenderer, { props: { sid: cuoi.sid, active: true } })
-
-      it('bài cuối render ProjectBrief ở chế độ capstone', () => {
-        expect(wrapper.findAll('.pb-capstone')).toHaveLength(1)
-      })
-
-      it('bài cuối lấy MVP đúng khoá chương của mình', () => {
-        expect(wrapper.get('.pb-capstone .pb-title').text()).toBe(capstoneCuaChuong(key).title)
-      })
-
-      it('bài cuối vẫn giữ cả bài luyện tay của riêng nó', () => {
-        const rieng = wrapper.findAll('.pb:not(.pb-capstone)')
-        expect(rieng).toHaveLength(1)
-        expect(rieng[0].get('.pb-title').text()).toBe(lessons[cuoi.sid].project.title)
-      })
-      return
-    }
-
-    const src = readFileSync(resolve(root, sidToFile(cuoi.sid)), 'utf8')
-
-    it('bài cuối render ProjectBrief ở chế độ capstone', () => {
-      expect(src).toContain('mode="capstone"')
+// Dự án của chương đứng thành section riêng, không nằm trong bài nào. Luật này
+// thay cho luật cũ "bài cuối chương render ProjectBrief" — kiến trúc đó đã chết.
+describe('section dự án của chương', () => {
+  describe.each(san)('chương $key', ({ key }) => {
+    it('có id dự án trong allSectionIds', () => {
+      expect(allSectionIds).toContain(chapterProjectId(key))
     })
 
-    it('bài cuối lấy MVP đúng khoá chương của mình', () => {
-      expect(src).toContain(`capstoneCuaChuong('${key}')`)
+    it('mount ChapterProject cho đúng một khối capstone, tiêu đề khớp dữ liệu', () => {
+      const w = mount(ChapterProject, { props: { chapterKey: key, active: true } })
+      expect(w.findAll('.pb-capstone')).toHaveLength(1)
+      expect(w.get('.pb-capstone .pb-title').text()).toBe(capstoneCuaChuong(key).title)
+      // Bốn thứ App.vue phụ thuộc vào.
+      const sec = w.get('section.day-section')
+      expect(sec.attributes('id')).toBe(chapterProjectId(key))
+      expect(sec.attributes('data-sid')).toBe(chapterProjectId(key))
     })
 
-    it('bài cuối vẫn giữ cả bài luyện tay của riêng nó', () => {
-      expect(src).toContain(':brief="data.project"')
+    it('không có khối dự án nào khác lọt vào trang này', () => {
+      const w = mount(ChapterProject, { props: { chapterKey: key, active: true } })
+      expect(w.findAll('.pb')).toHaveLength(1)
     })
   })
 })

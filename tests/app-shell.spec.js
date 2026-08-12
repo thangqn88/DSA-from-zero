@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import App from '../src/App.vue'
-import { LESSON_SECTIONS } from '../src/lesson/parts.js'
+import { LESSON_SECTIONS, CHAPTERS } from '../src/lesson/parts.js'
 
 // Bố cục khung ngoài không có test nào che, mà nó lại là chỗ dễ vỡ nhất khi
 // sửa giao diện. Test ở đây chốt lại hành vi gấp/mở menu và vài luật đã bỏ.
@@ -14,9 +14,10 @@ function mountApp() {
 describe('khung ngoài của app', () => {
   it('chỉ bài đã viết mới là link bấm được', () => {
     const w = mountApp()
+    // Danh sách nhóm chứa bài học cộng đúng một mục dự án mỗi chương. Trang chủ
+    // nằm ở khối thương hiệu, ngoài .sb-list, nên không tính vào đây.
     const soReady = LESSON_SECTIONS.filter(s => s.ready).length
-    // Danh sách nhóm chỉ chứa bài học. Trang chủ nằm ở khối thương hiệu,
-    // ngoài .sb-list, nên không tính vào đây.
+      + CHAPTERS.filter(c => c.capstoneReady).length
     expect(w.findAll('.sb-list a').length).toBe(soReady)
     w.unmount()
   })
@@ -49,6 +50,7 @@ describe('khung ngoài của app', () => {
   it('bài chưa viết vẫn hiện trên sidebar nhưng không bấm được', () => {
     const w = mountApp()
     const soChuaViet = LESSON_SECTIONS.filter(s => !s.ready).length
+      + CHAPTERS.filter(c => !c.capstoneReady).length
     const soon = w.findAll('.sb-soon')
     expect(soon.length).toBe(soChuaViet)
     expect(soon[0].element.tagName).toBe('SPAN')

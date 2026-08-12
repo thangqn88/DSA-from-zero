@@ -136,9 +136,7 @@ describe('LessonRenderer dựng đủ khung bài học', () => {
   })
 
   it('render đủ mọi mục của khung bài học', () => {
-    const data = lessons[sid]
     for (const p of LESSON_PARTS) {
-      if (p.key === 'du-an' && !data.project) continue
       if (p.key === 'muc-tieu') {
         expect(wrapper.find('.lesson-goal').exists()).toBe(true)
         continue

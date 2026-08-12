@@ -1,4 +1,4 @@
-import { LESSON_PARTS, partId, partTitle } from '../lesson/parts.js'
+import { LESSON_PARTS, partId, partTitle, CHAPTERS, chapterProjectId } from '../lesson/parts.js'
 import { lessons } from './lessons/index.js'
 import menusData from './menus.json'
 
@@ -7,10 +7,6 @@ import menusData from './menus.json'
 export function menuTuDuLieu(sid, data) {
   const out = []
   for (const p of LESSON_PARTS) {
-    // Bài chưa được bổ sung Phần 7 thì section không có neo tương ứng — sinh
-    // mục menu ở đây sẽ tạo ra một link trỏ vào hư không.
-    if (p.key === 'du-an' && !data.project) continue
-
     out.push({ id: partId(sid, p.key), label: partTitle(p.key), official: false, level: 3 })
     if (p.key === 'vi-du') {
       for (const e of data.examples) {
@@ -21,7 +17,14 @@ export function menuTuDuLieu(sid, data) {
   return out
 }
 
+const PROJECT_IDS = new Set(CHAPTERS.map(c => chapterProjectId(c.key)))
+
 export function buildMenu(sid) {
+  // Trang dự án là một bản đặc tả đọc một mạch, không phải bài học 7 mục — nó
+  // KHÔNG có menu bài tập bên phải. App.vue có v-if="currentMenu.length" nên
+  // khung menu tự biến mất. Đừng sinh menu cho trang này chỉ vì trang khác có.
+  if (PROJECT_IDS.has(sid)) return []
+
   const data = lessons[sid]
   if (!data) return menusData[sid] || []
   return menuTuDuLieu(sid, data)

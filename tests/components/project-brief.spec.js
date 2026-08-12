@@ -83,15 +83,23 @@ describe('ProjectBrief', () => {
     expect(w.find('a.pb-data-link').attributes('href')).toBe('https://example.org/data')
   })
 
-  it('không hiện khối kế thừa khi reuses rỗng', () => {
+  it('không hiện khối dùng lại khi reuses rỗng hoặc vắng mặt', () => {
     const w = mount(ProjectBrief, { props: { brief: capstoneBrief, mode: 'capstone' } })
     expect(w.find('.pb-reuse').exists()).toBe(false)
+
+    const { reuses, ...khongCo } = capstoneBrief
+    const w2 = mount(ProjectBrief, { props: { brief: khongCo, mode: 'capstone' } })
+    expect(w2.find('.pb-reuse').exists()).toBe(false)
   })
 
-  it('liệt kê module bắt buộc dùng lại khi có', () => {
+  // Bảy dự án độc lập với nhau, nên đây là GỢI Ý chứ không phải điều kiện. Nhãn
+  // cũ "Bắt buộc dùng lại" nói dối người học.
+  it('liệt kê module gợi ý dùng lại khi có', () => {
     const brief = { ...capstoneBrief, reuses: [{ chapter: 2, module: 'sort' }] }
     const w = mount(ProjectBrief, { props: { brief, mode: 'capstone' } })
     expect(w.find('.pb-reuse').exists()).toBe(true)
+    expect(w.text()).toContain('Gợi ý dùng lại code cũ của bạn')
+    expect(w.text()).not.toContain('Bắt buộc dùng lại')
     expect(w.text()).toContain('Chương 2')
     expect(w.text()).toContain('sort')
   })

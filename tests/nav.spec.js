@@ -18,8 +18,9 @@ describe('dữ liệu menu trái suy ra từ CHAPTERS', () => {
     expect(navGroups[6].label).toBe('Chương 7 — Chuyên đề và giới hạn')
   })
 
+  // Mỗi nhóm là danh sách bài của chương, cộng đúng một mục dự án ở cuối.
   it('thứ tự và số lượng bài khớp CHAPTERS', () => {
-    const fromNav = navGroups.flatMap(g => g.items.map(i => i.id))
+    const fromNav = navGroups.flatMap(g => g.items.filter(i => !i.laDuAn).map(i => i.id))
     const fromChapters = CHAPTERS.flatMap(c => c.lessons.map(l => l.sid))
     expect(fromNav).toEqual(fromChapters)
   })

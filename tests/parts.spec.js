@@ -2,25 +2,29 @@ import { describe, it, expect } from 'vitest'
 import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import {
-  LESSON_PARTS, LESSON_SECTIONS, CHAPTERS, sidToFile, sidToMd, partId, partTitle,
+  LESSON_PARTS, LESSON_SECTIONS, CHAPTERS, allSectionIds, chapterProjectId,
+  navGroups, sidToFile, sidToMd, partId, partTitle,
 } from '../src/lesson/parts.js'
 
 describe('parts', () => {
-  it('có đúng 8 mục theo thứ tự chuẩn', () => {
+  it('có đúng 7 mục theo thứ tự chuẩn', () => {
     expect(LESSON_PARTS.map(p => p.key)).toEqual([
-      'muc-tieu', 'ly-thuyet', 'vi-sao', 'quiz', 'vi-du', 'bai-tap', 'leetcode', 'du-an',
+      'muc-tieu', 'ly-thuyet', 'vi-sao', 'quiz', 'vi-du', 'bai-tap', 'leetcode',
     ])
   })
 
-  it('đánh số 1..7 cho 7 phần sau phần mở đầu', () => {
+  it('đánh số 1..6 cho 6 phần sau phần mở đầu', () => {
     expect(LESSON_PARTS[0].num).toBe(0)
-    expect(LESSON_PARTS.slice(1).map(p => p.num)).toEqual([1, 2, 3, 4, 5, 6, 7])
+    expect(LESSON_PARTS.slice(1).map(p => p.num)).toEqual([1, 2, 3, 4, 5, 6])
   })
 
-  it('mục cuối là Dự án thực hành', () => {
-    const last = LESSON_PARTS.at(-1)
-    expect(last.key).toBe('du-an')
-    expect(partTitle('du-an')).toBe('7. Dự án thực hành')
+  // Dự án thực hành thuộc về CẢ CHƯƠNG và có section riêng, nên nó không còn là
+  // một mục của bài học. Luật này chặn việc nhét nó ngược trở lại.
+  it('bài học không còn mục Dự án thực hành', () => {
+    expect(LESSON_PARTS.map(p => p.key)).not.toContain('du-an')
+    expect(LESSON_PARTS.at(-1).key).toBe('leetcode')
+    expect(partTitle('leetcode')).toBe('6. Tài nguyên tự luyện LeetCode')
+    expect(() => partTitle('du-an')).toThrow()
   })
 
   it('partId ghép sid với key bằng hai gạch ngang', () => {
@@ -64,23 +68,55 @@ describe('CHAPTERS — cấu trúc 7 chương', () => {
     }
   })
 
-  it('mọi bài đều khai báo đủ cờ ready và duAn', () => {
+  it('mọi bài đều khai báo cờ ready, và mọi chương khai báo capstoneReady', () => {
     for (const c of CHAPTERS) {
+      expect(typeof c.capstoneReady).toBe('boolean')
       for (const l of c.lessons) {
         expect(typeof l.ready).toBe('boolean')
-        expect(typeof l.duAn).toBe('boolean')
         expect(l.title.length).toBeGreaterThan(0)
       }
     }
   })
 
-  it('bài chưa viết thì chưa thể có Phần 7', () => {
+  // Cờ duAn là cờ của BÀI, mà bài không còn dự án riêng. Nó đã bị xoá ở Giai
+  // đoạn 2.6 và không được dựng lại dưới bất kỳ tên nào.
+  it('không bài nào còn cờ duAn', () => {
     for (const c of CHAPTERS) {
       for (const l of c.lessons) {
-        if (!l.ready) expect(l.duAn).toBe(false)
+        expect(l, `bài ${l.sid} còn cờ duAn`).not.toHaveProperty('duAn')
       }
     }
   })
+})
+
+describe('section dự án thực hành của chương', () => {
+  it('id sinh bằng chapterProjectId, không viết tay', () => {
+    expect(chapterProjectId('nen-mong')).toBe('du-an-nen-mong')
+  })
+
+  it('mỗi chương có đúng một mục dự án, đứng cuối danh sách bài', () => {
+    expect(navGroups).toHaveLength(CHAPTERS.length)
+    for (const [i, g] of navGroups.entries()) {
+      const c = CHAPTERS[i]
+      expect(g.items).toHaveLength(c.lessons.length + 1)
+      const cuoi = g.items.at(-1)
+      expect(cuoi.laDuAn).toBe(true)
+      expect(cuoi.id).toBe(chapterProjectId(c.key))
+      expect(cuoi.label).toBe('Dự án thực hành')
+      // Mục dự án sáng hay mờ đi theo cờ của CHƯƠNG, không theo bài nào.
+      expect(cuoi.ready).toBe(c.capstoneReady)
+      expect(g.items.slice(0, -1).some(i => i.laDuAn)).toBe(false)
+    }
+  })
+
+  it('chỉ chương đã có dữ liệu dự án mới là section điều hướng được', () => {
+    for (const c of CHAPTERS) {
+      expect(allSectionIds.includes(chapterProjectId(c.key))).toBe(c.capstoneReady)
+    }
+  })
+})
+
+describe('CHAPTERS — phần còn lại', () => {
 
   it('LESSON_SECTIONS suy ra đúng từ CHAPTERS, giữ thứ tự chương', () => {
     expect(LESSON_SECTIONS).toHaveLength(30)

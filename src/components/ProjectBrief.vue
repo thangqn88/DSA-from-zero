@@ -38,8 +38,11 @@
       </ul>
     </div>
 
-    <div v-if="isCapstone && brief.reuses.length" class="pb-block pb-reuse">
-      <strong>Bắt buộc dùng lại code cũ của bạn</strong>
+    <!-- Bảy dự án độc lập với nhau: dùng lại code cũ là GỢI Ý cho người học tuần
+         tự, không phải điều kiện. Chương 1 không có gì để dùng lại nên khối này
+         vắng mặt hẳn. -->
+    <div v-if="isCapstone && brief.reuses?.length" class="pb-block pb-reuse">
+      <strong>Gợi ý dùng lại code cũ của bạn</strong>
       <ul>
         <li v-for="(r, i) in brief.reuses" :key="i">
           Chương {{ r.chapter }} — module <code>{{ r.module }}</code>

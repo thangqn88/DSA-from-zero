@@ -86,6 +86,14 @@
             :sid="sid"
             :active="activeSection === sid"
           />
+          <!-- Mỗi chương có ĐÚNG MỘT dự án thực hành, đứng thành section riêng
+               chứ không nằm trong bài nào. Chỉ chương đã có dữ liệu mới dựng. -->
+          <ChapterProject
+            v-for="key in chapterProjectKeys"
+            :key="key"
+            :chapter-key="key"
+            :active="activeSection === chapterProjectId(key)"
+          />
           <DfsBfs :active="activeSection === 'dfs-bfs'" />
           <Dsu :active="activeSection === 'dsu'" />
           <CayNhiPhanBst :active="activeSection === 'cay-nhi-phan-bst'" />
@@ -140,11 +148,14 @@ import {
   navTop,
   navGroups,
   allSectionIds,
+  chapterProjectId,
+  CHAPTERS,
   DEFAULT_ID,
 } from "./lesson/parts.js";
 import { buildMenu } from "./data/menu.js";
 import { mdSids } from "./lesson/mdLessons.js";
 import LessonRenderer from "./components/LessonRenderer.vue";
+import ChapterProject from "./components/ChapterProject.vue";
 
 import TrangChu from "./sections/TrangChu.vue";
 import QuayLuiXauNhiPhan from "./sections/QuayLuiXauNhiPhan.vue";
@@ -156,6 +167,12 @@ import DfsBfs from "./sections/DfsBfs.vue";
 import Dsu from "./sections/Dsu.vue";
 import CayNhiPhanBst from "./sections/CayNhiPhanBst.vue";
 import BstNangCao from "./sections/BstNangCao.vue";
+
+// Chương chưa có dữ liệu dự án thì không dựng section — mục của nó trên sidebar
+// vẫn hiện ở dạng mờ "sắp có", giống hệt một bài chưa viết.
+const chapterProjectKeys = CHAPTERS.filter((c) => c.capstoneReady).map(
+  (c) => c.key,
+);
 
 const activeSection = ref(DEFAULT_ID);
 const contentMainEl = ref(null);
