@@ -8,8 +8,8 @@ Lệnh: `npm run dev` | `npm run build` | `npm run test -- --run`
 
 ## Công việc đang chạy
 
-Mở rộng chương trình từ 10 lên **30 nhóm kiến thức, chia 7 chương**, và thêm **Phần 7
-Dự án thực hành** vào khung bài học.
+Mở rộng chương trình từ 10 lên **30 nhóm kiến thức, chia 7 chương**, mỗi chương kết thúc
+bằng **đúng một dự án thực hành của cả chương**.
 
 - **Kế hoạch — file duy nhất:** `docs/superpowers/plans/KE-HOACH.md`
 - Thiết kế: `docs/superpowers/specs/2026-08-09-mo-rong-30-nhom-design.md`
@@ -23,18 +23,33 @@ trong lịch sử git. **Đừng dựng lại chúng.** Mọi cập nhật kế 
 
 ### Trạng thái
 
-Giai đoạn 0–2 xong: hạ tầng 7 chương, Phần 7, `ProjectBrief.vue`, MVP Chương 1, và hai
-bài mẫu `do-phuc-tap` + `bang-bam`. Còn lại 18 bài mới, 6 MVP, và Giai đoạn 4–5.
+Giai đoạn 0–2 xong. **Giai đoạn 2.6 xong 2026-08-12**: dự án thực hành lên cấp chương.
+Chương 1 trọn vẹn (4 bài + dự án chương). Còn 18 bài mới, 6 dự án chương, Giai đoạn 2.5
+(9 bài `.vue` còn lại) và Giai đoạn 4–5.
 
-Kế hoạch Giai đoạn 3 đã viết xong (26 task, chạy tuần tự), chưa thực thi task nào.
+### Một bài học có 7 mục, và KHÔNG có dự án
+
+Dự án thực hành thuộc về **cả chương**, không thuộc về bài: mỗi chương đúng một dự án,
+đứng thành **section riêng** trên sidebar (`ChapterProject.vue`), dữ liệu ở
+`src/data/capstones/<chapter-key>.js`. Bài học kết ở mục 6 LeetCode.
+
+- **Cờ `duAn` đã bị xoá.** Đừng dựng lại nó dưới bất kỳ tên nào. Test đỏ ngay nếu có.
+- **File dữ liệu bài không được có trường `project`.** Test cũng đỏ ngay.
+- Id trang dự án sinh bằng `chapterProjectId(key)`, không viết tay chuỗi `du-an-...`.
+- **Đề bài mọi dự án phải là vấn đề có thật trong cuộc sống** — đọc sao kê chi tiêu, phân
+  tích log, lập lộ trình giao hàng. Không trò chơi, không bài toán đố, không thư viện hay
+  công cụ cho lập trình viên. Bảy dự án độc lập với nhau; dùng lại code chương trước chỉ
+  là gợi ý.
 
 ### Hai cờ trạng thái trong `CHAPTERS`
 
-- `ready` — đã có file section. Bài chưa `ready` hiện mờ trên sidebar, không bấm được.
-- `duAn` — đã có Phần 7 Dự án thực hành.
+- `ready` — cờ của **bài**: đã có file nội dung. Bài chưa `ready` hiện mờ trên sidebar,
+  không bấm được.
+- `capstoneReady` — cờ của **chương**: đã có dữ liệu dự án. Chương chưa bật thì mục "Dự án
+  thực hành" hiện mờ y như một bài chưa viết.
 
-Test schema chỉ ép với bài đã bật cờ, nên chúng không bao giờ đỏ oan trong lúc chờ nội
-dung. Viết xong một bài thì bật cờ, đừng để quên.
+Test schema chỉ ép với bài hoặc chương đã bật cờ, nên chúng không bao giờ đỏ oan trong lúc
+chờ nội dung. Viết xong thì bật cờ, đừng để quên.
 
 ## Quy tắc chi phí — BẮT BUỘC
 
@@ -44,7 +59,7 @@ Dự án chạy trên gói Claude $20 (Pro), giới hạn theo cửa sổ 5 gi�
 |---|---|---|---|
 | 0–2 | Hạ tầng, đặc tả MVP, 2 bài mẫu — **đã xong** | Opus | Inline |
 | 3 | 18 bài mới còn lại | **Sonnet** | Subagent, **mỗi lần đúng 1 agent, tuần tự** |
-| 4 | Bổ sung Phần 7 và quiz ôn cho 10 bài cũ | **Sonnet** | Subagent, tuần tự |
+| 4 | Bổ sung quiz `recall` và `note` LeetCode cho 10 bài cũ | **Sonnet** | Subagent, tuần tự |
 | 5 | Rà soát 30 bài, giọng văn, giao diện, README | Opus | Inline |
 
 Giai đoạn 3 và 4 là công việc lặp khuôn: đã có hai bài mẫu, đặc tả MVP đầy đủ và test ép
@@ -118,7 +133,7 @@ phải nhìn bằng mắt qua `npm run dev`; nếu không nhìn được thì n�
 - **Không đổi id DOM mà widget đang query.** Trước khi sửa một section, chạy
   `grep -o "getElementById('[^']*'" src/widgets/<ten>.js | sort -u` và giữ nguyên mọi id
   in ra. 17 widget tương tác hiện có phải chạy được sau mỗi thay đổi.
-- `src/lesson/parts.js` là nguồn sự thật duy nhất cho **cả ba thứ**: khung 8 mục
+- `src/lesson/parts.js` là nguồn sự thật duy nhất cho **cả ba thứ**: khung 7 mục
   (`LESSON_PARTS`), cấu trúc 7 chương (`CHAPTERS`), và dữ liệu menu trái (`navGroups`,
   `allSectionIds`, `FIRST_LESSON_ID`). Sửa thì sửa ở đúng đó, không rải rác.
 - **`src/data/nav.js` đã bị xoá.** Nó từng viết tay lại danh sách bài học với cách gom
