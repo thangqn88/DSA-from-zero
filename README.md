@@ -11,8 +11,9 @@ hàng đợi được nạp — thay vì phải tự tưởng tượng trong đ�
 
 ## Học được những gì
 
-Chương trình gồm 30 nhóm kiến thức chia 7 chương, đi từ nền móng lên. Những nhóm chưa
-viết xong hiện mờ trên menu kèm nhãn "sắp có", để bạn nhìn thấy trước lộ trình.
+Chương trình gồm 30 nhóm kiến thức chia 7 chương, đi từ nền móng lên, mỗi chương kết
+thúc bằng một dự án thực hành. Phần chưa viết xong hiện mờ trên menu kèm nhãn "sắp có",
+để bạn nhìn thấy trước lộ trình.
 
 | Chương | Nhóm kiến thức |
 |---|---|
@@ -24,29 +25,37 @@ viết xong hiện mờ trên menu kèm nhãn "sắp có", để bạn nhìn th�
 | 6 — Thiết kế thuật toán | Quay lui · Tổ hợp · Tham lam · QHĐ nền tảng · QHĐ nâng cao |
 | 7 — Chuyên đề và giới hạn | Thao tác bit · Toán và số học · Chuỗi nâng cao · Work/Span · Độ khó bài toán |
 
-Mỗi nhóm đi theo cùng một khung 8 mục: mục tiêu bài học → lý thuyết cơ bản → vì sao
+Mỗi nhóm đi theo cùng một khung 7 mục: mục tiêu bài học → lý thuyết cơ bản → vì sao
 kiến thức này quan trọng → quiz kiểm tra → ví dụ điển hình → bài tập → danh sách LeetCode
-để tự luyện → **dự án thực hành**.
+để tự luyện.
 
 ## Dự án thực hành
 
-Học để vận dụng thì phải dựng ra thứ gì đó chạy được. Mỗi nhóm kiến thức có một bài
-luyện tay khoảng một tới hai giờ, và mỗi chương kết thúc bằng một dự án MVP quy mô một
-cuối tuần:
+Học để vận dụng thì phải dựng ra thứ gì đó chạy được. **Mỗi chương kết thúc bằng đúng một
+dự án của cả chương**, quy mô một cuối tuần, đứng thành một trang riêng ở cuối nhóm trên
+menu trái:
 
-| Chương | Dự án MVP |
+| Chương | Dự án thực hành |
 |---|---|
-| 1 | `core` + `bench` — thư viện nền tự cài và công cụ đo hiệu năng |
+| 1 | Sổ chi tiêu cá nhân — đọc file CSV sao kê ngân hàng, phân loại giao dịch, in báo cáo tháng |
 | 2 | Bộ phân tích log máy chủ, chạy trên log Nginx thật |
 | 3 | Máy gợi ý tìm kiếm có xếp hạng và bộ nhớ đệm LRU |
-| 4 | Mini database có index, chạy lại truy vấn của Chương 2 để so tốc độ |
+| 4 | Sổ quản lý kho hàng tra cứu nhanh |
 | 5 | Trình lập lộ trình giao hàng trên dữ liệu bản đồ thật |
 | 6 | Công cụ xếp lịch và tối ưu ngân sách |
 | 7 | Công cụ phát hiện tài liệu trùng lặp |
 
-Bảy dự án này không rời rạc: chúng là **một bộ công cụ lớn dần**, và mỗi dự án bắt buộc
-liên kết với module bạn đã viết ở chương trước. Nhờ vậy bạn không thể quên chương cũ —
-biên dịch sẽ không chạy nếu code cũ sai.
+Hai luật đứng sau bảng này:
+
+- **Đề bài là vấn đề có thật trong cuộc sống**, thứ người ta trả tiền để làm — không phải
+  trò chơi, bài toán đố, hay thư viện cho lập trình viên. Cấu trúc dữ liệu là phương tiện,
+  không phải sản phẩm.
+- **Bảy dự án độc lập với nhau.** Bạn nhảy thẳng vào chương nào cũng làm được dự án của
+  chương đó. Dùng lại code đã viết ở chương trước là gợi ý, không phải điều kiện.
+
+Mỗi dự án nói rõ: cần biết trước những gì (và cả những gì **chưa** cần biết), đầu vào đầu
+ra là gì kèm mẫu in ra terminal, **bắt đầu từ bước nào**, yêu cầu bắt buộc, tiêu chí
+nghiệm thu — mỗi tiêu chí kèm một lệnh hoặc ngưỡng số để bạn tự chấm — và các chỗ dễ sai.
 
 ## Cách học hiệu quả nhất
 
@@ -98,16 +107,23 @@ chặn nhiều tính năng. Hãy chạy qua một server tĩnh, ví dụ `npx se
 src/
   App.vue              layout chính: menu trái + nội dung + menu phải
   style.css            toàn bộ CSS
-  lesson/parts.js      nguồn sự thật duy nhất về khung 6 phần của mọi bài học
-  components/          6 component dùng chung cho mọi bài học
-                       LessonGoal, LessonPart, QuizBlock,
-                       WorkedExample, PracticeSet, LeetCodeList
+  lesson/
+    parts.js           nguồn sự thật duy nhất: khung 7 mục, cấu trúc 7 chương,
+                       dữ liệu menu trái
+    md.js              parser Markdown của bài học, chạy lúc build
+    widgets.js         nạp widget của một bài theo quy ước tên file
+  content/             văn xuôi từng bài, mỗi bài một file .md
+  components/          component dùng chung cho mọi bài học
+                       LessonRenderer (dựng khung 7 mục), LessonGoal, LessonPart,
+                       QuizBlock, WorkedExample, PracticeSet, LeetCodeList,
+                       ProjectBrief, ChapterProject
   data/
-    nav.js             menu trái — 5 nhóm, 10 bài học
     lessons/           dữ liệu từng bài: mục tiêu, quiz, bài tập, danh sách LeetCode
-    menu.js            sinh menu phải từ khung 6 phần + dữ liệu bài học
+    capstones/         dự án thực hành, mỗi chương một file
+    menu.js            sinh menu phải từ khung 7 mục + dữ liệu bài học
     menus.json         chỉ còn phần menu của Trang chủ
-  sections/            11 component Vue: Trang chủ + 10 nhóm kiến thức
+  sections/            các bài còn viết bằng .vue, cộng Trang chủ — đang chuyển
+                       dần hết sang src/content/
   widgets/             logic của các widget tương tác
   utils/stepper.js     engine chạy-từng-bước dùng chung
 tests/                 bộ test Vitest, xem mục "Chạy test" bên dưới
@@ -115,29 +131,37 @@ tests/                 bộ test Vitest, xem mục "Chạy test" bên dưới
 
 ## Cách hoạt động
 
-**Khung 6 phần là bắt buộc, không phải quy ước lỏng lẻo.** Mọi bài học đều gồm đúng 6 phần
-theo thứ tự cố định: lý thuyết → vì sao quan trọng → quiz → ví dụ điển hình → bài tập →
-LeetCode. Danh sách đó khai báo ở [src/lesson/parts.js](src/lesson/parts.js) và chỉ ở đó.
-Sửa khung thì sửa đúng một chỗ này, không rải rác trong các section.
+**Khung 7 mục là bắt buộc, không phải quy ước lỏng lẻo.** Mọi bài học đều gồm đúng 7 mục
+theo thứ tự cố định: mục tiêu → lý thuyết → vì sao quan trọng → quiz → ví dụ điển hình →
+bài tập → LeetCode. Danh sách đó khai báo ở [src/lesson/parts.js](src/lesson/parts.js) và
+chỉ ở đó — file này đồng thời là nguồn sự thật cho cấu trúc 7 chương và cho menu trái.
 
-**Nội dung tách làm hai lớp.** Phần văn xuôi, bảng, code mẫu và widget nằm trong
-`src/sections/*.vue`. Phần dữ liệu có cấu trúc — mục tiêu bài học, câu quiz, bài tập, danh
-sách LeetCode — nằm trong `src/data/lessons/*.js` và được test kiểm tra: đủ số câu, đúng
-trường, đáp án hợp lệ, danh sách LeetCode xếp từ Easy tới Hard.
+**Một bài học gồm đúng hai file nội dung.** Văn xuôi, bảng và code mẫu nằm ở
+`src/content/<sid>.md`; dữ liệu có cấu trúc — mục tiêu, quiz, bài tập, danh sách LeetCode —
+nằm ở `src/data/lessons/<sid>.js` và được test kiểm tra: đủ số câu, đúng trường, đáp án
+hợp lệ, danh sách LeetCode xếp từ Easy tới Hard.
+[src/components/LessonRenderer.vue](src/components/LessonRenderer.vue) dựng khung cho mọi
+bài, nên không còn mỗi bài một file `.vue` nữa. Vài bài viết từ trước còn nằm ở
+`src/sections/` và đang được chuyển dần.
+
+**Dự án thực hành thuộc về chương, không thuộc về bài.** Dữ liệu ở
+`src/data/capstones/<chapter-key>.js`, hiển thị bằng
+[ChapterProject.vue](src/components/ChapterProject.vue) thành một section riêng. Bài học
+không có trường `project`, và test đỏ ngay nếu ai đó thêm lại.
 
 **Menu phải được sinh tự động, không viết tay.** [src/data/menu.js](src/data/menu.js) ghép
-khung 6 phần với danh sách ví dụ điển hình của bài để dựng menu, nên menu không bao giờ
-lệch với nội dung thật. `menus.json` giờ chỉ còn lại phần của Trang chủ.
+khung 7 mục với danh sách ví dụ điển hình của bài để dựng menu, nên menu không bao giờ
+lệch với nội dung thật. Trang dự án không có menu này. `menus.json` chỉ còn phần của
+Trang chủ.
 
-**Chuyển nhóm bằng `v-show`, không dùng router.** Mỗi widget khởi tạo trong `onMounted()`
-của component tương ứng và thao tác DOM trực tiếp qua `getElementById` — nên khi sửa nội
+**Chuyển trang bằng `v-show`, không dùng router.** Widget của bài `<sid>` nằm ở
+`src/widgets/<sid>.js` và thao tác DOM trực tiếp qua `getElementById` — nên khi sửa nội
 dung, **không được đổi các `id` mà widget đang query**.
 
-Thêm một nhóm kiến thức mới: tạo file dữ liệu trong `src/data/lessons/` và đăng ký vào
-`src/data/lessons/index.js`, tạo component trong `src/sections/` dùng 6 component chung,
-thêm entry vào [src/data/nav.js](src/data/nav.js), rồi import và gắn
-`<TenComponent :active="..."/>` vào [src/App.vue](src/App.vue). Test sẽ báo ngay nếu thiếu
-phần nào của khung.
+Thêm một bài mới cần đúng ba việc: tạo `src/content/<sid>.md`, tạo
+`src/data/lessons/<sid>.js`, rồi bật cờ `ready` của bài đó trong `CHAPTERS`. Không phải
+sửa `App.vue`, không phải đăng ký ở đâu khác — cả hai danh sách đều suy ra bằng
+`import.meta.glob`. Test sẽ báo ngay nếu thiếu phần nào của khung.
 
 ## Chạy test
 
@@ -146,14 +170,19 @@ npm run test -- --run    # chạy một lượt rồi thoát
 npm run test             # chế độ theo dõi, tự chạy lại khi sửa file
 ```
 
-Bộ test ([Vitest](https://vitest.dev/) + jsdom) kiểm 4 nhóm việc:
+Bộ test ([Vitest](https://vitest.dev/) + jsdom) kiểm năm nhóm việc:
 
-- `tests/parts.spec.js` — khung 6 phần đúng thứ tự, id sinh ra ổn định.
-- `tests/lesson-data.spec.js` — dữ liệu 10 bài đủ trường và hợp lệ.
-- `tests/lesson-structure.spec.js` — mỗi section giữ đúng `id`, `data-sid`, đủ 6 phần, mỗi
-  ví dụ điển hình đủ 6 khối.
-- `tests/menu.spec.js`, `tests/menus-json.spec.js`, `tests/components/` — menu sinh đúng và
-  component dùng chung hoạt động.
+- `tests/parts.spec.js`, `tests/nav.spec.js` — khung 7 mục đúng thứ tự, cấu trúc 7 chương,
+  menu trái suy đúng từ đó, id sinh ra ổn định.
+- `tests/lesson-data.spec.js` — dữ liệu từng bài đủ trường và hợp lệ, và không bài nào có
+  trường `project`.
+- `tests/lesson-structure.spec.js`, `tests/lesson-md.spec.js` — mỗi bài giữ đúng `id`,
+  `data-sid`, đủ 7 mục, mỗi ví dụ điển hình đủ 6 khối; bài Markdown được mount thật rồi
+  bấm thật để kiểm widget.
+- `tests/capstone.spec.js` — dự án của chương đủ mười ba trường, mỗi tiêu chí nghiệm thu
+  kèm cách kiểm, và `uses` phủ hết các bài của chương.
+- `tests/menu.spec.js`, `tests/menus-json.spec.js`, `tests/app-shell.spec.js`,
+  `tests/components/` — menu sinh đúng, khung ngoài và component dùng chung hoạt động.
 
 Test xanh **không** chứng minh được giao diện. Sửa layout hay CSS thì vẫn phải mở
 `npm run dev` nhìn bằng mắt.
